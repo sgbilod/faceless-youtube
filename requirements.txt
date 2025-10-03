@@ -48,6 +48,13 @@ pyttsx3==2.90                   # Offline TTS (fallback)
 moviepy==1.0.3                  # Video editing
 ffmpeg-python==0.2.0            # FFmpeg wrapper
 pydub==0.25.1                   # Audio manipulation
+
+# ============================================
+# ASSET SCRAPING & HTTP
+# ============================================
+aiohttp==3.9.1                  # Async HTTP client for scrapers
+beautifulsoup4==4.12.2          # HTML parsing (if needed)
+lxml==4.9.3                     # XML/HTML parser (faster than bs4)
 mutagen==1.47.0                 # Audio metadata
 
 # ============================================

@@ -7,21 +7,25 @@ The Redis caching layer provides high-performance, distributed caching with auto
 ## Features
 
 ✅ **Redis-first with Graceful Fallback**
+
 - Automatically connects to Redis if available
 - Falls back to in-memory LRU cache if Redis is unavailable
 - Transparent operation regardless of backend
 
 ✅ **High Performance**
+
 - Connection pooling for efficiency
 - Async/await support for non-blocking operations
 - Pickle serialization for complex Python objects
 
 ✅ **Developer-Friendly**
+
 - Simple decorators: `@cached`, `@cache_invalidate`
 - Context manager support
 - Type hints throughout
 
 ✅ **Production-Ready**
+
 - Comprehensive error handling
 - Statistics tracking (hits, misses, hit rate)
 - Pattern-based cache invalidation
@@ -206,15 +210,15 @@ async def get_total_video_count():
 
 ### Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `REDIS_HOST` | `localhost` | Redis server hostname |
-| `REDIS_PORT` | `6379` | Redis server port |
-| `REDIS_DB` | `0` | Redis database number (0-15) |
-| `REDIS_PASSWORD` | - | Redis password (optional) |
-| `REDIS_POOL_MAX_CONNECTIONS` | `10` | Max connections in pool |
-| `REDIS_POOL_TIMEOUT` | `20` | Connection timeout (seconds) |
-| `CACHE_DEFAULT_TTL` | `300` | Default TTL (seconds) |
+| Variable                     | Default     | Description                  |
+| ---------------------------- | ----------- | ---------------------------- |
+| `REDIS_HOST`                 | `localhost` | Redis server hostname        |
+| `REDIS_PORT`                 | `6379`      | Redis server port            |
+| `REDIS_DB`                   | `0`         | Redis database number (0-15) |
+| `REDIS_PASSWORD`             | -           | Redis password (optional)    |
+| `REDIS_POOL_MAX_CONNECTIONS` | `10`        | Max connections in pool      |
+| `REDIS_POOL_TIMEOUT`         | `20`        | Connection timeout (seconds) |
+| `CACHE_DEFAULT_TTL`          | `300`       | Default TTL (seconds)        |
 
 ### Programmatic Configuration
 
@@ -238,32 +242,40 @@ await cache.connect()
 #### Methods
 
 **`async connect() -> bool`**
+
 - Connect to Redis or initialize fallback cache
 - Returns: `True` if Redis connected, `False` if using fallback
 
 **`async disconnect()`**
+
 - Disconnect from Redis
 
 **`async get(key: str, default: Any = None) -> Any`**
+
 - Get value from cache
 - Returns cached value or `default` if not found
 
 **`async set(key: str, value: Any, ttl: Optional[int] = None) -> bool`**
+
 - Set value in cache with optional TTL
 - Returns: `True` if successful
 
 **`async delete(key: str) -> bool`**
+
 - Delete key from cache
 - Returns: `True` if key was deleted
 
 **`async exists(key: str) -> bool`**
+
 - Check if key exists in cache
 
 **`async clear(pattern: str = "*") -> int`**
+
 - Clear cache keys matching pattern
 - Returns: Number of keys deleted
 
 **`async get_stats() -> dict`**
+
 - Get cache statistics (hits, misses, hit rate, etc.)
 
 ---
@@ -345,7 +357,7 @@ async def get_critical_data(key):
     cached_data = await cache.get(key)
     if cached_data:
         return cached_data
-    
+
     # Try database
     try:
         data = await db.query(...)
@@ -364,7 +376,7 @@ async def get_critical_data(key):
 async def log_cache_stats():
     stats = await cache.get_stats()
     logger.info(f"Cache hit rate: {stats['hit_rate']:.2%}")
-    
+
     if stats['hit_rate'] < 0.5:
         logger.warning("Low cache hit rate - consider adjusting TTL values")
 ```
@@ -404,6 +416,7 @@ print(f"Using Redis: {stats['using_redis']}")
 ### Issue: High cache misses
 
 **Possible causes:**
+
 1. TTL too short - increase TTL values
 2. Cache keys not matching - check key generation
 3. Cache being cleared too frequently
@@ -419,7 +432,8 @@ if stats['hit_rate'] < 0.5:
 
 ### Issue: Memory usage growing
 
-**Solution:** 
+**Solution:**
+
 1. Reduce TTL values
 2. Clear old entries periodically
 3. Set memory limits in Redis config
@@ -455,7 +469,7 @@ services:
     volumes:
       - redis-data:/data
     command: redis-server --appendonly yes
-  
+
   app:
     environment:
       - REDIS_HOST=redis
@@ -520,6 +534,7 @@ await cache_manager.set("key", "value", ttl=60)
 ## Support
 
 For issues or questions:
+
 1. Check this documentation
 2. Review example code in `examples/cache_usage.py`
 3. Run tests to verify functionality
