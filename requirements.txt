@@ -19,7 +19,7 @@ psycopg2-binary==2.9.9          # PostgreSQL adapter
 asyncpg==0.29.0                 # Async PostgreSQL
 pymongo==4.6.0                  # MongoDB client
 motor==3.3.2                    # Async MongoDB
-redis==5.0.1                    # Redis client
+redis==5.0.1                    # Redis client (includes async support)
 hiredis==2.2.3                  # Redis performance boost
 
 # ============================================
