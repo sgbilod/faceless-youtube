@@ -76,6 +76,17 @@ class DatabaseConfig:
 
 config = DatabaseConfig()
 
+
+def get_database_url() -> str:
+    """
+    Get the database URL from configuration.
+    
+    Returns:
+        str: Database connection URL
+    """
+    return config.database_url
+
+
 # Create engine
 engine = create_engine(
     config.database_url,
