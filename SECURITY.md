@@ -47,18 +47,21 @@ We take security seriously. If you discover a security vulnerability, please:
 ### For Users
 
 1. **Environment Variables**
+
    - Never commit `.env` files to version control
    - Use strong, unique values for `SECRET_KEY`
    - Rotate API keys regularly
    - Use different credentials for dev/staging/production
 
 2. **Database Security**
+
    - Use strong database passwords
    - Enable SSL/TLS for database connections in production
    - Restrict database access to specific IP addresses
    - Regularly backup your database
 
 3. **API Keys**
+
    - Store API keys in environment variables, not in code
    - Use read-only API keys when possible
    - Monitor API usage for anomalies
@@ -72,13 +75,14 @@ We take security seriously. If you discover a security vulnerability, please:
 ### For Developers
 
 1. **Input Validation**
+
    ```python
    # Always validate user input
    from pydantic import BaseModel, validator
-   
+
    class VideoInput(BaseModel):
        title: str
-       
+
        @validator('title')
        def validate_title(cls, v):
            if len(v) > 200:
@@ -87,31 +91,35 @@ We take security seriously. If you discover a security vulnerability, please:
    ```
 
 2. **SQL Injection Prevention**
+
    ```python
    # GOOD: Use SQLAlchemy ORM or parameterized queries
    db.query(Video).filter(Video.id == video_id).first()
-   
+
    # BAD: Never use string formatting for SQL
    # db.execute(f"SELECT * FROM videos WHERE id = {video_id}")
    ```
 
 3. **XSS Prevention**
+
    - Sanitize all user-generated content
    - Use Content Security Policy (CSP) headers
    - Escape HTML in templates
 
 4. **Authentication**
+
    - Use secure password hashing (bcrypt, Argon2)
    - Implement rate limiting on login endpoints
    - Use JWT with short expiration times
    - Implement refresh token rotation
 
 5. **Secrets Management**
+
    ```python
    # GOOD: Load from environment
    import os
    api_key = os.getenv('API_KEY')
-   
+
    # BAD: Never hardcode secrets
    # api_key = "sk-1234567890abcdef"
    ```
@@ -121,22 +129,25 @@ We take security seriously. If you discover a security vulnerability, please:
 ### Current Implementation
 
 1. **Encryption at Rest**
+
    - Database credentials are encrypted in Platform model
    - API keys stored in environment variables (not encrypted at rest)
    - Consider using AWS Secrets Manager / Azure Key Vault for production
 
 2. **Authentication**
+
    - JWT-based authentication (implementation pending)
    - Password hashing with bcrypt (implementation pending)
    - OAuth 2.0 for third-party platforms
 
 3. **Rate Limiting**
+
    - API rate limiting (implementation pending)
    - Asset scraper rate limiting (implemented)
 
 4. **CORS**
    - CORS configured for specified origins only
-   - No wildcard (*) origins in production
+   - No wildcard (\*) origins in production
 
 ### Planned Security Enhancements
 
@@ -163,6 +174,7 @@ We run the following security scans on every PR:
 ### Manual Security Reviews
 
 Security reviews are required for:
+
 - Authentication/authorization changes
 - Database schema changes
 - External API integrations

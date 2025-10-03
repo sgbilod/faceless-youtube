@@ -1,9 +1,9 @@
 ---
 name: Feature Request
 about: Suggest an idea for this project
-title: '[FEATURE] '
+title: "[FEATURE] "
 labels: enhancement
-assignees: ''
+assignees: ""
 ---
 
 ## 🚀 Feature Request
@@ -42,7 +42,7 @@ If you have technical ideas on how to implement this, share them here:
 ## 💰 Cost Considerations
 
 - [ ] This feature is FREE (no additional costs)
-- [ ] This feature requires paid APIs (estimated cost: $___/month)
+- [ ] This feature requires paid APIs (estimated cost: $\_\_\_/month)
 - [ ] This feature requires additional infrastructure
 - [ ] Cost analysis needed
 
@@ -53,7 +53,7 @@ How will we measure the success of this feature?
 - [ ] User adoption rate
 - [ ] Performance improvement
 - [ ] Revenue impact
-- [ ] Other: ___________
+- [ ] Other: ****\_\_\_****
 
 ## ⚠️ Potential Risks
 

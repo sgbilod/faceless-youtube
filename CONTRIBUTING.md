@@ -20,6 +20,7 @@ This project aims to democratize content creation through AI automation. Every c
 ### Our Pledge
 
 We pledge to make participation in this project a harassment-free experience for everyone, regardless of:
+
 - Age, body size, disability, ethnicity, gender identity
 - Experience level, education, socio-economic status
 - Nationality, personal appearance, race, religion
@@ -28,6 +29,7 @@ We pledge to make participation in this project a harassment-free experience for
 ### Our Standards
 
 **Positive behavior:**
+
 - Using welcoming and inclusive language
 - Being respectful of differing viewpoints
 - Gracefully accepting constructive criticism
@@ -35,6 +37,7 @@ We pledge to make participation in this project a harassment-free experience for
 - Showing empathy towards other community members
 
 **Unacceptable behavior:**
+
 - Trolling, insulting/derogatory comments, personal attacks
 - Public or private harassment
 - Publishing others' private information
@@ -45,6 +48,7 @@ We pledge to make participation in this project a harassment-free experience for
 ### Reporting Bugs
 
 Before creating bug reports:
+
 - **Check existing issues** to avoid duplicates
 - **Use the bug report template** (.github/ISSUE_TEMPLATE/bug_report.md)
 - **Include as much detail as possible**: OS, Python version, steps to reproduce
@@ -52,6 +56,7 @@ Before creating bug reports:
 ### Suggesting Enhancements
 
 Enhancement suggestions are tracked as GitHub issues:
+
 - **Use the feature request template** (.github/ISSUE_TEMPLATE/feature_request.md)
 - **Explain the problem** your feature solves
 - **Consider cost implications** (we prioritize FREE solutions)
@@ -128,15 +133,15 @@ def generate_video(
 ) -> Video:
     """
     Generate video from script.
-    
+
     Args:
         script: Video script content
         duration: Video duration in seconds
         output_path: Path to save generated video
-        
+
     Returns:
         Video object with metadata
-        
+
     Raises:
         ValueError: If script is empty
         IOError: If output_path is not writable
@@ -195,7 +200,7 @@ MAX_VIDEO_LENGTH = 3600
 class VideoGenerator:
     def generate_video(self):
         pass
-    
+
     def _validate_script(self):  # Private method
         pass
 
@@ -214,30 +219,30 @@ Every function must have a docstring:
 def calculate_video_duration(assets: List[Asset]) -> int:
     """
     Calculate total video duration from assets.
-    
+
     This function sums the duration of all assets and applies
     transition time adjustments.
-    
+
     Args:
         assets: List of Asset objects with duration_seconds attribute
-        
+
     Returns:
         Total duration in seconds (int)
-        
+
     Raises:
         ValueError: If assets list is empty
-        
+
     Example:
         >>> assets = [Asset(duration_seconds=10), Asset(duration_seconds=20)]
         >>> calculate_video_duration(assets)
         30
-        
+
     Note:
         Transition effects add 1 second per transition
     """
     if not assets:
         raise ValueError("Assets list cannot be empty")
-    
+
     base_duration = sum(asset.duration_seconds for asset in assets)
     transition_time = (len(assets) - 1) * 1  # 1 second per transition
     return base_duration + transition_time
@@ -256,6 +261,7 @@ def calculate_video_duration(assets: List[Asset]) -> int:
 ```
 
 **Types:**
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
@@ -293,18 +299,21 @@ git commit -m "perf(asset): optimize database queries with eager loading"
 ### Before Submitting
 
 1. **Update from upstream:**
+
    ```bash
    git fetch upstream
    git rebase upstream/main
    ```
 
 2. **Run tests:**
+
    ```bash
    pytest
    pytest --cov=src --cov-report=html
    ```
 
 3. **Format code:**
+
    ```bash
    black src/ tests/
    ruff check src/ tests/ --fix
@@ -320,6 +329,7 @@ git commit -m "perf(asset): optimize database queries with eager loading"
 ### PR Template
 
 Use the provided template (.github/pull_request_template.md):
+
 - Fill out all sections
 - Check all applicable boxes
 - Add screenshots for UI changes
@@ -329,11 +339,13 @@ Use the provided template (.github/pull_request_template.md):
 ### Review Process
 
 1. **Automated checks must pass:**
+
    - CI/CD pipeline (tests, linting, type checking)
    - Code coverage >= 90%
    - No security vulnerabilities
 
 2. **Code review:**
+
    - At least 1 approval required
    - Address all review comments
    - Be responsive to feedback
@@ -368,7 +380,7 @@ from src.core.models import Video, VideoStatus
 
 class TestVideo:
     """Test Video model."""
-    
+
     def test_create_video(self, db_session):
         """Test creating a video record."""
         video = Video(
@@ -378,18 +390,18 @@ class TestVideo:
         )
         db_session.add(video)
         db_session.commit()
-        
+
         assert video.id is not None
         assert video.title == "Test Video"
         assert video.status == VideoStatus.COMPLETED
-    
+
     def test_video_title_required(self, db_session):
         """Test that title is required."""
         with pytest.raises(ValueError):
             video = Video(duration_seconds=300)
             db_session.add(video)
             db_session.commit()
-    
+
     @pytest.mark.parametrize("duration", [0, -1, 10000000])
     def test_video_duration_validation(self, duration):
         """Test duration validation."""
@@ -435,23 +447,23 @@ def scrape_assets(
 ) -> List[Asset]:
     """
     Scrape assets from specified source.
-    
+
     Fetches video/image assets from free stock platforms based on
     search query. Results are cached for 1 hour to reduce API calls.
-    
+
     Args:
         source: Asset source platform ('pexels', 'pixabay', 'unsplash')
         query: Search query (e.g., "nature sunset")
         limit: Maximum number of assets to return (1-100)
-        
+
     Returns:
         List of Asset objects with metadata populated
-        
+
     Raises:
         ValueError: If source is not supported
         APIError: If source API returns error
         RateLimitError: If API rate limit exceeded
-        
+
     Example:
         >>> assets = scrape_assets('pexels', 'mountain', limit=5)
         >>> len(assets)
@@ -481,11 +493,13 @@ def scrape_assets(
 This project prioritizes cost-effective solutions:
 
 1. **Always prefer FREE:**
+
    - Local AI models (Ollama, GPT4All)
    - Free stock assets (Pexels, Pixabay)
    - Open-source TTS (Coqui, pyttsx3)
 
 2. **Freemium second:**
+
    - Use free tiers aggressively
    - Document cost implications in PR
 
@@ -510,6 +524,7 @@ This project prioritizes cost-effective solutions:
 ## 🏆 Recognition
 
 Contributors are recognized in:
+
 - README.md contributors section
 - CHANGELOG.md for each release
 - GitHub contributors page

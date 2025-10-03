@@ -42,7 +42,7 @@ Related to #
 pytest -v
 ```
 
-**Coverage:** ___%
+**Coverage:** \_\_\_%
 
 ## 📸 Screenshots/Videos (if applicable)
 
@@ -71,8 +71,8 @@ pytest -v
 <!-- Estimate cost impact of this change -->
 
 - [ ] No cost impact (FREE)
-- [ ] Increases costs by $___/month
-- [ ] Reduces costs by $___/month
+- [ ] Increases costs by $\_\_\_/month
+- [ ] Reduces costs by $\_\_\_/month
 - [ ] Cost analysis needed
 
 **Justification:** <!-- Explain cost impact -->
@@ -86,9 +86,10 @@ pytest -v
 - [ ] May impact performance (benchmarks provided)
 
 **Metrics:**
-- Response time: Before ___ ms → After ___ ms
-- Memory usage: Before ___ MB → After ___ MB
-- Database queries: Before ___ → After ___
+
+- Response time: Before **_ ms → After _** ms
+- Memory usage: Before **_ MB → After _** MB
+- Database queries: Before **_ → After _**
 
 ## 🔒 Security Considerations
 
@@ -163,6 +164,7 @@ pytest -v
 - [ ] Requires data migration
 
 **Migration steps:**
+
 ```bash
 # Add migration steps here
 ```
@@ -193,6 +195,7 @@ alembic downgrade -1
 <!-- For Copilot/AI assistants reviewing code -->
 
 **AI Review Focus:**
+
 - [ ] Code quality and best practices
 - [ ] Cost optimization opportunities
 - [ ] Performance optimization opportunities
@@ -202,6 +205,7 @@ alembic downgrade -1
 ---
 
 **By submitting this PR, I confirm:**
+
 - ✅ I have read the CONTRIBUTING.md guidelines
 - ✅ My code follows the project's coding standards
 - ✅ I have performed a self-review of my code

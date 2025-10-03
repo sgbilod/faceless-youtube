@@ -1,9 +1,9 @@
 ---
 name: Performance Issue
 about: Report performance problems or optimization opportunities
-title: '[PERF] '
+title: "[PERF] "
 labels: performance
-assignees: ''
+assignees: ""
 ---
 
 ## ⚡ Performance Issue
@@ -13,20 +13,22 @@ A clear and concise description of the performance problem.
 ## 📊 Current Performance
 
 **Measured metrics:**
-- Response time: ___ ms
-- Memory usage: ___ MB
-- CPU usage: ___% 
-- Database queries: ___ queries
-- API calls: ___ calls
+
+- Response time: \_\_\_ ms
+- Memory usage: \_\_\_ MB
+- CPU usage: \_\_\_%
+- Database queries: \_\_\_ queries
+- API calls: \_\_\_ calls
 
 ## 🎯 Expected Performance
 
 **Target metrics:**
-- Response time: < ___ ms
-- Memory usage: < ___ MB
-- CPU usage: < ___%
-- Database queries: < ___ queries
-- API calls: < ___ calls
+
+- Response time: < \_\_\_ ms
+- Memory usage: < \_\_\_ MB
+- CPU usage: < \_\_\_%
+- Database queries: < \_\_\_ queries
+- API calls: < \_\_\_ calls
 
 ## 🔍 Affected Component
 
@@ -38,7 +40,7 @@ A clear and concise description of the performance problem.
 - [ ] Multi-Platform Publisher
 - [ ] Analytics Engine
 - [ ] UI/Frontend
-- [ ] Other: ___________
+- [ ] Other: ****\_\_\_****
 
 ## 📋 Steps to Reproduce
 
@@ -55,12 +57,13 @@ A clear and concise description of the performance problem.
 ## 🔬 Analysis
 
 **Root cause (if known):**
+
 - N+1 query problem
 - Missing index
 - Inefficient algorithm
 - Memory leak
 - External API slowness
-- Other: ___________
+- Other: ****\_\_\_****
 
 ## 💡 Proposed Optimization
 
@@ -69,7 +72,6 @@ Describe potential solutions:
 1. **Solution 1:** Add database index
    - Impact: -50% query time
    - Effort: Low
-   
 2. **Solution 2:** Implement caching
    - Impact: -80% response time
    - Effort: Medium
@@ -79,11 +81,13 @@ Describe potential solutions:
 If you've tested optimizations, share results:
 
 **Before:**
+
 ```
 Metric: Value
 ```
 
 **After:**
+
 ```
 Metric: Improved Value
 ```

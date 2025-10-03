@@ -1,9 +1,9 @@
 ---
 name: Documentation Improvement
 about: Suggest improvements to documentation
-title: '[DOCS] '
+title: "[DOCS] "
 labels: documentation
-assignees: ''
+assignees: ""
 ---
 
 ## 📚 Documentation Issue
@@ -21,7 +21,7 @@ A clear and concise description of what documentation is missing, unclear, or in
 - [ ] Setup/Installation guide
 - [ ] Troubleshooting guide
 - [ ] Contributing guide
-- [ ] Other: ___________
+- [ ] Other: ****\_\_\_****
 
 ## 🐛 Problem Description
 
@@ -34,7 +34,7 @@ A clear and concise description of what documentation is missing, unclear, or in
 - [ ] Missing examples
 - [ ] Broken links
 - [ ] Typos/grammar
-- [ ] Other: ___________
+- [ ] Other: ****\_\_\_****
 
 ## 💡 Proposed Improvement
 
@@ -57,7 +57,7 @@ Who will benefit from this documentation improvement?
 - [ ] Developers integrating the API
 - [ ] DevOps/deployment teams
 - [ ] AI assistants (Copilot)
-- [ ] Other: ___________
+- [ ] Other: ****\_\_\_****
 
 ## ✔️ Checklist
 
