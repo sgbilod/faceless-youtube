@@ -1,0 +1,173 @@
+# ===========================
+# FACELESS YOUTUBE AUTOMATION
+# Comprehensive .gitignore
+# ===========================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# VS Code Local History
+.history/
+
+# Secrets & Credentials (CRITICAL - DO NOT COMMIT)
+*.key
+*.pem
+*.p12
+*.pfx
+client_secrets.json
+secrets.yaml
+secrets.yml
+.env
+.env.local
+.env.*.local
+*.secret
+credentials.json
+token.json
+api_keys.json
+Pexels.txt
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+*.sql
+faceless_youtube.db
+
+# Logs
+*.log
+logs/
+*.log.*
+video_log.txt
+setup_log.txt
+gtts_install.log
+gtts_install.log
+
+# Assets (Large Files - Use Git LFS or exclude)
+output_videos/*.mp4
+assets/video_library/**/*.mp4
+assets/video_library/**/*.mov
+assets/video_library/**/*.avi
+assets/audio_library/**/*.mp3
+assets/audio_library/**/*.wav
+assets/models/**/*.h5
+assets/models/**/*.ckpt
+assets/models/**/*.pt
+assets/models/**/*.pth
+assets/models/**/*.onnx
+
+# Downloaded binaries and installers
+ImageMagick/*.exe
+ImageMagick/*.zip
+ImageMagick/ImageMagick-*/
+*.exe
+
+# Docker
+*.dockerignore
+
+# Temporary Files
+tmp/
+temp/
+*.tmp
+*.temp
+*.cache
+*.swp
+*TEMP_MPY*
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Config (Keep examples, exclude secrets)
+config/production.yaml
+config/secrets.yaml
+
+# Legal (Exclude drafts)
+legal/DRAFTS/
+
+# Build artifacts
+*.exe
+*.msi
+*.dmg
+*.pkg
+*.deb
+*.rpm
+*.AppImage
+
+# Node (if using any JS tools)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Kubernetes secrets
+kubernetes/**/*secret*.yaml
+kubernetes/**/*credentials*.yaml
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Test output
+test_output/
+test_results/

@@ -1,0 +1,88 @@
+name: Security Scan
+
+on:
+    schedule:
+        # Run every Monday at 9 AM UTC
+        - cron: "0 9 * * 1"
+    workflow_dispatch: # Allow manual trigger
+
+jobs:
+    dependency-scan:
+        name: Dependency Vulnerability Scan
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: "3.11"
+
+            - name: Install dependencies
+              run: |
+                  python -m pip install --upgrade pip
+                  pip install safety
+
+            - name: Run Safety Check
+              run: |
+                  pip install -r requirements.txt
+                  safety check --json --output safety-report.json
+              continue-on-error: true
+
+            - name: Upload Safety Report
+              uses: actions/upload-artifact@v3
+              with:
+                  name: safety-report
+                  path: safety-report.json
+
+    code-scan:
+        name: Static Code Analysis
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: "3.11"
+
+            - name: Install Bandit
+              run: pip install bandit
+
+            - name: Run Bandit Security Scan
+              run: |
+                  bandit -r src/ \
+                    -f json \
+                    -o bandit-report.json \
+                    --severity-level medium
+              continue-on-error: true
+
+            - name: Upload Bandit Report
+              uses: actions/upload-artifact@v3
+              with:
+                  name: bandit-report
+                  path: bandit-report.json
+
+    docker-scan:
+        name: Docker Image Vulnerability Scan
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Build Docker Image
+              run: docker build -t faceless-youtube:latest -f docker/Dockerfile.app .
+
+            - name: Run Trivy Vulnerability Scanner
+              uses: aquasecurity/trivy-action@master
+              with:
+                  image-ref: "faceless-youtube:latest"
+                  format: "sarif"
+                  output: "trivy-results.sarif"
+
+            - name: Upload Trivy Results
+              uses: github/codeql-action/upload-sarif@v2
+              with:
+                  sarif_file: "trivy-results.sarif"

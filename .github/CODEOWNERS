@@ -1,0 +1,56 @@
+# Code Owners
+
+# These owners will be requested for review when someone opens a pull request.
+# More info: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global owners (fallback)
+* @owner-username
+
+# Core application code
+/src/ @backend-team
+/src/core/ @database-team
+/src/api/ @api-team
+/src/services/ @backend-team
+
+# Database & Migrations
+/alembic/ @database-team
+/src/core/models.py @database-team
+/src/core/database.py @database-team
+/docs/DATABASE.md @database-team
+
+# Documentation
+/docs/ @documentation-team
+*.md @documentation-team
+
+# CI/CD & Infrastructure
+/.github/ @devops-team
+/docker/ @devops-team
+docker-compose.yml @devops-team
+Dockerfile* @devops-team
+.dockerignore @devops-team
+
+# Configuration
+requirements.txt @backend-team @devops-team
+.env.example @devops-team
+alembic.ini @database-team @devops-team
+
+# Tests
+/tests/ @qa-team
+conftest.py @qa-team
+
+# Security
+/legal/ @legal-team @security-team
+SECURITY.md @security-team
+
+# Scripts
+/scripts/ @devops-team
+/scripts/test_database.py @database-team
+
+# Frontend (when added)
+# /client/ @frontend-team
+# /ui/ @frontend-team
+
+# AI/ML Components (when added)
+# /src/ai/ @ml-team
+# /src/services/script_generator/ @ml-team
+# /src/services/asset_selector/ @ml-team

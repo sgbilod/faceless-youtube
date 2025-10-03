@@ -1,0 +1,158 @@
+version: "3.8"
+
+services:
+  # ===========================
+  # PostgreSQL Database
+  # ===========================
+  postgres:
+    image: postgres:15-alpine
+    container_name: faceless-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-faceless_youtube}
+      POSTGRES_USER: ${POSTGRES_USER:-dev}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dev_password}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-dev}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ===========================
+  # Redis Cache & Queue
+  # ===========================
+  redis:
+    image: redis:7-alpine
+    container_name: faceless-redis
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ===========================
+  # MongoDB (Document Store)
+  # ===========================
+  mongodb:
+    image: mongo:6
+    container_name: faceless-mongodb
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGO_DB:-faceless_youtube}
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ===========================
+  # FastAPI Application
+  # ===========================
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.app
+    container_name: faceless-app
+    environment:
+      # Database
+      DATABASE_URL: postgresql://${POSTGRES_USER:-dev}:${POSTGRES_PASSWORD:-dev_password}@postgres:5432/${POSTGRES_DB:-faceless_youtube}
+      REDIS_URL: redis://redis:6379
+      MONGODB_URL: mongodb://mongodb:27017
+
+      # API Keys (load from .env)
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      PEXELS_API_KEY: ${PEXELS_API_KEY:-}
+      YOUTUBE_CLIENT_ID: ${YOUTUBE_CLIENT_ID:-}
+      YOUTUBE_CLIENT_SECRET: ${YOUTUBE_CLIENT_SECRET:-}
+
+      # Application
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      DEBUG: ${DEBUG:-true}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    volumes:
+      - ./src:/app/src # Development: hot reload
+      - ./assets:/app/assets
+      - ./output_videos:/app/output_videos
+      - ./config:/app/config
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ===========================
+  # Celery Worker
+  # ===========================
+  worker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    container_name: faceless-worker
+    environment:
+      # Celery
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+
+      # Database
+      DATABASE_URL: postgresql://${POSTGRES_USER:-dev}:${POSTGRES_PASSWORD:-dev_password}@postgres:5432/${POSTGRES_DB:-faceless_youtube}
+      MONGODB_URL: mongodb://mongodb:27017
+
+      # API Keys
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      PEXELS_API_KEY: ${PEXELS_API_KEY:-}
+    volumes:
+      - ./src:/app/src
+      - ./assets:/app/assets
+      - ./output_videos:/app/output_videos
+    depends_on:
+      - redis
+      - postgres
+      - mongodb
+    restart: unless-stopped
+
+  # ===========================
+  # Celery Beat (Scheduler)
+  # ===========================
+  beat:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    container_name: faceless-beat
+    command: celery -A src.core.celery_app beat --loglevel=info
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  mongo_data:
+    driver: local
+
+networks:
+  default:
+    name: faceless-network

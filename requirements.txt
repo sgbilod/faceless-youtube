@@ -1,0 +1,139 @@
+# Python dependencies for Faceless YouTube Automation Platform v2.0
+# Install with: pip install -r requirements.txt
+
+# ============================================
+# CORE FRAMEWORK
+# ============================================
+fastapi==0.104.1                # REST API framework
+uvicorn[standard]==0.24.0       # ASGI server
+pydantic==2.5.0                 # Data validation
+python-dotenv==1.0.0            # Environment variables
+python-multipart==0.0.6         # File upload support
+
+# ============================================
+# DATABASE & ORM
+# ============================================
+sqlalchemy==2.0.23              # ORM for PostgreSQL
+alembic==1.12.1                 # Database migrations
+psycopg2-binary==2.9.9          # PostgreSQL adapter
+asyncpg==0.29.0                 # Async PostgreSQL
+pymongo==4.6.0                  # MongoDB client
+motor==3.3.2                    # Async MongoDB
+redis==5.0.1                    # Redis client
+hiredis==2.2.3                  # Redis performance boost
+
+# ============================================
+# AI & ML (LOCAL-FIRST)
+# ============================================
+# NOTE: Ollama runs as separate service (not Python package)
+# Install: curl https://ollama.ai/install.sh | sh
+# Models: ollama pull mistral, ollama pull llama2
+
+sentence-transformers==2.2.2    # Text embeddings
+torch==2.1.1                    # PyTorch (CLIP dependency)
+torchvision==0.16.1             # Vision models
+pillow==10.1.0                  # Image processing
+opencv-python==4.8.1.78         # Video processing
+imagehash==4.3.1                # Perceptual hashing (deduplication)
+scikit-learn==1.3.2             # ML utilities
+numpy==1.26.2                   # Numerical computing
+
+# Voice Synthesis (FREE alternatives)
+TTS==0.21.1                     # Coqui TTS (local, high quality)
+pyttsx3==2.90                   # Offline TTS (fallback)
+
+# ============================================
+# VIDEO & AUDIO PROCESSING
+# ============================================
+moviepy==1.0.3                  # Video editing
+ffmpeg-python==0.2.0            # FFmpeg wrapper
+pydub==0.25.1                   # Audio manipulation
+mutagen==1.47.0                 # Audio metadata
+
+# ============================================
+# WEB SCRAPING & HTTP
+# ============================================
+httpx==0.25.2                   # Async HTTP client
+aiohttp==3.9.1                  # Alternative async HTTP
+beautifulsoup4==4.12.2          # HTML parsing
+lxml==4.9.3                     # XML/HTML parser
+playwright==1.40.0              # Browser automation (JavaScript sites)
+requests==2.31.0                # Sync HTTP (legacy support)
+
+# ============================================
+# DESKTOP UI
+# ============================================
+PyQt6==6.6.1                    # Desktop GUI framework
+PyQt6-WebEngine==6.6.0          # Web view component
+
+# ============================================
+# BACKGROUND TASKS & SCHEDULING
+# ============================================
+celery==5.3.4                   # Distributed task queue
+celery-redbeat==2.1.1           # Redis-backed scheduler
+apscheduler==3.10.4             # Alternative scheduler
+
+# ============================================
+# TESTING
+# ============================================
+pytest==7.4.3                   # Test framework
+pytest-asyncio==0.21.1          # Async test support
+pytest-cov==4.1.0               # Coverage reporting
+pytest-mock==3.12.0             # Mocking utilities
+faker==20.1.0                   # Fake data generation
+factory-boy==3.3.0              # Test fixtures
+
+# ============================================
+# CODE QUALITY
+# ============================================
+black==23.12.0                  # Code formatter
+ruff==0.1.7                     # Fast linter
+mypy==1.7.1                     # Type checker
+pre-commit==3.5.0               # Git hooks
+
+# ============================================
+# SECURITY & ENCRYPTION
+# ============================================
+cryptography==41.0.7            # Encryption library
+python-jose[cryptography]==3.3.0  # JWT handling
+passlib[bcrypt]==1.7.4          # Password hashing
+keyring==24.3.0                 # System keyring access
+
+# ============================================
+# API INTEGRATIONS (Platform Publishing)
+# ============================================
+google-api-python-client==2.108.0  # YouTube API
+google-auth-oauthlib==1.2.0     # Google OAuth
+google-auth-httplib2==0.2.0     # Google HTTP transport
+
+# TikTok (unofficial - may need custom implementation)
+# tiktok-uploader==1.0.0        # Community package (verify before use)
+
+# NOTE: Instagram, LinkedIn, Twitter require separate API setup
+# Refer to docs/API_INTEGRATION.md for platform-specific instructions
+
+# ============================================
+# MONITORING & LOGGING
+# ============================================
+structlog==23.2.0               # Structured logging
+prometheus-client==0.19.0       # Metrics export
+sentry-sdk==1.39.1              # Error tracking (optional)
+
+# ============================================
+# UTILITIES
+# ============================================
+python-slugify==8.0.1           # URL-safe strings
+arrow==1.3.0                    # Better datetime handling
+tenacity==8.2.3                 # Retry logic
+tqdm==4.66.1                    # Progress bars
+click==8.1.7                    # CLI framework
+pyyaml==6.0.1                   # YAML parsing
+toml==0.10.2                    # TOML parsing
+colorama==0.4.6                 # Colored terminal output (Windows)
+
+# ============================================
+# DEVELOPMENT TOOLS
+# ============================================
+ipython==8.18.1                 # Enhanced Python REPL
+ipdb==0.13.13                   # Debugger
+watchdog==3.0.0                 # File system monitoring
