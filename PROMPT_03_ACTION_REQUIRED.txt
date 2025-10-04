@@ -1,0 +1,212 @@
+# ⚠️ PROMPT #3 - ACTION REQUIRED
+
+**Date:** October 4, 2025  
+**Status:** Pending Administrator Action  
+**Complexity:** ⚙️ Medium  
+**Estimated Time:** 10-20 minutes
+
+---
+
+## 🎯 Current Situation
+
+**Problem:** PostgreSQL and MongoDB are not installed on this system, which blocks all data persistence operations.
+
+**Current Errors:**
+```
+❌ PostgreSQL: Not installed/running
+❌ MongoDB: Not installed/running
+✅ Redis: Working (already configured)
+```
+
+**Impact:**
+- Cannot store video metadata
+- Cannot manage job queues
+- Cannot persist asset libraries
+- System health: 50% (3/6 components)
+
+---
+
+## ✅ What Needs to Be Done
+
+You need to install PostgreSQL and MongoDB with **Administrator privileges**.
+
+I've created comprehensive guides for you:
+
+### 📄 **Main Guide:** `PROMPT_03_DATABASE_SETUP_GUIDE.md`
+
+This guide provides:
+- **Option 1:** Quick install with Chocolatey (10-15 minutes)
+- **Option 2:** Manual installation (20-30 minutes)
+- Complete troubleshooting section
+- Step-by-step verification
+
+### 🧪 **Test Script:** `test_databases.py`
+
+After installation, run this to verify:
+```powershell
+python test_databases.py
+```
+
+---
+
+## 🚀 Quick Start (Chocolatey Method)
+
+### Step 1: Open Admin PowerShell
+
+1. Press `Win + X`
+2. Select "**Windows PowerShell (Admin)**"
+3. Navigate to project: `cd C:\FacelessYouTube`
+
+### Step 2: Install Databases
+
+```powershell
+# Install PostgreSQL (3-5 minutes)
+choco install postgresql14 --params "/Password:FacelessYT2025!" -y
+
+# Install MongoDB (2-4 minutes)
+choco install mongodb -y
+
+# Verify services are running
+Get-Service -Name "*postgresql*", "*mongo*" | Select-Object Name, Status
+```
+
+### Step 3: Configure Environment
+
+Edit `.env` file and add:
+
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=faceless_youtube
+DB_USER=postgres
+DB_PASSWORD=FacelessYT2025!
+
+MONGODB_HOST=localhost
+MONGODB_PORT=27017
+MONGODB_DB=faceless_youtube_assets
+```
+
+### Step 4: Create Database
+
+```powershell
+& "C:\Program Files\PostgreSQL\14\bin\psql.exe" -U postgres -c "CREATE DATABASE faceless_youtube;"
+# Password: FacelessYT2025!
+```
+
+### Step 5: Test
+
+```powershell
+python test_databases.py
+```
+
+**Expected output:**
+```
+✅ PostgreSQL: OPERATIONAL
+✅ MongoDB: OPERATIONAL
+✅ Redis: OPERATIONAL
+🎉 All critical databases are working!
+```
+
+### Step 6: Verify with Diagnostics
+
+```powershell
+python scripts/diagnostics.py
+```
+
+**Expected improvement:**
+```
+Component: Database Connections - HEALTHY ✅
+  ✅ PASSED (3):
+    - PostgreSQL: Connected
+    - MongoDB: Connected
+    - Redis: Connected
+
+Components: 4/6 healthy (was 3/6)
+System Health: 67% (was 50%)
+```
+
+---
+
+## 📋 Why This Requires Administrator Action
+
+The current PowerShell session does not have administrator privileges, which are required to:
+- Install Windows Services
+- Create directories in Program Files
+- Configure system-level services
+- Modify Windows firewall rules
+
+---
+
+## 🔍 What I've Already Done
+
+1. ✅ Checked for existing installations (none found)
+2. ✅ Verified Chocolatey is installed (v2.4.3)
+3. ✅ Created comprehensive setup guide
+4. ✅ Created automated test script
+5. ✅ Documented all steps with troubleshooting
+
+---
+
+## 📚 Files Created
+
+| File | Purpose |
+|------|---------|
+| `PROMPT_03_DATABASE_SETUP_GUIDE.md` | Complete installation guide with 2 methods |
+| `test_databases.py` | Automated connection test script |
+| `PROMPT_03_ACTION_REQUIRED.txt` | This file (summary) |
+
+---
+
+## ⏭️ After Completion
+
+Once databases are installed and verified:
+
+1. **Mark Prompt #3 as complete**
+2. **Commit configuration changes:**
+   ```powershell
+   git add .env test_databases.py PROMPT_03_DATABASE_SETUP_GUIDE.md
+   git commit -m "config(phase2a): add database credentials and setup guide"
+   git push
+   ```
+3. **Proceed to Prompt #4:** Environment Configuration (API keys)
+
+---
+
+## 🆘 Need Help?
+
+If you encounter issues:
+
+1. Review `PROMPT_03_DATABASE_SETUP_GUIDE.md` (comprehensive troubleshooting section)
+2. Check Windows Event Viewer for service errors
+3. Verify port availability: `netstat -an | Select-String "5432|27017"`
+4. Check firewall settings
+
+---
+
+## 📊 Progress Tracking
+
+**Phase 2A Progress:**
+
+| Prompt | Status | Time | Notes |
+|--------|--------|------|-------|
+| #1 Dependencies | ⏳ Pending | - | 28 packages needed |
+| #2 Syntax Fix | ✅ **COMPLETE** | 5 min | video_assembler fixed |
+| #3 Databases | ⚠️ **ACTION REQUIRED** | 10-20 min | ← **YOU ARE HERE** |
+| #4 Environment | ⏳ Pending | 15-30 min | API keys needed |
+| #5 YouTube OAuth | ⏳ Pending | 30-60 min | Google Cloud setup |
+| #6 Verification | ⏳ Pending | 10-15 min | Final health check |
+
+**Current System Health:** 50% (3/6 components)  
+**Target After Prompt #3:** 67% (4/6 components)
+
+---
+
+**Action Required:** Install databases with administrator privileges  
+**Estimated Time:** 10-20 minutes  
+**Complexity:** Medium (requires admin access)
+
+---
+
+*Created: October 4, 2025*  
+*For: Faceless YouTube Automation Platform v2.0*  
+*Prompt: #3 of 6*
