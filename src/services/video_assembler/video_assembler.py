@@ -539,7 +539,7 @@ class VideoAssembler:
         
         return deleted
     
-    def estimate_assembly_time(
+    async def estimate_assembly_time(
         self,
         script: str,
         asset_count: int

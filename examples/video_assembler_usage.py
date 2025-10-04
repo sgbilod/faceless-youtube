@@ -373,7 +373,7 @@ async def example_8_time_estimation():
     script = "This is a test script with approximately fifty words. " * 10
     
     # Estimate time
-    estimated_time = assembler.estimate_assembly_time(
+    estimated_time = await assembler.estimate_assembly_time(
         script=script,
         asset_count=5
     )
