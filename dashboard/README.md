@@ -1,6 +1,6 @@
-# DOPPELGANGER STUDIO - Web Dashboard
+# Faceless YouTube Automation Platform - Web Dashboard
 
-A modern, real-time web interface for managing the DOPPELGANGER STUDIO video automation pipeline.
+A modern, real-time web interface for managing the Faceless YouTube Automation Platform video pipeline.
 
 ## 🚀 Quick Start
 
@@ -178,10 +178,10 @@ For production deployment:
 
 ## 📄 License
 
-Part of DOPPELGANGER STUDIO - All Rights Reserved
+Part of Faceless YouTube Automation Platform - GNU AGPL v3.0
 
 ---
 
 **Version:** 1.0.0  
 **Built with:** ❤️ and React  
-**For:** DOPPELGANGER STUDIO
+**For:** Faceless YouTube Automation Platform

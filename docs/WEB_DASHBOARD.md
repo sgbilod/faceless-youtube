@@ -2,7 +2,7 @@
 
 ## Overview
 
-The DOPPELGANGER STUDIO Web Dashboard provides a comprehensive web interface for managing the entire video automation pipeline. Built with React and FastAPI, it offers real-time monitoring, job management, scheduling, and analytics.
+The **Faceless YouTube Automation Platform** Web Dashboard provides a comprehensive web interface for managing the entire faceless video automation pipeline. Built with React and FastAPI, it offers real-time monitoring, job management, scheduling, and analytics for automated content creation.
 
 ## Architecture
 
@@ -23,9 +23,11 @@ The FastAPI backend provides a REST API and WebSocket server for real-time updat
 #### API Endpoints
 
 ##### Health Check
+
 - `GET /api/health` - System health and scheduler status
 
 ##### Job Management
+
 - `POST /api/jobs/schedule` - Schedule a new video job
 - `GET /api/jobs` - List all jobs (optional status filter)
 - `GET /api/jobs/{job_id}` - Get specific job details
@@ -34,6 +36,7 @@ The FastAPI backend provides a REST API and WebSocket server for real-time updat
 - `POST /api/jobs/{job_id}/resume` - Resume a paused job
 
 ##### Recurring Schedules
+
 - `POST /api/recurring/create` - Create recurring schedule (daily/weekly/monthly)
 - `GET /api/recurring` - List all recurring schedules
 - `POST /api/recurring/{job_id}/pause` - Pause recurring schedule
@@ -41,6 +44,7 @@ The FastAPI backend provides a REST API and WebSocket server for real-time updat
 - `DELETE /api/recurring/{job_id}` - Delete recurring schedule
 
 ##### Calendar Management
+
 - `POST /api/calendar/slots` - Reserve a calendar slot
 - `GET /api/calendar/day/{date}` - Get day view (YYYY-MM-DD)
 - `GET /api/calendar/week/{date}` - Get week view starting from date
@@ -48,9 +52,11 @@ The FastAPI backend provides a REST API and WebSocket server for real-time updat
 - `GET /api/calendar/conflicts` - Detect scheduling conflicts
 
 ##### Statistics
+
 - `GET /api/statistics` - System statistics and metrics
 
 ##### Real-time Updates
+
 - `WebSocket /ws` - Real-time job updates and notifications
 
 #### WebSocket Events
@@ -209,11 +215,13 @@ Built files will be in `dashboard/dist/`
 #### Serve Production Build
 
 Option 1 - Use Vite preview:
+
 ```bash
 npm run preview
 ```
 
 Option 2 - Serve with FastAPI:
+
 ```python
 # Add to src/api/main.py
 from fastapi.staticfiles import StaticFiles
@@ -228,12 +236,14 @@ app.mount("/", StaticFiles(directory="dashboard/dist", html=True), name="static"
 **Path:** `/dashboard`
 
 **Features:**
+
 - Real-time job statistics
 - Recent jobs list
 - Quick job scheduling
 - WebSocket-powered live updates
 
 **Components:**
+
 - `StatCard` - Displays job statistics (Total, Pending, Running, Completed)
 - `JobList` - Shows recent jobs with status
 - `CreateJobModal` - Modal for scheduling new videos
@@ -243,12 +253,14 @@ app.mount("/", StaticFiles(directory="dashboard/dist", html=True), name="static"
 **Path:** `/jobs`
 
 **Features:**
+
 - View all jobs with filtering
 - Filter by status (pending, running, completed, failed, cancelled)
 - Real-time job updates
 - Job actions (pause, resume, cancel)
 
 **Job Actions:**
+
 - **Pause** - Pause a running job (yellow button)
 - **Resume** - Resume a paused job (green button)
 - **Cancel** - Cancel pending/running/paused jobs (red button)
@@ -258,12 +270,14 @@ app.mount("/", StaticFiles(directory="dashboard/dist", html=True), name="static"
 **Path:** `/calendar`
 
 **Features:**
+
 - Week view of scheduled jobs
 - Navigate weeks (previous/next/today)
 - Conflict detection
 - Slot status indicators
 
 **Slot States:**
+
 - **Reserved** - Slot reserved but job not started (blue)
 - **Completed** - Job completed successfully (green)
 
@@ -272,12 +286,14 @@ app.mount("/", StaticFiles(directory="dashboard/dist", html=True), name="static"
 **Path:** `/analytics`
 
 **Features:**
+
 - Job status distribution (pie chart)
 - Jobs per day (bar chart)
 - Job completion trend (line chart)
 - System information panel
 
 **Metrics:**
+
 - Total jobs
 - Active jobs
 - Completed jobs
@@ -290,7 +306,7 @@ app.mount("/", StaticFiles(directory="dashboard/dist", html=True), name="static"
 ### Jobs
 
 ```javascript
-import { jobsApi } from './api/jobs'
+import { jobsApi } from "./api/jobs";
 
 // Schedule a job
 const job = await jobsApi.scheduleJob({
@@ -299,17 +315,17 @@ const job = await jobsApi.scheduleJob({
   scheduled_time: "2025-06-01T10:00:00",
   topic: "Luna starts a space business",
   duration: 60,
-  priority: 2
-})
+  priority: 2,
+});
 
 // Get all jobs
-const jobs = await jobsApi.getJobs()
+const jobs = await jobsApi.getJobs();
 
 // Filter by status
-const runningJobs = await jobsApi.getJobs('running')
+const runningJobs = await jobsApi.getJobs("running");
 
 // Cancel a job
-await jobsApi.cancelJob(job.job_id)
+await jobsApi.cancelJob(job.job_id);
 ```
 
 ### React Query Hooks
@@ -323,7 +339,7 @@ function MyComponent() {
 
   // Schedule mutation with success handling
   const scheduleMutation = useScheduleJob()
-  
+
   const handleSchedule = async (jobData) => {
     await scheduleMutation.mutateAsync(jobData)
     // Automatically invalidates and refetches jobs
@@ -331,7 +347,7 @@ function MyComponent() {
 
   // Cancel mutation
   const cancelMutation = useCancelJob()
-  
+
   const handleCancel = async (jobId) => {
     await cancelMutation.mutateAsync(jobId)
   }
@@ -345,26 +361,22 @@ function MyComponent() {
 ### WebSocket Integration
 
 ```javascript
-import useWebSocket from './hooks/useWebSocket'
+import useWebSocket from "./hooks/useWebSocket";
 
 function MyComponent() {
-  const { isConnected, subscribe } = useWebSocket()
+  const { isConnected, subscribe } = useWebSocket();
 
   useEffect(() => {
     // Subscribe to job updates
-    const unsubscribe = subscribe('job_update', (data) => {
-      console.log('Job updated:', data)
+    const unsubscribe = subscribe("job_update", (data) => {
+      console.log("Job updated:", data);
       // Update UI or refetch data
-    })
+    });
 
-    return unsubscribe // Cleanup on unmount
-  }, [subscribe])
+    return unsubscribe; // Cleanup on unmount
+  }, [subscribe]);
 
-  return (
-    <div>
-      Status: {isConnected ? 'Connected' : 'Disconnected'}
-    </div>
-  )
+  return <div>Status: {isConnected ? "Connected" : "Disconnected"}</div>;
 }
 ```
 
@@ -375,6 +387,7 @@ function MyComponent() {
 The dashboard uses TailwindCSS for styling with a custom theme:
 
 **Color Palette:**
+
 - Primary: Blue shades (#0ea5e9)
 - Background: Gray 900/800 (#111827, #1f2937)
 - Text: White/Gray variants
@@ -402,14 +415,14 @@ All API errors are intercepted and displayed as toast notifications:
 ```javascript
 // Automatic error handling
 try {
-  await jobsApi.scheduleJob(data)
+  await jobsApi.scheduleJob(data);
 } catch (error) {
   // Error automatically shown via toast
   // error.response.data.detail contains error message
 }
 
 // Silent errors (no toast)
-const response = await apiClient.get('/endpoint', { silent: true })
+const response = await apiClient.get("/endpoint", { silent: true });
 ```
 
 ### WebSocket Reconnection
@@ -445,7 +458,7 @@ This allows using relative URLs in frontend code:
 
 ```javascript
 // Works in both development and production
-await axios.get('/api/jobs')
+await axios.get("/api/jobs");
 ```
 
 ### React Query DevTools
@@ -458,12 +471,12 @@ npm install @tanstack/react-query-devtools
 
 ```javascript
 // main.jsx
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 <QueryClientProvider client={queryClient}>
   <App />
   <ReactQueryDevtools initialIsOpen={false} />
-</QueryClientProvider>
+</QueryClientProvider>;
 ```
 
 ## Testing
@@ -502,6 +515,7 @@ The dashboard integrates with all Task #9 scheduler components:
 - `CalendarManager` - Calendar slot management
 
 Test integration by:
+
 1. Scheduling jobs via dashboard
 2. Verifying jobs execute via Task #9 components
 3. Checking job status updates in real-time
@@ -512,15 +526,18 @@ Test integration by:
 ### Optimization Techniques
 
 1. **React Query Caching**
+
    - Automatic request deduplication
    - Stale-while-revalidate strategy
    - Background refetching
 
 2. **Code Splitting**
+
    - Lazy loading for routes
    - Reduced initial bundle size
 
 3. **WebSocket Efficiency**
+
    - Single connection for all updates
    - Event-based updates (no polling)
    - Automatic reconnection
@@ -545,6 +562,7 @@ Vite automatically optimizes the production bundle:
 **Problem:** Frontend can't connect to backend
 
 **Solution:**
+
 1. Verify backend is running: `curl http://localhost:8000/api/health`
 2. Check CORS configuration in `src/api/main.py`
 3. Verify Vite proxy configuration in `vite.config.js`
@@ -554,6 +572,7 @@ Vite automatically optimizes the production bundle:
 **Problem:** "WebSocket disconnected" message
 
 **Solution:**
+
 1. Verify backend WebSocket endpoint: `ws://localhost:8000/ws`
 2. Check firewall settings
 3. Verify proxy configuration supports WebSocket
@@ -564,6 +583,7 @@ Vite automatically optimizes the production bundle:
 **Problem:** Pause/Resume/Cancel buttons don't work
 
 **Solution:**
+
 1. Check job status (only certain actions available per status)
 2. Verify backend API endpoints are accessible
 3. Check browser console for API errors
@@ -574,6 +594,7 @@ Vite automatically optimizes the production bundle:
 **Problem:** Job status doesn't update automatically
 
 **Solution:**
+
 1. Verify WebSocket connection (check header status indicator)
 2. Check browser console for WebSocket errors
 3. Verify backend monitoring task is running
@@ -601,6 +622,7 @@ app.add_middleware(
 To add authentication:
 
 1. **Backend:**
+
    - Add JWT token generation
    - Require tokens for API endpoints
    - Add token verification middleware
@@ -658,27 +680,32 @@ VITE_WS_URL=wss://api.yourdomain.com/ws
 ### Planned Features
 
 1. **User Authentication**
+
    - Multi-user support
    - Role-based access control
    - User preferences
 
 2. **Advanced Analytics**
+
    - Custom date ranges
    - Export reports (CSV, PDF)
    - Performance metrics
    - Cost tracking
 
 3. **Recurring Schedule UI**
+
    - Visual schedule editor
    - Drag-and-drop calendar
    - Bulk operations
 
 4. **Video Preview**
+
    - Thumbnail generation
    - Video player integration
    - Preview before upload
 
 5. **Notification System**
+
    - Email notifications
    - Slack integration
    - Custom webhooks
@@ -690,10 +717,11 @@ VITE_WS_URL=wss://api.yourdomain.com/ws
 
 ## Conclusion
 
-The DOPPELGANGER STUDIO Web Dashboard provides a complete, real-time interface for managing the entire video automation pipeline. With its intuitive design, comprehensive features, and robust architecture, it serves as the perfect control center for automated content creation.
+The **Faceless YouTube Automation Platform** Web Dashboard provides a complete, real-time interface for managing the entire faceless video automation pipeline. With its intuitive design, comprehensive features, and robust architecture, it serves as the perfect control center for automated content creation and publishing.
 
 ---
 
 **Version:** 1.0.0  
-**Last Updated:** January 2025  
-**Maintainer:** DOPPELGANGER STUDIO Team
+**Last Updated:** October 2025  
+**Project:** Faceless YouTube Automation Platform  
+**License:** GNU AGPL v3.0
