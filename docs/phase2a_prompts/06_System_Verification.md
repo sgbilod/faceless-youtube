@@ -1,10 +1,11 @@
 # ✅ PROMPT #6: System Verification & Health Check
+
 ## Phase 2A - Critical Issue Resolution
 
 **Reference Code:** `[REF:PROMPT-006]`  
 **Complexity:** ⚡ Low  
 **Estimated Time:** 10-15 minutes  
-**Prerequisites:** PROMPT #1-5 complete  
+**Prerequisites:** PROMPT #1-5 complete
 
 ---
 
@@ -13,6 +14,7 @@
 Run comprehensive system verification to confirm all critical issues are resolved and the system is ready for Phase 2B (packaging and deployment).
 
 **Verification Areas:**
+
 - All dependencies installed
 - Syntax errors fixed
 - Database services running
@@ -25,7 +27,7 @@ Run comprehensive system verification to confirm all critical issues are resolve
 
 ## 📋 COPILOT PROMPT
 
-```
+````
 GITHUB COPILOT DIRECTIVE: FINAL SYSTEM VERIFICATION
 [REF:PROMPT-006]
 
@@ -60,7 +62,7 @@ Step 1: Run Full Diagnostic
 Execute in terminal:
 ```powershell
 python scripts/diagnostics.py | Tee-Object -FilePath diagnostic_report_final.txt
-```
+````
 
 Review output carefully for any failures
 
@@ -69,38 +71,45 @@ Check each component:
 
 Expected Results:
 ✅ Configuration: HEALTHY
-   - All settings loaded
-   - No critical warnings
+
+- All settings loaded
+- No critical warnings
 
 ✅ Python Dependencies: HEALTHY
-   - All 10 critical modules import successfully
-   - moviepy ✅
-   - google-api-python-client ✅
-   - sentence-transformers ✅
+
+- All 10 critical modules import successfully
+- moviepy ✅
+- google-api-python-client ✅
+- sentence-transformers ✅
 
 ✅ File System: HEALTHY
-   - All directories exist
-   - Write permissions confirmed
+
+- All directories exist
+- Write permissions confirmed
 
 ✅ Database Connections: HEALTHY
-   - PostgreSQL: Connected ✅
-   - MongoDB: Connected ✅
-   - Redis: Connected ✅
+
+- PostgreSQL: Connected ✅
+- MongoDB: Connected ✅
+- Redis: Connected ✅
 
 ✅ External APIs: HEALTHY
-   - Ollama: Connected ✅
-   - Pexels API: Configured ✅
-   - Pixabay API: Configured ✅
-   - YouTube secrets: Valid ✅
+
+- Ollama: Connected ✅
+- Pexels API: Configured ✅
+- Pixabay API: Configured ✅
+- YouTube secrets: Valid ✅
 
 ✅ Application Services: HEALTHY
-   - script_generator: Imports ✅
-   - video_assembler: Imports ✅ (was failing)
-   - youtube_uploader: Imports ✅
-   - scheduler: Imports ✅
+
+- script_generator: Imports ✅
+- video_assembler: Imports ✅ (was failing)
+- youtube_uploader: Imports ✅
+- scheduler: Imports ✅
 
 Step 3: Test Backend Startup
 Execute in terminal:
+
 ```powershell
 # Start backend in background
 Start-Process python -ArgumentList "start.py" -NoNewWindow
@@ -114,6 +123,7 @@ Expected: HTTP 200 OK response
 
 Step 4: Test Frontend Build
 Execute in terminal:
+
 ```powershell
 cd dashboard
 npm install  # If not already done
@@ -124,6 +134,7 @@ Expected: Build completes without errors
 
 Step 5: Verify Node Dependencies
 Execute in terminal:
+
 ```powershell
 cd dashboard
 npm list --depth=0
@@ -133,12 +144,14 @@ All 22 packages should show as installed
 
 Step 6: Test Unified Startup
 Execute in terminal:
+
 ```powershell
 # From project root
 .\start.bat
 ```
 
 Expected:
+
 - Backend starts on port 8000
 - Frontend starts on port 3000
 - No critical errors in console
@@ -147,6 +160,7 @@ Press Ctrl+C to stop
 
 Step 7: Generate Final Report
 Create summary of verification:
+
 ```powershell
 python -c "
 print('=' * 60)
@@ -176,6 +190,7 @@ type verification_report.txt
 
 Step 8: Commit All Changes
 Execute in terminal:
+
 ```powershell
 git add -A
 git commit -m "fix(phase2a): resolve all critical issues
@@ -197,18 +212,21 @@ git push origin main
 ```
 
 REQUIREMENTS:
+
 - All previous prompts completed
 - Terminal access
 - Git configured
 - Internet connection (for pushing)
 
 TROUBLESHOOTING:
+
 - If any test fails, revisit relevant prompt
 - If backend won't start, check logs in output
 - If frontend build fails, check npm error messages
 - If diagnostic shows failures, address them before Phase 2B
 
 DELIVERABLES:
+
 1. diagnostic_report_final.txt showing improved health
 2. Backend successfully starts
 3. Frontend successfully builds
@@ -226,6 +244,7 @@ SUCCESS CRITERIA:
 ✅ Changes committed to git
 
 PHASE 2A COMPLETE WHEN:
+
 - [ ] All 6 prompts executed
 - [ ] Diagnostic health >= 80%
 - [ ] 0 critical blockers remain
@@ -235,11 +254,13 @@ PHASE 2A COMPLETE WHEN:
 
 NEXT PHASE:
 Phase 2B: Packaging & Deployment
+
 - Docker containerization
 - Production build optimization
 - CI/CD pipeline setup
 - Documentation finalization
-```
+
+````
 
 ---
 
@@ -252,9 +273,10 @@ Phase 2B: Packaging & Deployment
 ```powershell
 # Run diagnostics with output saved
 python scripts/diagnostics.py 2>&1 | Tee-Object -FilePath diagnostic_report_final.txt
-```
+````
 
 **Review the output for:**
+
 - Component health status (HEALTHY vs UNHEALTHY)
 - Tests passed count (target: 24+/26)
 - Any remaining failures or warnings
@@ -289,6 +311,7 @@ python -m uvicorn src.api.main:app --host 0.0.0.0 --port 8000
 ```
 
 **In another terminal, test the API:**
+
 ```powershell
 # Test health endpoint
 Invoke-WebRequest -Uri "http://localhost:8000/api/health" -Method GET
@@ -320,6 +343,7 @@ npm run build
 ```
 
 **Verify:**
+
 - Terminal shows "Backend started on port 8000"
 - Terminal shows "Frontend started on port 3000"
 - No error messages
@@ -386,6 +410,7 @@ Critical Blockers: 0
 ### Issue: Diagnostic still shows failures
 
 **Review each failure:**
+
 1. Note which component failed
 2. Re-run relevant prompt (1-5)
 3. Check error messages carefully
@@ -394,12 +419,14 @@ Critical Blockers: 0
 ### Issue: Backend won't start
 
 **Check logs:**
+
 ```powershell
 # Run with verbose logging
 python -m uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --log-level debug
 ```
 
 **Common causes:**
+
 - Port 8000 already in use
 - Database connection failed
 - Import error in API code
@@ -408,12 +435,14 @@ python -m uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --log-level debug
 ### Issue: Frontend build fails
 
 **Check error message:**
+
 ```powershell
 cd dashboard
 npm run build 2>&1 | Tee-Object -FilePath build_errors.txt
 ```
 
 **Common causes:**
+
 - Missing dependencies (run `npm install`)
 - TypeScript errors
 - Import path issues
@@ -422,6 +451,7 @@ npm run build 2>&1 | Tee-Object -FilePath build_errors.txt
 ### Issue: Services import but don't work
 
 **Test individual services:**
+
 ```powershell
 # Test script generator
 python -c "from src.services.script_generator import ScriptGenerator; sg = ScriptGenerator(); print('✅ Works')"
@@ -437,18 +467,23 @@ python -c "from src.services.video_assembler import VideoAssembler; va = VideoAs
 ### Critical Fixes (Must All Pass)
 
 - [ ] **Issue #1:** 28 Python packages installed
+
   - Test: `python -c "import moviepy.editor; print('✅')"`
 
 - [ ] **Issue #2:** video_assembler.py syntax fixed
+
   - Test: `python -c "from src.services.video_assembler import VideoAssembler; print('✅')"`
 
 - [ ] **Issue #3:** PostgreSQL running and connected
+
   - Test: `python -c "import psycopg2; psycopg2.connect('postgresql://postgres:password@localhost/postgres'); print('✅')"`
 
 - [ ] **Issue #4:** MongoDB running and connected
+
   - Test: `python -c "from pymongo import MongoClient; MongoClient('mongodb://localhost:27017/').server_info(); print('✅')"`
 
 - [ ] **Issue #5:** Redis running and connected
+
   - Test: `python -c "import redis; redis.Redis(host='localhost', port=6379).ping(); print('✅')"`
 
 - [ ] **Issue #6:** Environment fully configured
@@ -560,6 +595,7 @@ Once all checks pass:
 ### Immediate Actions
 
 1. **Commit all changes:**
+
    ```powershell
    git add -A
    git commit -m "feat(phase2a): complete critical issue resolution"
@@ -567,6 +603,7 @@ Once all checks pass:
    ```
 
 2. **Backup current state:**
+
    ```powershell
    # Create backup branch
    git checkout -b phase2a-complete
@@ -584,6 +621,7 @@ Once all checks pass:
 **Next Phase:** Packaging & Deployment
 
 Focus areas:
+
 - Docker containerization (backend, frontend, databases)
 - Production-ready builds
 - CI/CD pipeline (GitHub Actions)
@@ -599,6 +637,7 @@ Focus areas:
 ## 📚 REFERENCE MATERIALS
 
 ### Generated Documentation
+
 - `PROJECT_INVENTORY.md` - Complete project structure
 - `dependency_audit.md` - Dependency analysis
 - `ISSUES_FOUND.md` - Issues and resolutions
@@ -606,6 +645,7 @@ Focus areas:
 - `PHASE_2A_COMPLETION_REPORT.txt` - This completion report
 
 ### Configuration Files
+
 - `.env` - Environment variables
 - `src/config/master_config.py` - Configuration system
 - `client_secrets.json` - YouTube OAuth credentials
@@ -613,6 +653,7 @@ Focus areas:
 - `dashboard/package.json` - Node.js dependencies
 
 ### Scripts & Tools
+
 - `scripts/diagnostics.py` - Health check tool
 - `scripts/audit_dependencies.py` - Dependency auditor
 - `start.py` - Unified startup launcher
@@ -620,6 +661,6 @@ Focus areas:
 
 ---
 
-*Reference: All Phase 2A prompts, ISSUES_FOUND.md, diagnostic_report.txt*  
-*Generated: October 4, 2025*  
-*End of Phase 2A*
+_Reference: All Phase 2A prompts, ISSUES_FOUND.md, diagnostic_report.txt_  
+_Generated: October 4, 2025_  
+_End of Phase 2A_

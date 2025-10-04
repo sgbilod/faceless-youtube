@@ -34,6 +34,7 @@ choco install postgresql14 --params "/Password:FacelessYT2025!" -y
 **Installation time:** 3-5 minutes
 
 **What it does:**
+
 - Installs PostgreSQL 14
 - Creates Windows Service (auto-starts)
 - Sets postgres user password to: `FacelessYT2025!`
@@ -48,6 +49,7 @@ choco install mongodb -y
 **Installation time:** 2-4 minutes
 
 **What it does:**
+
 - Installs MongoDB Community 6.0+
 - Creates Windows Service (auto-starts)
 - Configures default data directory
@@ -60,6 +62,7 @@ Get-Service -Name "*postgresql*", "*mongo*" | Select-Object Name, Status, Displa
 ```
 
 **Expected output:**
+
 ```
 Name                Status  DisplayName
 ----                ------  -----------
@@ -116,6 +119,7 @@ python scripts/diagnostics.py
 ```
 
 **Expected improvement:**
+
 ```
 Component: Database Connections - HEALTHY ✅
   ✅ PASSED (3):
@@ -131,10 +135,12 @@ Component: Database Connections - HEALTHY ✅
 ### PostgreSQL Manual Install
 
 1. **Download Installer:**
+
    - Visit: https://www.postgresql.org/download/windows/
    - Download PostgreSQL 14+ Windows Installer
 
 2. **Run Installer:**
+
    - Double-click the `.exe` file
    - Click "Next" through setup
    - **Important:** Remember the password you set for `postgres` user
@@ -143,6 +149,7 @@ Component: Database Connections - HEALTHY ✅
    - Complete installation
 
 3. **Verify Installation:**
+
    ```powershell
    Get-Service postgresql-x64-14
    ```
@@ -155,11 +162,13 @@ Component: Database Connections - HEALTHY ✅
 ### MongoDB Manual Install
 
 1. **Download Installer:**
+
    - Visit: https://www.mongodb.com/try/download/community
    - Select: Windows, MSI package
    - Download MongoDB Community Server 6.0+
 
 2. **Run Installer:**
+
    - Double-click the `.msi` file
    - Choose "Complete" installation
    - Install MongoDB as a Service: ✅ **Yes**
@@ -168,6 +177,7 @@ Component: Database Connections - HEALTHY ✅
    - Log Directory: `C:\Program Files\MongoDB\Server\6.0\log`
 
 3. **Verify Installation:**
+
    ```powershell
    Get-Service MongoDB
    ```
@@ -184,11 +194,13 @@ Component: Database Connections - HEALTHY ✅
 ### Issue: PostgreSQL service won't start
 
 **Check Event Viewer:**
+
 ```powershell
 Get-EventLog -LogName Application -Source PostgreSQL -Newest 10
 ```
 
 **Common fixes:**
+
 1. Port 5432 already in use - change port in `postgresql.conf`
 2. Data directory permissions issue - check folder permissions
 3. Service user account issue - reconfigure service
@@ -196,11 +208,13 @@ Get-EventLog -LogName Application -Source PostgreSQL -Newest 10
 ### Issue: MongoDB service won't start
 
 **Check MongoDB logs:**
+
 ```powershell
 Get-Content "C:\Program Files\MongoDB\Server\6.0\log\mongod.log" -Tail 50
 ```
 
 **Common fixes:**
+
 1. Port 27017 already in use - change port in `mongod.cfg`
 2. Lock file exists - delete `C:\Program Files\MongoDB\Server\6.0\data\mongod.lock`
 3. Insufficient permissions - run as administrator
@@ -208,6 +222,7 @@ Get-Content "C:\Program Files\MongoDB\Server\6.0\log\mongod.log" -Tail 50
 ### Issue: Can't connect from Python
 
 **Check firewall:**
+
 ```powershell
 # Allow PostgreSQL
 netsh advfirewall firewall add rule name="PostgreSQL" dir=in action=allow protocol=TCP localport=5432
@@ -217,6 +232,7 @@ netsh advfirewall firewall add rule name="MongoDB" dir=in action=allow protocol=
 ```
 
 **Verify services are listening:**
+
 ```powershell
 netstat -an | Select-String "5432|27017"
 ```
@@ -305,6 +321,7 @@ else:
 ```
 
 Run it:
+
 ```powershell
 python test_databases.py
 ```
@@ -315,7 +332,7 @@ python test_databases.py
 
 1. **Update `.env` file** with database credentials
 2. **Run diagnostics:** `python scripts/diagnostics.py`
-3. **Commit changes:** 
+3. **Commit changes:**
    ```powershell
    git add .env
    git commit -m "config: add database credentials for PostgreSQL and MongoDB"

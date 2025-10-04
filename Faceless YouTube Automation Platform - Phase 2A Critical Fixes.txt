@@ -1,0 +1,1560 @@
+
+Faceless YouTube
+/
+
+# 🎯 COMPREHENSIVE PROJECT ANALYSIS ## Faceless YouTube Automation Platform v2.0 **Analysis Date:** October 4, 2025 **Project Status:** Phase 1 Assessment Complete - Preparing for Phase 2 **Overall Health:** ⚠️ **50% (Critical Issues Blocking Production)** --- ## 📊 EXECUTIVE SUMMARY
+
+pasted
+
+I want you to Expertly Crafting Master Class Prompts for me to Deliver to Copilot in VS Code where it will then Execute your Directives.  Refer to all Project Folder Content for context if needed.
+
+
+Engineered expert Copilot prompts for critical project fixes
+
+
+
+
+
+
+🎯 MASTER-CLASS COPILOT PROMPTS
+Faceless YouTube Automation Platform - Phase 2A Critical Fixes
+Target: GitHub Copilot in VS Code
+Project: Faceless YouTube Automation Platform v2.0
+Context: Phase 2A - Critical Issue Resolution
+Generated: October 4, 2025
+
+📋 HOW TO USE THESE PROMPTS [REF:USAGE-001]
+Copy-Paste Instructions
+Open VS Code in project root: C:\FacelessYouTube
+Open Copilot Chat (Ctrl+Alt+I or Cmd+Shift+I)
+Copy entire prompt (including the reference codes)
+Paste into Copilot and press Enter
+Follow Copilot's guidance step-by-step
+Verify completion before moving to next prompt
+Execution Order
+Execute these prompts in sequence:
+
+[PROMPT #1] - Dependency Analysis & Installation
+[PROMPT #2] - Syntax Error Fix (video_assembler.py)
+[PROMPT #3] - Database Service Setup
+[PROMPT #4] - Environment Configuration
+[PROMPT #5] - YouTube OAuth Validation
+[PROMPT #6] - System Health Verification
+🔧 PROMPT #1: DEPENDENCY INSTALLATION [REF:PROMPT-001]
+markdown
+# CRITICAL FIX: Missing Python Dependencies [REF:ISSUES-003 Issue #1]
+
+## Context
+The Faceless YouTube Automation Platform has 28 missing Python packages preventing:
+- Video generation (moviepy)
+- YouTube uploads (google-api-python-client, google-auth-oauthlib)
+- AI processing (sentence-transformers, torch)
+- Core functionality (numpy, scipy, pillow)
+
+## Current State
+- File exists: `requirements.txt` ✅
+- Dependencies installed: ❌ NO (fresh environment)
+- Project health: 50% (3/6 components blocked)
+
+## Your Task
+1. **Analyze** the current Python environment:
+   - Check if virtual environment is active
+   - List currently installed packages
+   - Identify which of the 28 missing packages are critical
+
+2. **Install Missing Dependencies:**
+   - Execute: `pip install -r requirements.txt`
+   - Monitor for any installation failures
+   - Note any packages that fail to install
+
+3. **Verify Installation:**
+   - Test critical imports:
+```python
+     import moviepy
+     import google.auth
+     import sentence_transformers
+     import torch
+     import numpy
+     import scipy
+Report which imports succeed/fail
+Document Issues:
+If any packages fail to install, provide:
+Error message
+Potential cause
+Alternative installation method
+Expected Outcome
+All 28 missing packages installed successfully
+No import errors when testing
+Diagnostic health check improves from 50% to 67%
+Verification Command
+After installation, run:
+
+bash
+python -c "from src.services import video_assembler, script_generator, youtube_uploader; print('✅ All core services importable')"
+Critical Packages (Priority Order)
+moviepy (video assembly)
+google-api-python-client (YouTube API)
+google-auth-oauthlib (OAuth2)
+sentence-transformers (AI embeddings)
+torch (PyTorch)
+numpy, scipy (numerical operations)
+pillow (image processing)
+Reference Documentation
+Requirements file: requirements.txt
+Dependency audit: dependency_audit.md
+Issue details: ISSUES_FOUND.md [REF:ISSUES-003 Issue #1]
+Success Criteria
+ All packages in requirements.txt installed
+ No import errors for core services
+ Diagnostic script shows improvement
+ Ready to proceed to Prompt #2
+
+---
+
+## 🐛 PROMPT #2: VIDEO ASSEMBLER SYNTAX FIX [REF:PROMPT-002]
+```markdown
+# CRITICAL FIX: Video Assembler Syntax Error [REF:ISSUES-003 Issue #3]
+
+## Context
+Syntax error preventing video generation pipeline from running.
+
+**File:** `src/services/video_assembler.py`  
+**Line:** 558  
+**Error:** `'await' outside async function`  
+**Impact:** Video generation crashes on execution
+
+## Current Diagnostic Output
+❌ FAILED: Import src.services.video_assembler
+Error: 'await' outside async function (video_assembler.py, line 558)
+
+
+## Your Task
+
+### Step 1: Code Investigation
+Navigate to `src/services/video_assembler.py` and:
+1. **Go to line 558** (or search for the await statement causing the error)
+2. **Examine the surrounding context** (lines 550-570)
+3. **Identify the function** containing line 558
+4. **Determine if the function should be async**
+
+### Step 2: Analyze the Function
+Look for these patterns:
+
+**Pattern A - Function is synchronous but calls async:**
+```python
+def process_timeline(timeline):  # ← Should be async
+    # ...
+    await render_scene()  # ← Error: await in sync function
+Pattern B - Incorrect await usage:
+
+python
+def process_timeline(timeline):
+    # ...
+    await some_sync_function()  # ← Function isn't async, shouldn't await
+Pattern C - Decorator mismatch:
+
+python
+def process_timeline(timeline):  # ← Missing @async decorator
+    async with something:
+        await do_work()
+Step 3: Apply the Correct Fix
+If Pattern A (function should be async):
+
+python
+# BEFORE
+def process_timeline(timeline):
+    # ...
+    await render_scene()
+
+# AFTER
+async def process_timeline(timeline):
+    # ...
+    await render_scene()
+If Pattern B (function being awaited isn't async):
+
+python
+# BEFORE
+def process_timeline(timeline):
+    await some_sync_function()
+
+# AFTER
+def process_timeline(timeline):
+    some_sync_function()  # Remove await
+If Pattern C (multiple async operations):
+
+python
+# BEFORE
+def process_timeline(timeline):
+    async with context_manager:
+        await operation()
+
+# AFTER
+async def process_timeline(timeline):
+    async with context_manager:
+        await operation()
+Step 4: Verify All Call Sites
+After fixing the function definition:
+
+Search for all calls to the fixed function
+Update call sites if needed:
+python
+   # If function became async, callers need await:
+   result = await process_timeline(timeline)
+   
+   # If function stayed sync but removed await:
+   result = process_timeline(timeline)
+Step 5: Test the Fix
+bash
+# Test import
+python -c "from src.services.video_assembler import VideoAssembler; print('✅ Import successful')"
+
+# Test instantiation
+python -c "from src.services.video_assembler import VideoAssembler; va = VideoAssembler(); print('✅ Can create instance')"
+Expected Patterns in This File
+Based on the project architecture, video_assembler.py likely has:
+
+Async functions for I/O operations (file reading, API calls)
+Sync functions for pure computation
+Mixed sync/async patterns in the assembly pipeline
+Common Pitfalls to Avoid
+❌ Don't make everything async (performance overhead)
+❌ Don't remove async where it's needed for I/O
+❌ Don't forget to update all call sites
+✅ Do check if caller is in async context
+✅ Do maintain consistent async patterns
+Verification Checklist
+ Syntax error resolved
+ Import statement succeeds
+ Can instantiate VideoAssembler class
+ No new errors introduced
+ All call sites updated if needed
+Success Criteria
+bash
+python -c "from src.services import video_assembler; print('✅ Video Assembler fixed')"
+# Should print success message with no errors
+Reference Documentation
+Issue details: ISSUES_FOUND.md [REF:ISSUES-003 Issue #3]
+Architecture: VIDEO_ASSEMBLER.md
+Comprehensive analysis: Project analysis document [REF:ISSUES-003]
+
+---
+
+## 🗄️ PROMPT #3: DATABASE SERVICE SETUP [REF:PROMPT-003]
+```markdown
+# CRITICAL FIX: PostgreSQL & MongoDB Setup [REF:ISSUES-003 Issues #4 & #5]
+
+## Context
+Database services are not running, blocking all data persistence operations.
+
+**PostgreSQL Status:** ❌ Not Running  
+**MongoDB Status:** ❌ Not Running  
+**Impact:** Cannot store video metadata, job queues, or asset libraries
+
+## Current Errors
+PostgreSQL: FATAL: no password supplied
+MongoDB: ServerSelectionTimeoutError: localhost:27017: [WinError 10061]
+
+
+## Your Task - Part A: PostgreSQL Setup
+
+### Step 1: Check Installation Status
+Detect the operating system and check if PostgreSQL is installed:
+
+**Windows:**
+```powershell
+Get-Service -Name "postgresql*"
+# OR
+sc query postgresql-x64-14
+Linux:
+
+bash
+systemctl status postgresql
+# OR
+service postgresql status
+macOS:
+
+bash
+brew services list | grep postgresql
+# OR
+pg_ctl status
+Step 2: Install if Not Present
+Windows (Chocolatey):
+
+powershell
+choco install postgresql --params '/Password:YourSecurePassword'
+Windows (Direct Download):
+
+Download from: https://www.postgresql.org/download/windows/
+Install PostgreSQL 14 or later
+Remember the password set during installation
+Ubuntu/Debian:
+
+bash
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+macOS (Homebrew):
+
+bash
+brew install postgresql@14
+brew services start postgresql@14
+Step 3: Start PostgreSQL Service
+Windows:
+
+powershell
+# Method 1: Services
+net start postgresql-x64-14
+
+# Method 2: PowerShell
+Start-Service postgresql-x64-14
+
+# Verify
+Get-Service postgresql-x64-14
+Linux:
+
+bash
+sudo systemctl start postgresql
+sudo systemctl enable postgresql  # Auto-start on boot
+
+# Verify
+systemctl status postgresql
+macOS:
+
+bash
+brew services start postgresql@14
+
+# Verify
+brew services list | grep postgresql
+Step 4: Configure Database Password
+Update .env file with PostgreSQL password:
+
+bash
+# In .env file, add or update:
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=faceless_youtube
+DB_USER=postgres
+DB_PASSWORD=your_secure_password_here  # ← IMPORTANT: Set this!
+Step 5: Create Database
+bash
+# Windows (PowerShell as Admin):
+& "C:\Program Files\PostgreSQL\14\bin\psql.exe" -U postgres -c "CREATE DATABASE faceless_youtube;"
+
+# Linux/Mac:
+sudo -u postgres psql -c "CREATE DATABASE faceless_youtube;"
+Step 6: Test Connection
+python
+# Test Python connection
+python -c "
+from sqlalchemy import create_engine
+from src.config.master_config import get_config
+config = get_config()
+engine = create_engine(config.database.url)
+with engine.connect() as conn:
+    print('✅ PostgreSQL connection successful')
+"
+Your Task - Part B: MongoDB Setup
+Step 1: Check Installation Status
+Windows:
+
+powershell
+Get-Service -Name "MongoDB"
+Linux:
+
+bash
+systemctl status mongod
+macOS:
+
+bash
+brew services list | grep mongodb
+Step 2: Install if Not Present
+Windows (Chocolatey):
+
+powershell
+choco install mongodb
+Windows (Direct Download):
+
+Download from: https://www.mongodb.com/try/download/community
+Install MongoDB Community Edition 6.0+
+Ubuntu:
+
+bash
+# Import MongoDB GPG key
+wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+
+# Add repository
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -sc)/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+
+# Install
+sudo apt update
+sudo apt install -y mongodb-org
+macOS (Homebrew):
+
+bash
+brew tap mongodb/brew
+brew install mongodb-community@6.0
+Step 3: Start MongoDB Service
+Windows:
+
+powershell
+net start MongoDB
+
+# Verify
+Get-Service MongoDB
+Linux:
+
+bash
+sudo systemctl start mongod
+sudo systemctl enable mongod
+
+# Verify
+systemctl status mongod
+macOS:
+
+bash
+brew services start mongodb-community@6.0
+
+# Verify
+brew services list | grep mongodb
+Step 4: Test Connection
+python
+# Test Python connection
+python -c "
+from pymongo import MongoClient
+client = MongoClient('mongodb://localhost:27017/')
+print(f'✅ MongoDB connection successful')
+print(f'Server version: {client.server_info()[\"version\"]}')
+"
+Troubleshooting Guide
+PostgreSQL Issues
+Issue: "password authentication failed"
+
+bash
+# Reset PostgreSQL password (Linux/Mac)
+sudo -u postgres psql
+ALTER USER postgres PASSWORD 'new_secure_password';
+\q
+
+# Update .env with new password
+Issue: "could not connect to server"
+
+bash
+# Check if service is running
+# Windows: Get-Service postgresql*
+# Linux: systemctl status postgresql
+
+# Check port 5432 is not in use
+netstat -an | grep 5432
+Issue: "database does not exist"
+
+bash
+# Create the database
+createdb -U postgres faceless_youtube
+MongoDB Issues
+Issue: "Failed to connect to localhost:27017"
+
+bash
+# Verify MongoDB is running
+# Windows: Get-Service MongoDB
+# Linux: systemctl status mongod
+
+# Check port 27017
+netstat -an | grep 27017
+Issue: "MongoDB service won't start"
+
+bash
+# Check logs
+# Windows: C:\Program Files\MongoDB\Server\6.0\log\mongod.log
+# Linux: /var/log/mongodb/mongod.log
+
+# Common fix: Remove lock file
+# Linux: sudo rm /var/lib/mongodb/mongod.lock
+# Then: sudo systemctl start mongod
+Verification Checklist
+ PostgreSQL service running
+ PostgreSQL password configured in .env
+ Database 'faceless_youtube' created
+ Python can connect to PostgreSQL
+ MongoDB service running
+ Python can connect to MongoDB
+ Both databases show in health check
+Final Verification
+bash
+# Run project diagnostics
+python scripts/diagnostics.py
+
+# Should show:
+# ✅ PostgreSQL: Connected
+# ✅ MongoDB: Connected
+Success Criteria
+python
+# Both database connections work:
+python -c "
+from src.config.master_config import get_config
+from sqlalchemy import create_engine
+from pymongo import MongoClient
+
+config = get_config()
+
+# Test PostgreSQL
+engine = create_engine(config.database.url)
+with engine.connect():
+    print('✅ PostgreSQL connected')
+
+# Test MongoDB
+client = MongoClient('mongodb://localhost:27017/')
+client.server_info()
+print('✅ MongoDB connected')
+
+print('🎉 All databases operational!')
+"
+Reference Documentation
+PostgreSQL issue: ISSUES_FOUND.md [REF:ISSUES-003 Issue #4]
+MongoDB issue: ISSUES_FOUND.md [REF:ISSUES-003 Issue #5]
+Configuration: src/config/master_config.py
+Architecture: GRAND_EXECUTIVE_SUMMARY.md [REF:ARCH-002]
+
+---
+
+## 🔑 PROMPT #4: ENVIRONMENT CONFIGURATION [REF:PROMPT-004]
+```markdown
+# CONFIGURATION: Complete .env Setup [REF:ISSUES-003 Issues #8-11]
+
+## Context
+Multiple environment variables need configuration for full system operation.
+
+**Current Issues:**
+- DB_PASSWORD: Empty (blocks PostgreSQL)
+- PEXELS_API_KEY: Not set (limits video sources)
+- PIXABAY_API_KEY: Not set (limits video sources)
+- DEBUG: Set to true (should be false for production)
+
+## Your Task
+
+### Step 1: Locate .env File
+```bash
+# File should be at project root
+C:\FacelessYouTube\.env
+
+# If it doesn't exist, create it from template:
+cp .env.example .env
+Step 2: Database Configuration
+Update database credentials:
+
+bash
+# PostgreSQL (REQUIRED)
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=faceless_youtube
+DB_USER=postgres
+DB_PASSWORD=your_secure_password_here  # ← SET THIS
+
+# MongoDB (REQUIRED)
+MONGODB_HOST=localhost
+MONGODB_PORT=27017
+MONGODB_DB=faceless_youtube_assets
+
+# Redis (OPTIONAL - improves performance)
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_DB=0
+Step 3: API Keys Configuration
+Pexels API (FREE - Recommended)
+Get API Key:
+Visit: https://www.pexels.com/api/
+Click "Get Started"
+Sign up (free account)
+Navigate to: https://www.pexels.com/api/new/
+Copy your API key
+Add to .env:
+bash
+   PEXELS_API_KEY=your_pexels_api_key_here
+Pixabay API (FREE - Recommended)
+Get API Key:
+Visit: https://pixabay.com/api/docs/
+Sign up for free account
+Go to: https://pixabay.com/api/docs/
+Copy your API key from "Your API Key" section
+Add to .env:
+bash
+   PIXABAY_API_KEY=your_pixabay_api_key_here
+Step 4: Ollama Configuration (AI/LLM)
+bash
+# Ollama (for local AI - FREE)
+OLLAMA_HOST=http://localhost:11434
+OLLAMA_MODEL=mistral:7b-instruct
+
+# Note: Requires Ollama to be installed and running
+# Install: https://ollama.ai/download
+# Start: ollama serve
+# Pull model: ollama pull mistral
+Step 5: Application Settings
+bash
+# Environment
+DEBUG=false  # ← CHANGE to false for production
+LOG_LEVEL=INFO
+
+# Application
+APP_NAME=Faceless YouTube Automation
+APP_VERSION=2.0.0
+SECRET_KEY=your_random_secret_key_here  # Generate random string
+
+# Server
+API_HOST=0.0.0.0
+API_PORT=8000
+FRONTEND_URL=http://localhost:3000
+Step 6: YouTube OAuth (Optional - for uploads)
+bash
+# YouTube API
+YOUTUBE_CLIENT_SECRETS=client_secrets.json
+YOUTUBE_TOKEN_STORAGE=youtube_tokens/
+
+# Note: Requires Google Cloud OAuth setup
+# See PROMPT #5 for detailed setup
+Step 7: Optional Services
+bash
+# Email notifications (OPTIONAL)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=your_email@gmail.com
+SMTP_PASSWORD=your_app_password
+
+# Sentry error tracking (OPTIONAL)
+SENTRY_DSN=https://your_sentry_dsn@sentry.io/project_id
+SENTRY_ENVIRONMENT=production
+Step 8: Security Best Practices
+Generate Secure Random Keys:
+
+python
+# Generate SECRET_KEY
+python -c "import secrets; print(secrets.token_urlsafe(32))"
+
+# Generate DB_PASSWORD
+python -c "import secrets; print(secrets.token_urlsafe(16))"
+File Permissions:
+
+bash
+# Ensure .env is in .gitignore
+grep -q "^\.env$" .gitignore || echo ".env" >> .gitignore
+
+# Set restrictive permissions (Linux/Mac)
+chmod 600 .env
+Complete .env Template
+bash
+# ============================================
+# Faceless YouTube Automation Platform v2.0
+# Environment Configuration
+# ============================================
+
+# --------------------------------------------
+# Database Configuration (REQUIRED)
+# --------------------------------------------
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=faceless_youtube
+DB_USER=postgres
+DB_PASSWORD=your_secure_password_here
+
+MONGODB_HOST=localhost
+MONGODB_PORT=27017
+MONGODB_DB=faceless_youtube_assets
+
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_DB=0
+
+# --------------------------------------------
+# API Keys (REQUIRED for asset sourcing)
+# --------------------------------------------
+PEXELS_API_KEY=your_pexels_api_key
+PIXABAY_API_KEY=your_pixabay_api_key
+
+# --------------------------------------------
+# AI/ML Configuration (REQUIRED)
+# --------------------------------------------
+OLLAMA_HOST=http://localhost:11434
+OLLAMA_MODEL=mistral:7b-instruct
+
+# --------------------------------------------
+# Application Settings
+# --------------------------------------------
+DEBUG=false
+LOG_LEVEL=INFO
+APP_NAME=Faceless YouTube Automation
+APP_VERSION=2.0.0
+SECRET_KEY=your_random_secret_key_here
+
+# --------------------------------------------
+# Server Configuration
+# --------------------------------------------
+API_HOST=0.0.0.0
+API_PORT=8000
+FRONTEND_URL=http://localhost:3000
+
+# --------------------------------------------
+# YouTube API (OPTIONAL)
+# --------------------------------------------
+YOUTUBE_CLIENT_SECRETS=client_secrets.json
+YOUTUBE_TOKEN_STORAGE=youtube_tokens/
+
+# --------------------------------------------
+# Optional Services
+# --------------------------------------------
+# SMTP_HOST=smtp.gmail.com
+# SMTP_PORT=587
+# SMTP_USERNAME=
+# SMTP_PASSWORD=
+
+# SENTRY_DSN=
+# SENTRY_ENVIRONMENT=production
+Verification
+Test Configuration Loading
+python
+# Test that config loads without errors
+python -c "
+from src.config.master_config import get_config
+config = get_config()
+print('✅ Configuration loaded successfully')
+print(f'Database: {config.database.host}:{config.database.port}')
+print(f'Debug mode: {config.debug}')
+"
+Test API Keys
+python
+# Test Pexels API
+python -c "
+import os
+from dotenv import load_dotenv
+load_dotenv()
+print(f'Pexels API: {\"✅ Set\" if os.getenv(\"PEXELS_API_KEY\") else \"❌ Missing\"}')
+print(f'Pixabay API: {\"✅ Set\" if os.getenv(\"PIXABAY_API_KEY\") else \"❌ Missing\"}')
+"
+Checklist
+ .env file exists in project root
+ DB_PASSWORD set (not empty)
+ PEXELS_API_KEY obtained and set
+ PIXABAY_API_KEY obtained and set
+ DEBUG set to false
+ SECRET_KEY generated and set
+ .env in .gitignore
+ Configuration loads without errors
+ All required variables set
+Security Warnings
+⚠️ NEVER commit .env file to git ⚠️ NEVER share API keys publicly ⚠️ Use strong passwords for DB_PASSWORD ⚠️ Regenerate SECRET_KEY for production
+
+Success Criteria
+bash
+# All environment variables load correctly
+python -c "
+from src.config.master_config import get_config
+config = get_config()
+assert config.database.password != ''
+assert config.debug == False
+print('🎉 Configuration complete and secure!')
+"
+Reference Documentation
+Configuration issues: ISSUES_FOUND.md [REF:ISSUES-003 Issues #8-11]
+Config file: src/config/master_config.py
+Security: .gitignore should exclude .env
+
+---
+
+## 🎥 PROMPT #5: YOUTUBE OAUTH VALIDATION [REF:PROMPT-005]
+```markdown
+# SETUP: YouTube OAuth2 Credentials [REF:ISSUES-003 Issue #6]
+
+## Context
+YouTube upload functionality requires valid OAuth2 credentials from Google Cloud Console.
+
+**Current State:**
+- ✅ File exists: `client_secrets.json`
+- ❌ Validity: UNKNOWN (not tested)
+- ❌ OAuth flow: NOT VERIFIED
+
+**Impact if Invalid:**
+- YouTube uploads will fail
+- Cannot authenticate with Google
+- Video publishing blocked
+
+## Your Task - Part A: Google Cloud Console Setup
+
+### Step 1: Access Google Cloud Console
+1. Navigate to: https://console.cloud.google.com/
+2. Sign in with your Google account
+3. Note: You may need to set up billing (free tier is sufficient)
+
+### Step 2: Create or Select Project
+**If creating new project:**
+Click "Select a project" dropdown
+Click "NEW PROJECT"
+Project name: "Faceless YouTube Automation"
+Organization: (leave default or select)
+Click "CREATE"
+Wait for project creation (30-60 seconds)
+
+**If using existing project:**
+Click "Select a project" dropdown
+Choose your existing project
+
+### Step 3: Enable YouTube Data API v3
+In left sidebar: APIs & Services → Library
+Search: "YouTube Data API v3"
+Click on "YouTube Data API v3"
+Click "ENABLE" button
+Wait for activation (10-20 seconds)
+
+### Step 4: Configure OAuth Consent Screen
+APIs & Services → OAuth consent screen
+User Type: Select "External" (for personal use)
+Click "CREATE"
+App information:
+App name: "Faceless YouTube Automation"
+User support email: [your email]
+App logo: (optional)
+App domain (optional):
+Application home page: (leave blank for now)
+Privacy policy: (leave blank for now)
+Terms of service: (leave blank for now)
+Developer contact information:
+Email addresses: [your email]
+Click "SAVE AND CONTINUE"
+Scopes:
+Click "ADD OR REMOVE SCOPES"
+Search and select: □ YouTube Data API v3 - .../auth/youtube □ YouTube Data API v3 - .../auth/youtube.upload □ YouTube Data API v3 - .../auth/youtube.force-ssl
+Click "UPDATE"
+Click "SAVE AND CONTINUE"
+Test users (IMPORTANT for External apps):
+Click "ADD USERS"
+Add your email address
+Click "ADD"
+Click "SAVE AND CONTINUE"
+Summary:
+Review settings
+Click "BACK TO DASHBOARD"
+
+### Step 5: Create OAuth 2.0 Client ID
+APIs & Services → Credentials
+Click "CREATE CREDENTIALS" → "OAuth 2.0 Client ID"
+Application type: "Desktop app"
+Name: "Faceless YouTube Desktop Client"
+Click "CREATE"
+Download credentials:
+Modal appears: "OAuth client created"
+Click "DOWNLOAD JSON"
+Save as: client_secrets.json
+Click "OK"
+Replace project file:
+Move downloaded file to: C:\FacelessYouTube\client_secrets.json
+Overwrite existing file (if any)
+
+### Step 6: Verify client_secrets.json Format
+```json
+// File should contain:
+{
+  "installed": {
+    "client_id": "xxxxx.apps.googleusercontent.com",
+    "project_id": "your-project-id",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret": "GOCSPX-xxxxx",
+    "redirect_uris": ["http://localhost", "urn:ietf:wg:oauth:2.0:oob"]
+  }
+}
+Your Task - Part B: Test OAuth Flow
+Step 1: Test Authentication
+bash
+# Run authentication test
+python -c "
+import asyncio
+from src.services.youtube_uploader import AuthManager, AuthConfig
+
+async def test_auth():
+    auth = AuthManager(AuthConfig(
+        client_secrets_path='client_secrets.json'
+    ))
+    
+    print('🔐 Starting OAuth2 flow...')
+    print('📱 Browser will open for authorization')
+    
+    creds = await auth.authenticate(account_name='main')
+    
+    print(f'✅ Authentication successful!')
+    print(f'Channel: {creds.channel_title}')
+    print(f'Channel ID: {creds.channel_id}')
+
+asyncio.run(test_auth())
+"
+Expected Flow:
+
+Script runs
+Browser opens automatically
+Google account selection page appears
+You select your account
+Warning: "Google hasn't verified this app"
+Click "Advanced"
+Click "Go to Faceless YouTube Automation (unsafe)"
+Permission request page appears
+Review requested permissions
+Click "Allow"
+Success page appears: "The authentication flow has completed"
+Return to terminal: "✅ Authentication successful!"
+Step 2: Verify Token Storage
+bash
+# Check that token was saved
+ls youtube_tokens/
+# Should show: main.json (or similar)
+
+# Verify token contents (encrypted)
+python -c "
+import json
+with open('youtube_tokens/main.json') as f:
+    data = json.load(f)
+    print('✅ Token file exists')
+    print(f'Account: {data.get(\"account_name\", \"unknown\")}')
+"
+Step 3: Test API Access
+python
+# Test that we can make API calls
+python -c "
+import asyncio
+from src.services.youtube_uploader import AuthManager, AuthConfig
+
+async def test_api():
+    auth = AuthManager(AuthConfig(
+        client_secrets_path='client_secrets.json'
+    ))
+    
+    # Load existing credentials
+    creds = await auth.load_credentials('main')
+    
+    # Get YouTube client
+    youtube = await auth.get_youtube_client('main')
+    
+    # Test API call - get channel info
+    request = youtube.channels().list(
+        part='snippet,statistics',
+        mine=True
+    )
+    response = request.execute()
+    
+    channel = response['items'][0]
+    print(f'✅ API access working')
+    print(f'Channel: {channel[\"snippet\"][\"title\"]}')
+    print(f'Subscribers: {channel[\"statistics\"][\"subscriberCount\"]}')
+
+asyncio.run(test_api())
+"
+Troubleshooting Guide
+Issue: "This app hasn't been verified by Google"
+This is normal for External apps in development.
+
+Solution:
+
+1. Click "Advanced" (bottom left)
+2. Click "Go to [App Name] (unsafe)"
+3. Continue with authorization
+To Remove Warning (Optional):
+
+1. Google Cloud Console → OAuth consent screen
+2. Click "PUBLISH APP"
+3. Submit for verification (requires domain, privacy policy, etc.)
+Note: Not necessary for personal use
+Issue: "Access blocked: This app's request is invalid"
+Cause: OAuth consent screen not configured or redirect URI mismatch
+
+Solution:
+
+1. Verify OAuth consent screen is set up (Part A, Step 4)
+2. Check redirect URIs in client_secrets.json include:
+   - "http://localhost"
+   - "urn:ietf:wg:oauth:2.0:oob"
+Issue: "The user did not consent to the scopes required"
+Cause: Missing required YouTube API scopes
+
+Solution:
+
+1. Google Cloud Console → OAuth consent screen
+2. Edit App → Scopes
+3. Add all YouTube Data API v3 scopes:
+   - .../auth/youtube
+   - .../auth/youtube.upload
+   - .../auth/youtube.force-ssl
+4. Save and retry authentication
+Issue: "Daily Limit Exceeded"
+Cause: YouTube API quota exceeded (default: 10,000 units/day)
+
+Solution:
+
+1. Google Cloud Console → APIs & Services → YouTube Data API v3
+2. Click "Quotas" tab
+3. View current usage
+4. To increase quota:
+   - Click "INCREASE QUOTA" (may require billing)
+   - Fill quota increase form
+   - Wait for approval (1-2 business days)
+API Quota Information
+Default Quota: 10,000 units/day
+
+Cost per operation:
+
+Upload video: ~1,600 units
+Update metadata: 50 units
+List videos: 1 unit
+Get channel info: 1 unit
+Daily upload limit: ~6 videos/day with default quota
+
+To request increase:
+
+1. Cloud Console → YouTube Data API v3 → Quotas
+2. Click quota metric to increase
+3. Click "EDIT QUOTAS"
+4. Enter new value and justification
+5. Submit request
+Verification Checklist
+ Google Cloud project created/selected
+ YouTube Data API v3 enabled
+ OAuth consent screen configured
+ Test users added (for External apps)
+ OAuth 2.0 Client ID created
+ client_secrets.json downloaded and placed
+ Authentication flow tested successfully
+ Token saved to youtube_tokens/
+ API access verified (can get channel info)
+ No errors when making API calls
+Success Criteria
+bash
+# Complete verification test
+python -c "
+import asyncio
+from src.services.youtube_uploader import AuthManager, AuthConfig
+
+async def verify_all():
+    print('🔍 Verifying YouTube OAuth Setup...\n')
+    
+    auth = AuthManager(AuthConfig(
+        client_secrets_path='client_secrets.json'
+    ))
+    
+    # Check file exists
+    import os
+    assert os.path.exists('client_secrets.json'), '❌ client_secrets.json missing'
+    print('✅ client_secrets.json exists')
+    
+    # Check credentials saved
+    assert os.path.exists('youtube_tokens/main.json'), '❌ Token not saved'
+    print('✅ Token file exists')
+    
+    # Load credentials
+    creds = await auth.load_credentials('main')
+    print(f'✅ Credentials loaded for: {creds.channel_title}')
+    
+    # Test API
+    youtube = await auth.get_youtube_client('main')
+    request = youtube.channels().list(part='snippet', mine=True)
+    response = request.execute()
+    print(f'✅ API access confirmed')
+    
+    print('\n🎉 YouTube OAuth fully configured!')
+
+asyncio.run(verify_all())
+"
+Reference Documentation
+YouTube OAuth issue: ISSUES_FOUND.md [REF:ISSUES-003 Issue #6]
+Uploader documentation: YOUTUBE_UPLOADER.md
+Google Cloud Console: https://console.cloud.google.com/
+YouTube API Reference: https://developers.google.com/youtube/v3
+OAuth 2.0 Guide: https://developers.google.com/identity/protocols/oauth2
+
+---
+
+## ✅ PROMPT #6: SYSTEM HEALTH VERIFICATION [REF:PROMPT-006]
+```markdown
+# VERIFICATION: Complete System Health Check [REF:ACTION-006]
+
+## Context
+After completing Prompts #1-5, verify that all critical issues are resolved and the system is operational.
+
+**Target State:**
+- System Health: 100% (6/6 components)
+- All services importing correctly
+- Databases connected
+- APIs configured
+- Ready for first video generation
+
+## Your Task
+
+### Step 1: Run Diagnostic Script
+```bash
+python scripts/diagnostics.py
+
+# Save output to file
+python scripts/diagnostics.py > diagnostic_results.txt 2>&1
+Expected Output:
+
+=================================================
+   FACELESS YOUTUBE - SYSTEM DIAGNOSTICS
+=================================================
+
+Component Health Check:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Configuration          ✅ PASS   1/1
+Python Dependencies    ✅ PASS   10/10
+File System           ✅ PASS   6/6
+Databases             ✅ PASS   3/3
+External APIs         ✅ PASS   2/2
+Services              ✅ PASS   4/4
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OVERALL               ✅ 100%   26/26
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Step 2: Verify Core Service Imports
+python
+# Test all critical imports
+python -c "
+print('🧪 Testing Core Service Imports...\n')
+
+try:
+    from src.config.master_config import get_config
+    print('✅ Configuration')
+except Exception as e:
+    print(f'❌ Configuration: {e}')
+
+try:
+    from src.services.script_generator import ScriptGenerator
+    print('✅ Script Generator')
+except Exception as e:
+    print(f'❌ Script Generator: {e}')
+
+try:
+    from src.services.video_assembler import VideoAssembler
+    print('✅ Video Assembler')
+except Exception as e:
+    print(f'❌ Video Assembler: {e}')
+
+try:
+    from src.services.youtube_uploader import AuthManager, VideoUploader
+    print('✅ YouTube Uploader')
+except Exception as e:
+    print(f'❌ YouTube Uploader: {e}')
+
+try:
+    from src.services.scheduler import ContentScheduler
+    print('✅ Scheduler')
+except Exception as e:
+    print(f'❌ Scheduler: {e}')
+
+print('\n🎉 All core services importable!')
+"
+Step 3: Test Database Connections
+python
+# Verify all databases
+python -c "
+print('🧪 Testing Database Connections...\n')
+
+# PostgreSQL
+try:
+    from sqlalchemy import create_engine
+    from src.config.master_config import get_config
+    config = get_config()
+    engine = create_engine(config.database.url)
+    with engine.connect() as conn:
+        result = conn.execute('SELECT version();')
+        version = result.fetchone()[0]
+        print(f'✅ PostgreSQL: {version.split(\",\")[0]}')
+except Exception as e:
+    print(f'❌ PostgreSQL: {e}')
+
+# MongoDB
+try:
+    from pymongo import MongoClient
+    client = MongoClient('mongodb://localhost:27017/', serverSelectionTimeoutMS=5000)
+    info = client.server_info()
+    print(f'✅ MongoDB: Version {info[\"version\"]}')
+except Exception as e:
+    print(f'❌ MongoDB: {e}')
+
+# Redis (optional)
+try:
+    import redis
+    r = redis.Redis(host='localhost', port=6379, socket_timeout=2)
+    r.ping()
+    print(f'✅ Redis: Connected')
+except Exception as e:
+    print(f'⚠️  Redis: {e} (optional - not critical)')
+
+print('\n🎉 Database connections verified!')
+"
+Step 4: Verify API Configuration
+python
+# Check API keys and services
+python -c "
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+print('🧪 Testing API Configuration...\n')
+
+# Pexels
+pexels_key = os.getenv('PEXELS_API_KEY', '')
+if pexels_key and len(pexels_key) > 10:
+    print(f'✅ Pexels API: Configured ({pexels_key[:8]}...)')
+else:
+    print('⚠️  Pexels API: Not configured (optional)')
+
+# Pixabay
+pixabay_key = os.getenv('PIXABAY_API_KEY', '')
+if pixabay_key and len(pixabay_key) > 10:
+    print(f'✅ Pixabay API: Configured ({pixabay_key[:8]}...)')
+else:
+    print('⚠️  Pixabay API: Not configured (optional)')
+
+# Ollama
+import requests
+try:
+    response = requests.get('http://localhost:11434/api/tags', timeout=2)
+    models = response.json().get('models', [])
+    print(f'✅ Ollama: Running ({len(models)} models available)')
+except:
+    print('❌ Ollama: Not running or not configured')
+
+# YouTube OAuth
+import os.path
+if os.path.exists('client_secrets.json'):
+    print('✅ YouTube OAuth: client_secrets.json exists')
+    if os.path.exists('youtube_tokens/main.json'):
+        print('✅ YouTube OAuth: Token exists (authenticated)')
+    else:
+        print('⚠️  YouTube OAuth: Not authenticated yet')
+else:
+    print('⚠️  YouTube OAuth: client_secrets.json missing')
+
+print('\n🎉 API configuration verified!')
+"
+Step 5: Test Backend Startup
+bash
+# Start backend in test mode (will exit after checks)
+python -c "
+import asyncio
+from fastapi import FastAPI
+from src.api.main import app
+
+async def test_startup():
+    print('🧪 Testing Backend Startup...\n')
+    
+    # Test FastAPI app creation
+    assert isinstance(app, FastAPI), 'Failed to create FastAPI app'
+    print('✅ FastAPI app created')
+    
+    # Test that routes are registered
+    routes = [route.path for route in app.routes]
+    assert '/api/health' in routes, 'Health endpoint missing'
+    assert '/api/jobs/schedule' in routes, 'Job scheduling endpoint missing'
+    print(f'✅ {len(routes)} API routes registered')
+    
+    print('\n🎉 Backend startup test passed!')
+    print('Ready to start: uvicorn src.api.main:app --reload')
+
+asyncio.run(test_startup())
+"
+Step 6: Test Frontend Build
+bash
+# Test frontend build process
+cd dashboard
+
+# Check node_modules exists
+if [ -d "node_modules" ]; then
+    echo "✅ Node.js dependencies installed"
+else
+    echo "⚠️  Node.js dependencies missing - running npm install..."
+    npm install
+fi
+
+# Test build (production)
+echo "🧪 Testing Frontend Build..."
+npm run build
+
+# Check if build succeeded
+if [ -d "dist" ]; then
+    echo "✅ Frontend build successful"
+    echo "✅ Production build ready in: dashboard/dist/"
+else
+    echo "❌ Frontend build failed"
+fi
+
+cd ..
+Step 7: Generate Health Report
+python
+# Create comprehensive health report
+python -c "
+import json
+from datetime import datetime
+
+report = {
+    'timestamp': datetime.now().isoformat(),
+    'system_health': {},
+    'issues_resolved': [],
+    'remaining_warnings': [],
+    'ready_for_production': False
+}
+
+# Add health check results here
+# (populated by previous steps)
+
+# Check if all critical issues resolved
+critical_issues = [
+    'Python Dependencies',
+    'Video Assembler Syntax',
+    'PostgreSQL',
+    'MongoDB',
+    'Environment Config',
+    'YouTube OAuth'
+]
+
+resolved_count = 0
+for issue in critical_issues:
+    # Check each issue status
+    # (would be populated by actual checks)
+    pass
+
+report['ready_for_production'] = resolved_count == len(critical_issues)
+
+# Save report
+with open('health_report.json', 'w') as f:
+    json.dump(report, f, indent=2)
+
+print('📊 Health report saved to: health_report.json')
+"
+Step 8: First End-to-End Test
+python
+# Attempt to generate a simple test video
+python -c "
+import asyncio
+from src.services.script_generator import ScriptGenerator, ScriptConfig, NicheType
+from src.services.video_assembler import VideoAssembler, VideoConfig
+from pathlib import Path
+
+async def test_video_pipeline():
+    print('🧪 Testing Complete Video Pipeline...\n')
+    
+    # 1. Generate script
+    print('1️⃣  Generating test script...')
+    script_gen = ScriptGenerator()
+    config = ScriptConfig(
+        duration_minutes=1,  # Short test
+        niche=NicheType.FACTS
+    )
+    script = await script_gen.generate('Python Programming Tip', config)
+    print(f'✅ Script generated ({script.word_count} words)')
+    
+    # 2. Assemble video
+    print('2️⃣  Assembling test video...')
+    assembler = VideoAssembler()
+    video = await assembler.assemble(
+        script=script.script,
+        niche='facts',
+        assets=[],  # Will use defaults
+        title='Test Video - Do Not Upload'
+    )
+    print(f'✅ Video assembled: {video.video_path}')
+    
+    # 3. Verify output
+    if Path(video.video_path).exists():
+        size_mb = Path(video.video_path).stat().st_size / (1024 * 1024)
+        print(f'✅ Video file exists ({size_mb:.1f} MB)')
+        print(f'🎉 END-TO-END TEST PASSED!')
+        print(f'Test video: {video.video_path}')
+        return True
+    else:
+        print('❌ Video file not created')
+        return False
+
+# Run test
+result = asyncio.run(test_video_pipeline())
+print(f'\n{'✅ SYSTEM READY FOR PRODUCTION' if result else '❌ Issues remain'}')
+"
+Verification Checklist
+Critical Issues (Must All Be ✅)
+ Python dependencies installed (28 packages)
+ Video assembler syntax error fixed
+ PostgreSQL running and connected
+ MongoDB running and connected
+ Environment variables configured
+ YouTube OAuth tested (if using uploads)
+System Health (Must Be 80%+ or 100%)
+ Diagnostic script shows 80%+ health
+ All core services import successfully
+ All databases connect without errors
+ Backend starts without errors
+ Frontend builds successfully
+Optional But Recommended
+ Pexels API key configured
+ Pixabay API key configured
+ Ollama running with models
+ Redis installed and running
+ End-to-end test video generated
+Success Criteria
+Minimum for Production:
+
+✅ All 6 critical issues resolved
+✅ System health: 80%+ (currently should be 100%)
+✅ All core services functional
+✅ At least one test video generated
+Optimal for Production:
+
+✅ All critical + warning issues resolved
+✅ System health: 100%
+✅ All API keys configured
+✅ End-to-end pipeline tested
+✅ YouTube upload tested
+Final Verification Command
+bash
+# Run this single command to verify everything
+python -c "
+print('='*60)
+print('   FINAL SYSTEM VERIFICATION')
+print('='*60)
+
+import subprocess
+import sys
+
+# Run diagnostics
+print('\n1. Running system diagnostics...')
+result = subprocess.run([sys.executable, 'scripts/diagnostics.py'], 
+                       capture_output=True, text=True)
+print(result.stdout)
+
+if '100%' in result.stdout or '80%' in result.stdout:
+    print('\n✅ SYSTEM READY FOR PRODUCTION')
+    print('\nNext steps:')
+    print('  1. Start backend: uvicorn src.api.main:app --reload')
+    print('  2. Start frontend: cd dashboard && npm run dev')
+    print('  3. Access dashboard: http://localhost:3000')
+else:
+    print('\n⚠️  Some issues remain - review diagnostic output above')
+"
+Troubleshooting Remaining Issues
+If health check is not 100%, review the diagnostic output and:
+
+Rerun specific prompts for failed components:
+Dependencies → Prompt #1
+Syntax errors → Prompt #2
+Databases → Prompt #3
+Config → Prompt #4
+YouTube → Prompt #5
+Check logs for detailed errors:
+bash
+   cat logs/app.log
+   cat diagnostic_report.txt
+Verify services are running:
+bash
+   # Check all services at once
+   python -c "
+   import subprocess
+   
+   services = [
+       ('PostgreSQL', 'postgresql'),
+       ('MongoDB', 'mongod'),
+       ('Redis', 'redis-server'),
+       ('Ollama', 'ollama')
+   ]
+   
+   for name, process in services:
+       result = subprocess.run(['pgrep', '-x', process], 
+                              capture_output=True)
+       status = '✅ Running' if result.returncode == 0 else '❌ Not running'
+       print(f'{name}: {status}')
+   "
+Reference Documentation
+Complete analysis: Project analysis document [REF:COMP-008]
+Action plan: ISSUES_FOUND.md [REF:ACTION-006]
+All prompts: This document [REF:PROMPT-001 through REF:PROMPT-006]
+Diagnostic tool: scripts/diagnostics.py
+Next Steps After Verification
+Once system health is 100%:
+
+Start the application (see Final Verification Command)
+Generate first real video via web dashboard
+Upload to YouTube (if configured)
+Proceed to Phase 2B (warning resolution)
+Plan production deployment
+🎉 Congratulations! If all checks pass, Phase 2A is complete!
+
+
+---
+
+## 📚 APPENDIX: QUICK REFERENCE [REF:APPENDIX-007]
+
+### All Prompts At-A-Glance
+
+| # | Prompt | Issue | Complexity | Time |
+|---|--------|-------|------------|------|
+| 1 | Dependency Installation | Missing packages | Low | 10-30m |
+| 2 | Video Assembler Fix | Syntax error | Low | 5-10m |
+| 3 | Database Setup | PostgreSQL + MongoDB | Medium | 10-20m |
+| 4 | Environment Config | .env variables | Low | 15-30m |
+| 5 | YouTube OAuth | Google Cloud | High | 30-60m |
+| 6 | System Verification | Health check | Low | 10-15m |
+
+**Total Estimated Time:** 80-165 minutes (1.3-2.75 hours)
+
+### Prompt Execution Order
+START
+↓
+[PROMPT #1] Python Dependencies
+↓
+[PROMPT #2] Syntax Error Fix
+↓
+[PROMPT #3] Database Services
+↓
+[PROMPT #4] Environment Config
+↓
+[PROMPT #5] YouTube OAuth (optional)
+↓
+[PROMPT #6] System Verification
+↓
+END (System Ready)
+
+
+### Reference Code Index
+
+- `[REF:USAGE-001]` - How to use these prompts
+- `[REF:PROMPT-001]` - Dependency installation
+- `[REF:PROMPT-002]` - Syntax error fix
+- `[REF:PROMPT-003]` - Database setup
+- `[REF:PROMPT-004]` - Environment configuration
+- `[REF:PROMPT-005]` - YouTube OAuth
+- `[REF:PROMPT-006]` - System verification
+- `[REF:APPENDIX-007]` - This quick reference
+
+### Related Documentation
+
+- **Project Analysis:** Comprehensive analysis document
+- **Issues Found:** `ISSUES_FOUND.md`
+- **Project Inventory:** `PROJECT_INVENTORY.md`
+- **Dependency Audit:** `dependency_audit.md`
+- **Technical Docs:** `VIDEO_ASSEMBLER.md`, `YOUTUBE_UPLOADER.md`, `SCHEDULER.md`, etc.
+
+### Support Resources
+
+- **Diagnostic Tool:** `python scripts/diagnostics.py`
+- **Startup Scripts:** `start.py`, `start.bat`, `start.sh`
+- **Configuration:** `src/config/master_config.py`
+- **Logs:** `logs/app.log`, `diagnostic_report.txt`
+
+---
+
+**Document Generated:** October 4, 2025  
+**For:** Faceless YouTube Automation Platform v2.0  
+**Target:** GitHub Copilot in VS Code  
+**Status:** Ready for Execution
+
+*Use these prompts sequentially. Each prompt is self-contained but builds on previous completions.*
+
+
+
+
+
+
+
+
+
+
+

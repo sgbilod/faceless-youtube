@@ -1,0 +1,13 @@
+Pexels API Key:
+omioz8tanJumM0YfQSda2i2eceGXdCiez4ht8CbpFkNGDKLciQbvGpsJ
+
+Pixabay API Key:
+50601140-90d9f5c8a3023acf9ec5b015f
+
+Youtube/Google Cloud API Key:
+AIzaSyDr0GosgJ7c_yYbymdA2-gSmzxxGoKLuBk
+
+Options:
+  1. Reinstall PostgreSQL:
+     choco uninstall postgresql14 -y
+     choco install postgresql14 --params "/Password:FacelessYT2025!" -y

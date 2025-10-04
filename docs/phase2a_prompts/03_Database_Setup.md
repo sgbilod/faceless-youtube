@@ -1,10 +1,11 @@
 # 🗄️ PROMPT #3: Database Services Setup
+
 ## Phase 2A - Critical Issue Resolution
 
 **Reference Code:** `[REF:PROMPT-003]`  
 **Complexity:** ⚙️ Medium  
 **Estimated Time:** 10-20 minutes  
-**Prerequisites:** PROMPT #1, #2 complete  
+**Prerequisites:** PROMPT #1, #2 complete
 
 ---
 
@@ -13,6 +14,7 @@
 Start and configure PostgreSQL, MongoDB, and Redis database services required for video metadata, asset storage, and caching.
 
 **Services to Configure:**
+
 - PostgreSQL (port 5432) - Relational data
 - MongoDB (port 27017) - Asset storage
 - Redis (port 6379) - Caching and job queues
@@ -21,7 +23,7 @@ Start and configure PostgreSQL, MongoDB, and Redis database services required fo
 
 ## 📋 COPILOT PROMPT
 
-```
+````
 GITHUB COPILOT DIRECTIVE: DATABASE SERVICES SETUP
 [REF:PROMPT-003]
 
@@ -60,10 +62,11 @@ Get-Service | Where-Object {$_.Name -like "*mongo*"}
 
 # Check Redis
 Get-Service | Where-Object {$_.Name -like "*redis*"}
-```
+````
 
 Step 2: Start PostgreSQL
 Execute in PowerShell (as Administrator):
+
 ```powershell
 # Find the exact service name
 $pgService = Get-Service | Where-Object {$_.Name -like "*postgresql*"} | Select-Object -First 1
@@ -79,6 +82,7 @@ Expected status: Running
 
 Step 3: Start MongoDB
 Execute in PowerShell (as Administrator):
+
 ```powershell
 # Start MongoDB
 Start-Service MongoDB
@@ -91,17 +95,20 @@ Expected status: Running
 
 Step 4: Verify Redis
 Execute in PowerShell:
+
 ```powershell
 Get-Service | Where-Object {$_.Name -like "*redis*"}
 ```
 
 If not running:
+
 ```powershell
 Start-Service Redis
 ```
 
 Step 5: Test Connections
 Execute in terminal (regular PowerShell):
+
 ```powershell
 # Test PostgreSQL
 python -c "import psycopg2; conn = psycopg2.connect('postgresql://postgres:password@localhost:5432/postgres'); print('✅ PostgreSQL OK')"
@@ -115,6 +122,7 @@ python -c "import redis; r = redis.Redis(host='localhost', port=6379); r.ping();
 
 Step 6: Update .env File
 Set database credentials in .env:
+
 ```
 DB_HOST=localhost
 DB_PORT=5432
@@ -130,6 +138,7 @@ REDIS_PORT=6379
 ```
 
 Step 7: Run Diagnostics
+
 ```powershell
 python scripts/diagnostics.py
 ```
@@ -137,6 +146,7 @@ python scripts/diagnostics.py
 Check Database Connections component shows all 3 passing
 
 REQUIREMENTS:
+
 - Windows with Administrator access
 - PostgreSQL, MongoDB, Redis installed
 - Python packages: psycopg2, pymongo, redis (installed in PROMPT #1)
@@ -144,27 +154,32 @@ REQUIREMENTS:
 IF SERVICES NOT INSTALLED:
 
 For PostgreSQL:
+
 1. Download from https://www.postgresql.org/download/windows/
 2. Install with default settings
 3. Remember the password you set for postgres user
 
 For MongoDB:
+
 1. Download from https://www.mongodb.com/try/download/community
 2. Install as Windows Service
 3. Use default port 27017
 
 For Redis:
+
 1. Download from https://github.com/microsoftarchive/redis/releases
 2. Or use: `choco install redis-64` (if Chocolatey installed)
 3. Install as Windows Service
 
 ERROR HANDLING:
+
 - If service won't start, check Windows Event Viewer for errors
 - If port already in use, check for conflicts with other services
 - If connection fails, verify firewall settings allow localhost connections
 - If PostgreSQL password fails, may need to reset via pgAdmin
 
 DELIVERABLES:
+
 1. All 3 database services running
 2. All 3 connection tests passing
 3. .env updated with correct credentials
@@ -179,7 +194,8 @@ SUCCESS CRITERIA:
 
 NEXT STEP:
 Once complete, proceed to PROMPT #4 (Environment Configuration)
-```
+
+````
 
 ---
 
@@ -210,7 +226,7 @@ Start-Service -Name "Redis"
 
 # Verify all running
 Get-Service -Name "postgresql-x64-*", "MongoDB", "Redis"
-```
+````
 
 ### For Linux/Mac Users
 
@@ -276,6 +292,7 @@ Get-Content "C:\Program Files\MongoDB\Server\*\log\mongod.log" -Tail 50
 ```
 
 **Common fixes:**
+
 - Delete `mongod.lock` file if exists
 - Check data directory has write permissions
 - Ensure port 27017 not in use
@@ -343,17 +360,17 @@ try:
     )
     conn.close()
     print('✅ PostgreSQL: Connected')
-    
+
     # MongoDB
     client = MongoClient('mongodb://localhost:27017/')
     client.server_info()
     print('✅ MongoDB: Connected')
-    
+
     # Redis
     r = redis.Redis(host='localhost', port=6379, decode_responses=True)
     r.ping()
     print('✅ Redis: Connected')
-    
+
     print('\n🎉 ALL DATABASES CONNECTED SUCCESSFULLY')
 except Exception as e:
     print(f'❌ Error: {e}')
@@ -361,6 +378,7 @@ except Exception as e:
 ```
 
 **Expected Output:**
+
 ```
 ✅ PostgreSQL: Connected
 ✅ MongoDB: Connected
@@ -374,24 +392,26 @@ except Exception as e:
 ## 📊 BEFORE & AFTER
 
 ### Before
+
 ```
 Component: Database Connections - UNHEALTHY ❌
   ✅ PASSED (1): Redis connection
   ❌ FAILED (2):
     - PostgreSQL: no password supplied
     - MongoDB: connection refused (not running)
-    
+
 Status: Data storage BLOCKED
 ```
 
 ### After
+
 ```
 Component: Database Connections - HEALTHY ✅
   ✅ PASSED (3):
     - PostgreSQL: Connected
     - MongoDB: Connected
     - Redis: Connected
-    
+
 Status: All database services READY
 ```
 
@@ -402,6 +422,7 @@ Status: All database services READY
 Once all database services are running:
 
 1. **Test the setup:**
+
    ```powershell
    python scripts/diagnostics.py
    ```
@@ -411,6 +432,7 @@ Once all database services are running:
 3. **Mark this task complete** in your checklist
 
 **Status Update:**
+
 - ✅ Critical Issue #1: RESOLVED
 - ✅ Critical Issue #2: RESOLVED
 - ✅ Critical Issue #3: RESOLVED (PostgreSQL)
@@ -448,5 +470,5 @@ Document your database passwords in a secure password manager!
 
 ---
 
-*Reference: ISSUES_FOUND.md (Issues #4, #5), diagnostic_report.txt*  
-*Generated: October 4, 2025*
+_Reference: ISSUES_FOUND.md (Issues #4, #5), diagnostic_report.txt_  
+_Generated: October 4, 2025_

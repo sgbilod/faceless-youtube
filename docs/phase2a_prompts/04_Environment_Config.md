@@ -1,10 +1,11 @@
 # ⚙️ PROMPT #4: Environment Configuration
+
 ## Phase 2A - Critical Issue Resolution
 
 **Reference Code:** `[REF:PROMPT-004]`  
 **Complexity:** ⚡ Low  
 **Estimated Time:** 15-30 minutes  
-**Prerequisites:** PROMPT #1, #2, #3 complete  
+**Prerequisites:** PROMPT #1, #2, #3 complete
 
 ---
 
@@ -13,6 +14,7 @@
 Configure all environment variables in `.env` file including database credentials, API keys, and application settings.
 
 **Configuration Areas:**
+
 - Database credentials (PostgreSQL, MongoDB, Redis)
 - API keys (Pexels, Pixabay, ElevenLabs, OpenAI)
 - Application settings (debug mode, ports, paths)
@@ -22,13 +24,13 @@ Configure all environment variables in `.env` file including database credential
 
 ## 📋 COPILOT PROMPT
 
-```
+````
 GITHUB COPILOT DIRECTIVE: ENVIRONMENT CONFIGURATION SETUP
 [REF:PROMPT-004]
 
 CONTEXT:
 - Project: Faceless YouTube Automation Platform v2.0
-- Phase: 2A - Critical Issue Resolution  
+- Phase: 2A - Critical Issue Resolution
 - Task: Complete .env configuration
 - Reference: .env.example template
 
@@ -62,7 +64,7 @@ if (!(Test-Path .env)) {
 } else {
     Write-Host "ℹ️ .env already exists"
 }
-```
+````
 
 Step 2: Configure Database Section
 Open .env in VS Code and update:
@@ -86,28 +88,33 @@ REDIS_DB=0
 ```
 
 Step 3: Get Pexels API Key
+
 1. Go to https://www.pexels.com/api/
 2. Click "Get Started" or "Sign Up"
 3. Verify email
 4. Go to "Your API Key" section
 5. Copy the API key
 6. Add to .env:
+
 ```env
 PEXELS_API_KEY=your_pexels_api_key_here
 ```
 
 Step 4: Get Pixabay API Key
+
 1. Go to https://pixabay.com/api/docs/
 2. Sign up for free account
 3. Navigate to API documentation
 4. Find your API key
 5. Add to .env:
+
 ```env
 PIXABAY_API_KEY=your_pixabay_api_key_here
 ```
 
 Step 5: Configure Application Settings
 Update in .env:
+
 ```env
 # Application
 DEBUG=false  # ← IMPORTANT: Set to false for production
@@ -125,6 +132,7 @@ FRONTEND_PORT=3000
 
 Step 6: Configure AI Services (Optional)
 If using external AI services:
+
 ```env
 # OpenAI (optional)
 OPENAI_API_KEY=your_openai_key_here
@@ -139,6 +147,7 @@ OLLAMA_MODEL=mistral
 
 Step 7: Verify Configuration
 Execute in terminal:
+
 ```powershell
 python -c "from src.config.master_config import MasterConfig; config = MasterConfig(); config.print_config()"
 ```
@@ -147,6 +156,7 @@ Should show all configurations loaded without errors
 
 Step 8: Test API Keys
 Execute in terminal:
+
 ```powershell
 # Test Pexels
 python -c "
@@ -173,6 +183,7 @@ else:
 ```
 
 Step 9: Run Full Diagnostic
+
 ```powershell
 python scripts/diagnostics.py
 ```
@@ -180,12 +191,14 @@ python scripts/diagnostics.py
 Check that warnings are resolved
 
 REQUIREMENTS:
+
 - .env.example file exists (reference template)
 - Free API accounts (Pexels, Pixabay)
 - Email addresses for account verification
 - Secure password manager for storing credentials
 
 SECURITY NOTES:
+
 - Never commit .env to git (already in .gitignore)
 - Use strong passwords for databases
 - Keep API keys secret
@@ -193,12 +206,14 @@ SECURITY NOTES:
 - Use environment variables for production deployment
 
 ERROR HANDLING:
+
 - If API key test fails, verify key was copied correctly
 - If config loading fails, check .env syntax (no spaces around =)
 - If database connection fails, verify credentials match database setup
 - If file not found, ensure .env is in project root
 
 DELIVERABLES:
+
 1. Complete .env file with all required values
 2. Valid API keys for Pexels and Pixabay
 3. Database credentials configured
@@ -217,7 +232,8 @@ SUCCESS CRITERIA:
 
 NEXT STEP:
 Once complete, proceed to PROMPT #5 (YouTube OAuth Setup)
-```
+
+````
 
 ---
 
@@ -234,7 +250,7 @@ Copy-Item .env.example .env
 # Or manually in VS Code:
 # 1. Open .env.example
 # 2. File → Save As → .env
-```
+````
 
 #### 2. Database Configuration
 
@@ -271,6 +287,7 @@ REDIS_DB=0
 7. Copy the key (looks like: `abc123def456ghi789...`)
 
 **Add to .env:**
+
 ```env
 PEXELS_API_KEY=abc123def456ghi789
 ```
@@ -282,13 +299,14 @@ PEXELS_API_KEY=abc123def456ghi789
 **Visual Guide:**
 
 1. Visit: https://pixabay.com/api/docs/
-2. Click: "Sign Up" 
+2. Click: "Sign Up"
 3. Create free account
 4. Navigate to: https://pixabay.com/api/docs/
 5. Find "Your API Key" section
 6. Copy the key (looks like: `12345678-abc...`)
 
 **Add to .env:**
+
 ```env
 PIXABAY_API_KEY=12345678-abc
 ```
@@ -324,6 +342,7 @@ ASSETS_DIR=C:/FacelessYouTube/assets
 ### Issue: Configuration not loading
 
 **Check syntax:**
+
 ```env
 # CORRECT
 API_KEY=abc123
@@ -338,6 +357,7 @@ API_KEY="abc123"
 ### Issue: API key invalid
 
 **Test manually:**
+
 ```powershell
 # Test Pexels
 curl -H "Authorization: YOUR_KEY" "https://api.pexels.com/v1/search?query=nature&per_page=1"
@@ -348,6 +368,7 @@ Expected: JSON response with photos
 ### Issue: Database connection fails
 
 **Verify credentials:**
+
 ```powershell
 # Test PostgreSQL connection
 python -c "
@@ -367,6 +388,7 @@ conn.close()
 ### Issue: .env not found
 
 **Check location:**
+
 ```powershell
 # Must be in project root
 ls .env
@@ -426,6 +448,7 @@ else:
 ```
 
 **Expected Output:**
+
 ```
 📋 Configuration Check:
 ✅ PostgreSQL Password: SET
@@ -441,6 +464,7 @@ else:
 ## 📊 BEFORE & AFTER
 
 ### Before
+
 ```
 Configuration warnings:
 ⚠️ PostgreSQL password not set
@@ -452,6 +476,7 @@ Impact: Limited asset sources, development mode active
 ```
 
 ### After
+
 ```
 Configuration: HEALTHY ✅
 ✅ All database credentials configured
@@ -469,6 +494,7 @@ Impact: Full functionality enabled
 Once configuration is complete:
 
 1. **Run final diagnostic:**
+
    ```powershell
    python scripts/diagnostics.py
    ```
@@ -478,6 +504,7 @@ Once configuration is complete:
 3. **Mark this task complete** in your checklist
 
 **Status Update:**
+
 - ✅ Critical Issue #1: RESOLVED
 - ✅ Critical Issue #2: RESOLVED
 - ✅ Critical Issue #3: RESOLVED
@@ -490,18 +517,21 @@ Once configuration is complete:
 ## 🔒 SECURITY BEST PRACTICES
 
 **Password Requirements:**
+
 - Minimum 12 characters
 - Mix of uppercase, lowercase, numbers, symbols
 - Use password manager (1Password, LastPass, Bitwarden)
 - Different password for each service
 
 **API Key Security:**
+
 - Never commit to git (.gitignore protects .env)
 - Never share in chat/email
 - Regenerate if accidentally exposed
 - Use environment variables in production
 
 **Production Deployment:**
+
 - Use secrets management (Azure Key Vault, AWS Secrets Manager)
 - Rotate credentials regularly
 - Use read-only database accounts where possible
@@ -509,5 +539,5 @@ Once configuration is complete:
 
 ---
 
-*Reference: ISSUES_FOUND.md (Issues #8-11), .env.example*  
-*Generated: October 4, 2025*
+_Reference: ISSUES_FOUND.md (Issues #8-11), .env.example_  
+_Generated: October 4, 2025_

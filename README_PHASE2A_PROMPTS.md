@@ -19,11 +19,13 @@ I've created **6 comprehensive prompts** to guide you through resolving all crit
 ## How to Use
 
 ### Step 1: Open the INDEX
+
 ```powershell
 code docs/phase2a_prompts/00_Copilot_Prompts_INDEX.md
 ```
 
 ### Step 2: Open GitHub Copilot Chat
+
 - Press `Ctrl+Alt+I` (Windows) or `Cmd+Shift+I` (Mac)
 - Or click the Copilot icon in the sidebar
 
@@ -32,23 +34,28 @@ code docs/phase2a_prompts/00_Copilot_Prompts_INDEX.md
 For each prompt (#1 through #6):
 
 1. **Open the prompt file**
+
    ```powershell
    code docs/phase2a_prompts/01_Dependencies_Installation.md
    ```
 
 2. **Copy the entire "COPILOT PROMPT" section**
+
    - Find the section marked with triple backticks
    - Copy from "GITHUB COPILOT DIRECTIVE..." to the end of that code block
 
 3. **Paste into Copilot Chat**
+
    - Paste into the chat input
    - Press Enter
 
 4. **Follow Copilot's guidance**
+
    - Execute the commands it suggests
    - Verify each step completes successfully
 
 5. **Check the success criteria**
+
    - Each prompt has a "✅ SUCCESS VERIFICATION" section
    - Confirm all checkboxes before moving to next prompt
 
@@ -57,26 +64,28 @@ For each prompt (#1 through #6):
 
 ## What Each Prompt Does
 
-| # | Prompt | What It Fixes | Time | Difficulty |
-|---|--------|---------------|------|------------|
-| 1 | Dependencies | Installs 28 missing packages | 10-30m | ⚡ Easy |
-| 2 | Syntax Fix | Fixes await error line 558 | 5-10m | ⚡ Easy |
-| 3 | Databases | Starts PostgreSQL/MongoDB/Redis | 10-20m | ⚙️ Medium |
-| 4 | Environment | Configures .env with API keys | 15-30m | ⚡ Easy |
-| 5 | YouTube | Setup OAuth (can skip) | 30-60m | 🔥 Hard |
-| 6 | Verification | Final health check | 10-15m | ⚡ Easy |
+| #   | Prompt       | What It Fixes                   | Time   | Difficulty |
+| --- | ------------ | ------------------------------- | ------ | ---------- |
+| 1   | Dependencies | Installs 28 missing packages    | 10-30m | ⚡ Easy    |
+| 2   | Syntax Fix   | Fixes await error line 558      | 5-10m  | ⚡ Easy    |
+| 3   | Databases    | Starts PostgreSQL/MongoDB/Redis | 10-20m | ⚙️ Medium  |
+| 4   | Environment  | Configures .env with API keys   | 15-30m | ⚡ Easy    |
+| 5   | YouTube      | Setup OAuth (can skip)          | 30-60m | 🔥 Hard    |
+| 6   | Verification | Final health check              | 10-15m | ⚡ Easy    |
 
 **Total Time:** 80-165 minutes (1.3-2.75 hours)
 
 ## Expected Results
 
 ### Before (Current State)
+
 - ❌ System Health: 50% (3/6 components)
 - ❌ 6 critical blockers
 - ❌ Backend won't start
 - ❌ Video generation blocked
 
 ### After (Target State)
+
 - ✅ System Health: 80-100% (5-6/6 components)
 - ✅ 0 critical blockers
 - ✅ Backend starts successfully
@@ -157,6 +166,7 @@ You're done! 🚀
 **Ready to begin?**
 
 Open the index and start with Prompt #1:
+
 ```powershell
 code docs/phase2a_prompts/00_Copilot_Prompts_INDEX.md
 ```

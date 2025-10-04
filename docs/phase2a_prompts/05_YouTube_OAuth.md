@@ -1,4 +1,5 @@
 # 🔐 PROMPT #5: YouTube OAuth Setup
+
 ## Phase 2A - Critical Issue Resolution
 
 **Reference Code:** `[REF:PROMPT-005]`  
@@ -14,6 +15,7 @@
 Configure YouTube Data API v3 OAuth 2.0 credentials to enable automated video uploads to YouTube channels.
 
 **Setup Requirements:**
+
 - Google Cloud Project
 - YouTube Data API v3 enabled
 - OAuth 2.0 credentials configured
@@ -24,7 +26,7 @@ Configure YouTube Data API v3 OAuth 2.0 credentials to enable automated video up
 
 ## 📋 COPILOT PROMPT
 
-```
+````
 GITHUB COPILOT DIRECTIVE: YOUTUBE OAUTH CONFIGURATION
 [REF:PROMPT-005]
 
@@ -116,10 +118,11 @@ File should look like:
     "redirect_uris": ["http://localhost", "urn:ietf:wg:oauth:2.0:oob"]
   }
 }
-```
+````
 
 Step 7: Test OAuth Flow
 Execute in terminal:
+
 ```powershell
 # Test authentication
 python -c "
@@ -148,11 +151,13 @@ Keep this file secure - it contains your authorization.
 
 Step 9: Test YouTube Upload Function
 Execute in terminal:
+
 ```powershell
 python -c "from src.services.youtube_uploader import YouTubeUploader; uploader = YouTubeUploader(); print('✅ YouTube uploader initialized')"
 ```
 
 Step 10: Run Final Diagnostic
+
 ```powershell
 python scripts/diagnostics.py
 ```
@@ -160,6 +165,7 @@ python scripts/diagnostics.py
 All tests should now pass
 
 REQUIREMENTS:
+
 - Google account with YouTube channel
 - Google Cloud Console access
 - Browser for OAuth flow
@@ -167,6 +173,7 @@ REQUIREMENTS:
 - google-auth-oauthlib installed (from PROMPT #1)
 
 SECURITY NOTES:
+
 - client_secrets.json contains sensitive data (don't commit)
 - token.json contains access token (don't share)
 - Both should be in .gitignore (already configured)
@@ -174,12 +181,14 @@ SECURITY NOTES:
 - Only authorize on trusted computers
 
 ERROR HANDLING:
+
 - If API not enabled, enable in Cloud Console
 - If quota exceeded, wait 24 hours or request increase
 - If redirect URI mismatch, add URI to OAuth client settings
 - If consent screen error, verify email and test user added
 
 DELIVERABLES:
+
 1. Google Cloud Project created with YouTube API enabled
 2. OAuth consent screen configured
 3. OAuth 2.0 credentials created and downloaded
@@ -199,6 +208,7 @@ SUCCESS CRITERIA:
 
 OPTIONAL: Test with Actual Upload
 If you want to test full upload flow (optional):
+
 ```powershell
 # Create a test video file first
 python -c "
@@ -211,6 +221,7 @@ print('✅ Upload test ready (uncomment to actually upload)')
 
 NEXT STEP:
 Once complete, proceed to PROMPT #6 (System Verification)
+
 ```
 
 ---
@@ -244,25 +255,33 @@ Once complete, proceed to PROMPT #6 (System Verification)
 
 **App Information:**
 ```
+
 App name: Faceless YouTube Automation
 User support email: your-email@gmail.com
 App logo: (optional)
+
 ```
 
 **App Domain:**
 ```
+
 Application home page: http://localhost:8000
+
 ```
 
 **Authorized Domains:**
 ```
+
 localhost
+
 ```
 
 **Developer Contact:**
 ```
+
 your-email@gmail.com
-```
+
+````
 
 **Scopes:**
 Add these YouTube scopes:
@@ -326,7 +345,7 @@ flow = InstalledAppFlow.from_client_secrets_file(
 credentials = flow.run_console()
 print('✅ Authorized!')
 "
-```
+````
 
 Follow the URL printed, authorize, paste code back.
 
@@ -334,6 +353,7 @@ Follow the URL printed, authorize, paste code back.
 
 **Solution:**
 Token expired or invalid. Delete `token.json` and re-authenticate:
+
 ```powershell
 Remove-Item token.json
 # Then run auth test again
@@ -342,11 +362,13 @@ Remove-Item token.json
 ### Issue: Quota exceeded
 
 **Check Quota:**
+
 1. Go to Cloud Console → APIs & Services → Dashboard
 2. Click "YouTube Data API v3"
 3. View "Quotas" tab
 
 **Solution:**
+
 - Free quota: 10,000 units/day
 - Upload costs: 1,600 units
 - Request quota increase if needed
@@ -394,28 +416,29 @@ try:
     )
     credentials = flow.run_local_server(port=8080)
     print('✅ OAuth authentication successful')
-    
+
     # Test API connection
     youtube = build('youtube', 'v3', credentials=credentials)
     print('✅ YouTube API client built')
-    
+
     # Get channel info
     request = youtube.channels().list(part='snippet', mine=True)
     response = request.execute()
-    
+
     if 'items' in response and len(response['items']) > 0:
         channel_name = response['items'][0]['snippet']['title']
         print(f'✅ Connected to channel: {channel_name}')
         print('\n🎉 YOUTUBE OAUTH FULLY CONFIGURED!')
     else:
         print('⚠️ No channel found for this account')
-        
+
 except Exception as e:
     print(f'❌ Error: {e}')
 "
 ```
 
 **Expected Output:**
+
 ```
 🔐 Testing YouTube OAuth...
 ✅ client_secrets.json found
@@ -431,6 +454,7 @@ except Exception as e:
 ## 📊 BEFORE & AFTER
 
 ### Before
+
 ```
 YouTube OAuth: UNCONFIGURED ⚠️
 ✅ client_secrets.json exists
@@ -441,6 +465,7 @@ Status: Upload functionality UNKNOWN
 ```
 
 ### After
+
 ```
 YouTube OAuth: CONFIGURED ✅
 ✅ client_secrets.json configured
@@ -465,6 +490,7 @@ Once YouTube OAuth is configured:
 3. **Mark this task complete** in your checklist
 
 **Status Update:**
+
 - ✅ Critical Issue #1: RESOLVED
 - ✅ Critical Issue #2: RESOLVED
 - ✅ Critical Issue #3: RESOLVED
@@ -479,6 +505,7 @@ Once YouTube OAuth is configured:
 ### File Security
 
 **DO NOT COMMIT:**
+
 - `client_secrets.json` - OAuth credentials
 - `token.json` - Access/refresh tokens
 - `token.pickle` - Serialized credentials
@@ -495,6 +522,7 @@ These are already in `.gitignore`.
 ### Production Deployment
 
 For production, consider:
+
 - Service account credentials (for server-to-server)
 - Secure secrets management (Azure Key Vault, AWS Secrets)
 - Token encryption at rest
@@ -503,6 +531,7 @@ For production, consider:
 ### Rate Limits
 
 **YouTube Data API v3 Quota:**
+
 - Default: 10,000 units/day
 - Video upload: 1,600 units
 - ~6 uploads per day with default quota
@@ -517,11 +546,12 @@ For production, consider:
 You can skip this prompt and proceed to PROMPT #6. YouTube functionality will be disabled but the rest of the system will work.
 
 To skip:
+
 1. Comment out YouTube tests in `scripts/diagnostics.py`
 2. Don't run YouTube upload functions
 3. Return to this prompt when ready for uploads
 
 ---
 
-*Reference: ISSUES_FOUND.md (Issue #6), Google Cloud Console documentation*  
-*Generated: October 4, 2025*
+_Reference: ISSUES_FOUND.md (Issue #6), Google Cloud Console documentation_  
+_Generated: October 4, 2025_

@@ -1,10 +1,11 @@
 # 🔧 PROMPT #1: Python Dependencies Installation
+
 ## Phase 2A - Critical Issue Resolution
 
 **Reference Code:** `[REF:PROMPT-001]`  
 **Complexity:** ⚡ Low  
 **Estimated Time:** 10-30 minutes  
-**Prerequisites:** None  
+**Prerequisites:** None
 
 ---
 
@@ -13,6 +14,7 @@
 Install all 28 missing Python packages required for core functionality including video generation, YouTube uploads, and AI processing.
 
 **Critical Packages to Install:**
+
 - `moviepy` - Video assembly engine
 - `google-api-python-client` - YouTube API client
 - `google-auth-oauthlib` - OAuth authentication
@@ -23,7 +25,7 @@ Install all 28 missing Python packages required for core functionality including
 
 ## 📋 COPILOT PROMPT
 
-```
+````
 GITHUB COPILOT DIRECTIVE: PYTHON DEPENDENCIES INSTALLATION
 [REF:PROMPT-001]
 
@@ -61,21 +63,24 @@ Execute in terminal:
 # Check venv is active (should see (venv) in prompt)
 python --version
 # Should show Python 3.8 or higher
-```
+````
 
 Step 2: Install All Dependencies
 Execute in terminal:
+
 ```powershell
 pip install -r requirements.txt
 ```
 
 Expected behavior:
+
 - Installation should take 5-15 minutes
 - Some packages may have large downloads (torch ~2GB, tensorflow ~500MB)
 - Watch for errors or failures
 
 Step 3: Verify Critical Packages
 Execute in terminal:
+
 ```powershell
 python -c "import moviepy.editor; print('✅ moviepy installed')"
 python -c "import googleapiclient; print('✅ google-api-python-client installed')"
@@ -89,6 +94,7 @@ All should print ✅ without errors
 
 Step 4: Run Dependency Audit
 Execute in terminal:
+
 ```powershell
 python scripts/audit_dependencies.py > dependency_audit_post_install.txt
 ```
@@ -99,6 +105,7 @@ Step 5: Test Import in Script
 Create a simple test to verify all critical imports work together.
 
 REQUIREMENTS:
+
 - Virtual environment must be active
 - requirements.txt must exist in project root
 - Internet connection required for package downloads
@@ -106,6 +113,7 @@ REQUIREMENTS:
 
 ERROR HANDLING:
 If installation fails:
+
 1. Check internet connection
 2. Verify pip is up to date: `pip install --upgrade pip`
 3. Try installing problematic package individually
@@ -113,6 +121,7 @@ If installation fails:
 5. Consult error messages for missing C++ build tools
 
 DELIVERABLES:
+
 1. All packages installed successfully
 2. Import verification passes for all critical packages
 3. Updated dependency audit showing 0 missing
@@ -126,7 +135,8 @@ SUCCESS CRITERIA:
 
 NEXT STEP:
 Once complete, proceed to PROMPT #2 (Syntax Error Fix)
-```
+
+````
 
 ---
 
@@ -138,7 +148,7 @@ Once complete, proceed to PROMPT #2 (Syntax Error Fix)
 # If not already active
 cd C:\FacelessYouTube
 .\venv\Scripts\Activate.ps1
-```
+````
 
 You should see `(venv)` in your terminal prompt.
 
@@ -157,6 +167,7 @@ pip install -r requirements.txt
 ```
 
 **Expected Output:**
+
 ```
 Collecting moviepy==X.X.X
 Downloading moviepy-X.X.X-py3-none-any.whl
@@ -165,6 +176,7 @@ Successfully installed moviepy-X.X.X google-api-python-client-X.X.X ...
 ```
 
 **Installation Time:**
+
 - Fast internet: 5-10 minutes
 - Slow internet: 15-30 minutes
 - Large packages: torch (~2GB), tensorflow (~500MB if listed)
@@ -189,6 +201,7 @@ python scripts/audit_dependencies.py
 ```
 
 **Expected Output:**
+
 ```
 Missing packages: 0 (was 28)
 Version mismatches: 41 (acceptable)
@@ -202,6 +215,7 @@ Potentially unused: 324 (can ignore)
 ### Issue: "pip: command not found"
 
 **Solution:**
+
 ```powershell
 python -m pip install -r requirements.txt
 ```
@@ -210,6 +224,7 @@ python -m pip install -r requirements.txt
 
 **Solution:**
 Check requirements.txt for outdated version pins. Try:
+
 ```powershell
 pip install moviepy  # Without version constraint
 ```
@@ -218,6 +233,7 @@ pip install moviepy  # Without version constraint
 
 **Solution (Windows):**
 Some packages need C++ build tools:
+
 1. Download: https://visualstudio.microsoft.com/visual-cpp-build-tools/
 2. Install "Desktop development with C++"
 3. Retry installation
@@ -226,6 +242,7 @@ Some packages need C++ build tools:
 
 **Solution:**
 Install CPU-only version (much smaller):
+
 ```powershell
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 ```
@@ -233,6 +250,7 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 ### Issue: Out of disk space
 
 **Check Space:**
+
 ```powershell
 Get-PSDrive C | Select-Object Used,Free
 ```
@@ -281,6 +299,7 @@ except ImportError as e:
 ## 📊 BEFORE & AFTER
 
 ### Before
+
 ```
 Missing packages: 28
 Status: Backend cannot start
@@ -290,6 +309,7 @@ AI processing: BLOCKED
 ```
 
 ### After
+
 ```
 Missing packages: 0
 Status: All dependencies available
@@ -309,6 +329,7 @@ Once all packages are installed successfully:
 3. **Mark this task complete** in your checklist
 
 **Status Update:**
+
 - ✅ Critical Issue #1: RESOLVED
 - ⏳ Critical Issue #2: Next
 - ⏳ Critical Issue #3: Pending
@@ -328,5 +349,5 @@ Once all packages are installed successfully:
 
 ---
 
-*Reference: dependency_audit.md, ISSUES_FOUND.md (Issue #1)*  
-*Generated: October 4, 2025*
+_Reference: dependency_audit.md, ISSUES_FOUND.md (Issue #1)_  
+_Generated: October 4, 2025_
