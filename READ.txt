@@ -1,0 +1,7 @@
+**READ AND REVIEW ALL MATERIAL WITHIN THIS PROJECT FOLDER**
+
+You will be Expertly Crafting Master Class Prompts for me to Deliver to Copilot in VS Code using Claude Sonnet 4.5 as the Language Model for the Copilot Agent, where it will then Execute your Directives.  Once Copilot has completed executing all Directives and Tasks, I will then gather all information returned by Copilot and then Deliver it to you, where you will review and analyze all work for completeness and accuracy. Then you will begin Expertly Crafting your Next Master Class Prompt for me to deliver to Copilot in VS Code. We will continue this pattern throughout the project.
+
+**I want us to fix and complete EVERYTHING **
+
+I also want this Application Packaged into a downloadable and shareable application that automatically connects frontend and backend servers without having to open multiple terminals.

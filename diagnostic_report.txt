@@ -1,0 +1,142 @@
+
+============================================================
+SYSTEM DIAGNOSTICS - FACELESS YOUTUBE AUTOMATION
+============================================================
+Date: Sat 10/04/2025
+Python: 3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]
+Platform: win32
+============================================================
+
+============================================================
+Component: Configuration
+============================================================
+
+Γ£à PASSED (1):
+   Configuration loaded successfully
+
+ΓÜá∩╕Å  WARNINGS (4):
+   Configuration: PostgreSQL password not set
+   Configuration: Pexels API key not set (video assets limited)
+   Configuration: Pixabay API key not set (video assets limited)
+   Configuration: Debug mode is enabled - disable for production!
+
+Status: HEALTHY Γ£à
+
+
+============================================================
+Component: Python Dependencies
+============================================================
+
+Γ£à PASSED (9):
+   Import fastapi - FastAPI framework
+   Import uvicorn - ASGI server
+   Import sqlalchemy - Database ORM
+   Import pydantic - Data validation
+   Import redis - Redis client
+   Import pymongo - MongoDB client
+   Import httpx - Async HTTP client
+   Import PIL - Image processing
+   Import google.oauth2 - Google OAuth
+
+Γ¥î FAILED (1):
+   Import moviepy.editor: Video editing - No module named 'moviepy'
+
+Status: UNHEALTHY Γ¥î
+
+
+============================================================
+Component: File System
+============================================================
+
+Γ£à PASSED (6):
+   Assets directory exists: C:\FacelessYouTube\assets
+   Output directory exists: C:\FacelessYouTube\output_videos
+   Temp directory exists: C:\FacelessYouTube\temp
+   Cache directory exists: C:\FacelessYouTube\cache
+   Scripts directory exists: C:\FacelessYouTube\scripts
+   Write permissions OK
+
+Status: HEALTHY Γ£à
+
+
+============================================================
+Component: Database Connections
+============================================================
+
+Γ£à PASSED (1):
+   Redis connection
+
+Γ¥î FAILED (2):
+   PostgreSQL connection: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5432 failed: fe_sendauth: no password supplied
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+   MongoDB connection: localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68e0f5a694efe07f8071f978, topology_type: Unknown, servers: [<ServerDescription ('localhost', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>]>
+
+Status: UNHEALTHY Γ¥î
+
+
+============================================================
+Component: External APIs
+============================================================
+
+Γ£à PASSED (2):
+   Ollama connection
+   YouTube client secrets found
+
+ΓÜá∩╕Å  WARNINGS (2):
+   Pexels API key: Not configured (asset scraping limited)
+   Pixabay API key: Not configured (asset scraping limited)
+
+Status: HEALTHY Γ£à
+
+
+============================================================
+Component: Application Services
+============================================================
+
+Γ£à PASSED (1):
+   Import src.services.script_generator - AI Script Generation
+
+Γ¥î FAILED (3):
+   Import src.services.video_assembler: Video Assembly - 'await' outside async function (video_assembler.py, line 558)
+   Import src.services.youtube_uploader: YouTube Upload - No module named 'googleapiclient'
+   Import src.services.scheduler: Job Scheduling - No module named 'services'
+
+Status: UNHEALTHY Γ¥î
+
+============================================================
+OVERALL SUMMARY
+============================================================
+
+Components: 3/6 healthy
+Tests Passed: 20 Γ£à
+Warnings: 6 ΓÜá∩╕Å
+Tests Failed: 6 Γ¥î
+
+============================================================
+RECOMMENDED ACTIONS
+============================================================
+
+1. Install missing Python packages:
+   pip install -r requirements.txt
+
+2. Start required services:
+   - PostgreSQL (port 5432)
+   - MongoDB (port 27017)
+   - Redis (port 6379)
+   - Ollama (port 11434)
+
+3. Configure API keys in .env file:
+   - PEXELS_API_KEY
+   - PIXABAY_API_KEY
+   - YOUTUBE_CLIENT_SECRETS
+
+4. Install Node.js dependencies:
+   cd dashboard && npm install
+
+Γ¥î CRITICAL ISSUES MUST BE RESOLVED
+
+C:\Users\sgbil\AppData\Local\Programs\Python\Python313\Lib\site-packages\pydantic\_internal\_fields.py:132: UserWarning: Field "model_used" in GeneratedScript has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(

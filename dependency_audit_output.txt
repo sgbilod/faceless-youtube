@@ -1,0 +1,421 @@
+C:\FacelessYouTube\scripts\audit_dependencies.py:6: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+Collecting installed packages...
+
+============================================================
+DEPENDENCY STATUS
+============================================================
+
+
+### MISSING PACKAGES:
+
+  Γ¥î arrow==1.3.0                    # Better datetime handling - NOT INSTALLED
+  Γ¥î asyncpg==0.29.0                 # Async PostgreSQL - NOT INSTALLED
+  Γ¥î celery-redbeat==2.1.1           # Redis-backed scheduler - NOT INSTALLED
+  Γ¥î celery==5.3.4                   # Distributed task queue - NOT INSTALLED
+  Γ¥î factory-boy==3.3.0              # Test fixtures - NOT INSTALLED
+  Γ¥î faker==20.1.0                   # Fake data generation - NOT INSTALLED
+  Γ¥î ffmpeg-python==0.2.0            # FFmpeg wrapper - NOT INSTALLED
+  Γ¥î google-api-python-client==2.108.0  # YouTube API - NOT INSTALLED
+  Γ¥î google-auth-httplib2==0.2.0     # Google HTTP transport - NOT INSTALLED
+  Γ¥î imagehash==4.3.1                # Perceptual hashing (deduplication) - NOT INSTALLED
+  Γ¥î ipdb==0.13.13                   # Debugger - NOT INSTALLED
+  Γ¥î ipython==8.18.1                 # Enhanced Python REPL - NOT INSTALLED
+  Γ¥î moviepy==1.0.3                  # Video editing - NOT INSTALLED
+  Γ¥î mutagen==1.47.0                 # Audio metadata - NOT INSTALLED
+  Γ¥î passlib[bcrypt]==1.7.4          # Password hashing - NOT INSTALLED
+  Γ¥î playwright==1.40.0              # Browser automation (JavaScript sites) - NOT INSTALLED
+  Γ¥î psycopg2-binary==2.9.9          # PostgreSQL adapter - NOT INSTALLED
+  Γ¥î pydub==0.25.1                   # Audio manipulation - NOT INSTALLED
+  Γ¥î pyqt6-webengine==6.6.0          # Web view component - NOT INSTALLED
+  Γ¥î pyqt6==6.6.1                    # Desktop GUI framework - NOT INSTALLED
+  Γ¥î python-jose[cryptography]==3.3.0  # JWT handling - NOT INSTALLED
+  Γ¥î python-slugify==8.0.1           # URL-safe strings - NOT INSTALLED
+  Γ¥î pyttsx3==2.90                   # Offline TTS (fallback) - NOT INSTALLED
+  Γ¥î sentence-transformers==2.2.2    # Text embeddings - NOT INSTALLED
+  Γ¥î sentry-sdk==1.39.1              # Error tracking (optional) - NOT INSTALLED
+  Γ¥î torchvision==0.16.1             # Vision models - NOT INSTALLED
+  Γ¥î tts==0.21.1                     # Coqui TTS (local, high quality) - NOT INSTALLED
+  Γ¥î uvicorn[standard]==0.24.0       # ASGI server - NOT INSTALLED
+
+### VERSION MISMATCHES:
+
+  ΓÜá∩╕Å aiohttp: Required 3.9.1                  # Alternative async HTTP, Installed 3.12.15
+  ΓÜá∩╕Å alembic: Required 1.12.1                 # Database migrations, Installed 1.16.4
+  ΓÜá∩╕Å apscheduler: Required 3.10.4             # Alternative scheduler, Installed 3.11.0
+  ΓÜá∩╕Å beautifulsoup4: Required 4.12.2          # HTML parsing, Installed 4.13.4
+  ΓÜá∩╕Å black: Required 23.12.0                  # Code formatter, Installed 25.1.0
+  ΓÜá∩╕Å click: Required 8.1.7                    # CLI framework, Installed 8.2.1
+  ΓÜá∩╕Å colorama: Required 0.4.6                 # Colored terminal output (Windows), Installed 0.4.6
+  ΓÜá∩╕Å cryptography: Required 41.0.7            # Encryption library, Installed 45.0.6
+  ΓÜá∩╕Å fastapi: Required 0.104.1                # REST API framework, Installed 0.116.1
+  ΓÜá∩╕Å google-auth-oauthlib: Required 1.2.0     # Google OAuth, Installed 1.2.2
+  ΓÜá∩╕Å hiredis: Required 2.2.3                  # Redis performance boost, Installed 3.2.1
+  ΓÜá∩╕Å httpx: Required 0.25.2                   # Async HTTP client, Installed 0.28.1
+  ΓÜá∩╕Å keyring: Required 24.3.0                 # System keyring access, Installed 25.6.0
+  ΓÜá∩╕Å lxml: Required 4.9.3                     # XML/HTML parser, Installed 6.0.0
+  ΓÜá∩╕Å motor: Required 3.3.2                    # Async MongoDB, Installed 3.7.1
+  ΓÜá∩╕Å mypy: Required 1.7.1                     # Type checker, Installed 1.10.0
+  ΓÜá∩╕Å numpy: Required 1.26.2                   # Numerical computing, Installed 2.2.6
+  ΓÜá∩╕Å opencv-python: Required 4.8.1.78         # Video processing, Installed 4.12.0.88
+  ΓÜá∩╕Å pillow: Required 10.1.0                  # Image processing, Installed 11.3.0
+  ΓÜá∩╕Å pre-commit: Required 3.5.0               # Git hooks, Installed 3.7.1
+  ΓÜá∩╕Å prometheus-client: Required 0.19.0       # Metrics export, Installed 0.22.1
+  ΓÜá∩╕Å pydantic: Required 2.5.0                 # Data validation, Installed 2.9.2
+  ΓÜá∩╕Å pymongo: Required 4.6.0                  # MongoDB client, Installed 4.14.1
+  ΓÜá∩╕Å pytest-asyncio: Required 0.21.1          # Async test support, Installed 1.1.0
+  ΓÜá∩╕Å pytest-cov: Required 4.1.0               # Coverage reporting, Installed 6.2.1
+  ΓÜá∩╕Å pytest-mock: Required 3.12.0             # Mocking utilities, Installed 3.14.1
+  ΓÜá∩╕Å pytest: Required 7.4.3                   # Test framework, Installed 8.2.0
+  ΓÜá∩╕Å python-dotenv: Required 1.0.0            # Environment variables, Installed 1.1.1
+  ΓÜá∩╕Å python-multipart: Required 0.0.6         # File upload support, Installed 0.0.20
+  ΓÜá∩╕Å pyyaml: Required 6.0.1                   # YAML parsing, Installed 6.0.2
+  ΓÜá∩╕Å redis: Required 5.0.1                    # Redis client (includes async support), Installed 6.4.0
+  ΓÜá∩╕Å requests: Required 2.31.0                # Sync HTTP (legacy support), Installed 2.32.4
+  ΓÜá∩╕Å ruff: Required 0.1.7                     # Fast linter, Installed 0.5.5
+  ΓÜá∩╕Å scikit-learn: Required 1.3.2             # ML utilities, Installed 1.7.1
+  ΓÜá∩╕Å sqlalchemy: Required 2.0.23              # ORM for PostgreSQL, Installed 2.0.43
+  ΓÜá∩╕Å structlog: Required 23.2.0               # Structured logging, Installed 25.4.0
+  ΓÜá∩╕Å tenacity: Required 8.2.3                 # Retry logic, Installed 9.1.2
+  ΓÜá∩╕Å toml: Required 0.10.2                    # TOML parsing, Installed 0.10.2
+  ΓÜá∩╕Å torch: Required 2.1.1                    # PyTorch (CLIP dependency), Installed 2.8.0
+  ΓÜá∩╕Å tqdm: Required 4.66.1                    # Progress bars, Installed 4.67.1
+  ΓÜá∩╕Å watchdog: Required 3.0.0                 # File system monitoring, Installed 6.0.0
+
+### POTENTIALLY UNUSED:
+
+  ≡ƒöì absl-py==2.3.1 - Not in requirements.txt
+  ≡ƒöì aiofiles==24.1.0 - Not in requirements.txt
+  ≡ƒöì aiohappyeyeballs==2.6.1 - Not in requirements.txt
+  ≡ƒöì aiohttp-retry==2.9.1 - Not in requirements.txt
+  ≡ƒöì aiosignal==1.4.0 - Not in requirements.txt
+  ≡ƒöì annotated-types==0.7.0 - Not in requirements.txt
+  ≡ƒöì anthropic==0.64.0 - Not in requirements.txt
+  ≡ƒöì anyio==4.10.0 - Not in requirements.txt
+  ≡ƒöì astroid==3.3.11 - Not in requirements.txt
+  ≡ƒöì astropy-iers-data==0.2025.7.28.0.41.50 - Not in requirements.txt
+  ≡ƒöì astropy==7.1.0 - Not in requirements.txt
+  ≡ƒöì astroquery==0.4.10 - Not in requirements.txt
+  ≡ƒöì astunparse==1.6.3 - Not in requirements.txt
+  ≡ƒöì async-timeout==5.0.1 - Not in requirements.txt
+  ≡ƒöì asyncio==4.0.0 - Not in requirements.txt
+  ≡ƒöì atomicwrites==1.4.1 - Not in requirements.txt
+  ≡ƒöì attrs==25.3.0 - Not in requirements.txt
+  ≡ƒöì audioop-lts==0.2.2 - Not in requirements.txt
+  ≡ƒöì authlib==1.6.1 - Not in requirements.txt
+  ≡ƒöì autocommand==2.2.2 - Not in requirements.txt
+  ≡ƒöì backports.tarfile==1.2.0 - Not in requirements.txt
+  ≡ƒöì bandit==1.8.6 - Not in requirements.txt
+  ≡ƒöì bidict==0.23.1 - Not in requirements.txt
+  ≡ƒöì bitarray==3.6.0 - Not in requirements.txt
+  ≡ƒöì blinker==1.9.0 - Not in requirements.txt
+  ≡ƒöì blis==1.3.0 - Not in requirements.txt
+  ≡ƒöì boto3==1.40.11 - Not in requirements.txt
+  ≡ƒöì botocore==1.40.11 - Not in requirements.txt
+  ≡ƒöì botorch==0.15.1 - Not in requirements.txt
+  ≡ƒöì brotli==1.1.0 - Not in requirements.txt
+  ≡ƒöì cachetools==5.5.2 - Not in requirements.txt
+  ≡ƒöì catalogue==2.0.10 - Not in requirements.txt
+  ≡ƒöì certifi==2025.7.14 - Not in requirements.txt
+  ≡ƒöì cffi==1.17.1 - Not in requirements.txt
+  ≡ƒöì cfgv==3.4.0 - Not in requirements.txt
+  ≡ƒöì charset-normalizer==3.4.2 - Not in requirements.txt
+  ≡ƒöì ckzg==2.1.1 - Not in requirements.txt
+  ≡ƒöì cloudpathlib==0.22.0 - Not in requirements.txt
+  ≡ƒöì cloudpickle==3.1.1 - Not in requirements.txt
+  ≡ƒöì confection==0.1.5 - Not in requirements.txt
+  ≡ƒöì configargparse==1.7.1 - Not in requirements.txt
+  ≡ƒöì contourpy==1.3.3 - Not in requirements.txt
+  ≡ƒöì coverage==7.10.2 - Not in requirements.txt
+  ≡ƒöì cupy-cuda11x==13.5.1 - Not in requirements.txt
+  ≡ƒöì cycler==0.12.1 - Not in requirements.txt
+  ≡ƒöì cymem==2.0.11 - Not in requirements.txt
+  ≡ƒöì cython==3.1.3 - Not in requirements.txt
+  ≡ƒöì cytoolz==1.0.1 - Not in requirements.txt
+  ≡ƒöì dash==3.2.0 - Not in requirements.txt
+  ≡ƒöì dask==2025.7.0 - Not in requirements.txt
+  ≡ƒöì dataclasses-json==0.6.7 - Not in requirements.txt
+  ≡ƒöì decorator==5.2.1 - Not in requirements.txt
+  ≡ƒöì deepagents==0.0.4 - Not in requirements.txt
+  ≡ƒöì deprecated==1.2.18 - Not in requirements.txt
+  ≡ƒöì dill==0.4.0 - Not in requirements.txt
+  ≡ƒöì distlib==0.4.0 - Not in requirements.txt
+  ≡ƒöì distro==1.9.0 - Not in requirements.txt
+  ≡ƒöì dnspython==2.7.0 - Not in requirements.txt
+  ≡ƒöì docker==7.1.0 - Not in requirements.txt
+  ≡ƒöì dparse==0.6.4 - Not in requirements.txt
+  ≡ƒöì durationpy==0.10 - Not in requirements.txt
+  ≡ƒöì en-core-web-sm==3.8.0 - Not in requirements.txt
+  ≡ƒöì et-xmlfile==2.0.0 - Not in requirements.txt
+  ≡ƒöì eth-abi==5.2.0 - Not in requirements.txt
+  ≡ƒöì eth-account==0.13.7 - Not in requirements.txt
+  ≡ƒöì eth-hash==0.7.1 - Not in requirements.txt
+  ≡ƒöì eth-keyfile==0.8.1 - Not in requirements.txt
+  ≡ƒöì eth-keys==0.7.0 - Not in requirements.txt
+  ≡ƒöì eth-rlp==2.2.0 - Not in requirements.txt
+  ≡ƒöì eth-typing==5.2.1 - Not in requirements.txt
+  ≡ƒöì eth-utils==5.3.0 - Not in requirements.txt
+  ≡ƒöì exifread==3.0.0 - Not in requirements.txt
+  ≡ƒöì fastrlock==0.8.3 - Not in requirements.txt
+  ≡ƒöì filelock==3.16.1 - Not in requirements.txt
+  ≡ƒöì flask-cors==6.0.1 - Not in requirements.txt
+  ≡ƒöì flask-login==0.6.3 - Not in requirements.txt
+  ≡ƒöì flask==3.1.1 - Not in requirements.txt
+  ≡ƒöì flatbuffers==25.2.10 - Not in requirements.txt
+  ≡ƒöì fonttools==4.59.0 - Not in requirements.txt
+  ≡ƒöì frozenlist==1.7.0 - Not in requirements.txt
+  ≡ƒöì fsspec==2025.7.0 - Not in requirements.txt
+  ≡ƒöì gast==0.6.0 - Not in requirements.txt
+  ≡ƒöì gcsfs==2025.7.0 - Not in requirements.txt
+  ≡ƒöì gevent==25.5.1 - Not in requirements.txt
+  ≡ƒöì geventhttpclient==2.3.4 - Not in requirements.txt
+  ≡ƒöì gitdb==4.0.12 - Not in requirements.txt
+  ≡ƒöì gitpython==3.1.45 - Not in requirements.txt
+  ≡ƒöì google-api-core==2.25.1 - Not in requirements.txt
+  ≡ƒöì google-auth==2.40.3 - Not in requirements.txt
+  ≡ƒöì google-cloud-core==2.4.3 - Not in requirements.txt
+  ≡ƒöì google-cloud-storage==3.3.0 - Not in requirements.txt
+  ≡ƒöì google-crc32c==1.7.1 - Not in requirements.txt
+  ≡ƒöì google-pasta==0.2.0 - Not in requirements.txt
+  ≡ƒöì google-resumable-media==2.7.2 - Not in requirements.txt
+  ≡ƒöì googleapis-common-protos==1.70.0 - Not in requirements.txt
+  ≡ƒöì gpytorch==1.14 - Not in requirements.txt
+  ≡ƒöì greenlet==3.2.4 - Not in requirements.txt
+  ≡ƒöì grpcio==1.74.0 - Not in requirements.txt
+  ≡ƒöì h11==0.16.0 - Not in requirements.txt
+  ≡ƒöì h5py==3.14.0 - Not in requirements.txt
+  ≡ƒöì hds-core==0.1.0 - Not in requirements.txt
+  ≡ƒöì hexbytes==1.3.1 - Not in requirements.txt
+  ≡ƒöì hopcroftkarp==1.2.5 - Not in requirements.txt
+  ≡ƒöì html5lib==1.1 - Not in requirements.txt
+  ≡ƒöì httpcore==1.0.9 - Not in requirements.txt
+  ≡ƒöì httpx-sse==0.4.1 - Not in requirements.txt
+  ≡ƒöì huggingface-hub==0.34.4 - Not in requirements.txt
+  ≡ƒöì hypothesis==6.138.14 - Not in requirements.txt
+  ≡ƒöì identify==2.6.13 - Not in requirements.txt
+  ≡ƒöì idna==3.10 - Not in requirements.txt
+  ≡ƒöì imageio==2.37.0 - Not in requirements.txt
+  ≡ƒöì importlib-metadata==8.7.0 - Not in requirements.txt
+  ≡ƒöì inflect==7.3.1 - Not in requirements.txt
+  ≡ƒöì iniconfig==2.1.0 - Not in requirements.txt
+  ≡ƒöì isort==6.0.1 - Not in requirements.txt
+  ≡ƒöì itsdangerous==2.2.0 - Not in requirements.txt
+  ≡ƒöì jaraco-functools==4.2.1 - Not in requirements.txt
+  ≡ƒöì jaraco.classes==3.4.0 - Not in requirements.txt
+  ≡ƒöì jaraco.collections==5.1.0 - Not in requirements.txt
+  ≡ƒöì jaraco.context==6.0.1 - Not in requirements.txt
+  ≡ƒöì jaraco.functools==4.0.1 - Not in requirements.txt
+  ≡ƒöì jaraco.text==3.12.1 - Not in requirements.txt
+  ≡ƒöì jaxtyping==0.3.2 - Not in requirements.txt
+  ≡ƒöì jinja2==3.1.6 - Not in requirements.txt
+  ≡ƒöì jiter==0.10.0 - Not in requirements.txt
+  ≡ƒöì jmespath==1.0.1 - Not in requirements.txt
+  ≡ƒöì joblib==1.5.1 - Not in requirements.txt
+  ≡ƒöì jsonpatch==1.33 - Not in requirements.txt
+  ≡ƒöì jsonpointer==3.0.0 - Not in requirements.txt
+  ≡ƒöì jwst-mast-query==0.0.6 - Not in requirements.txt
+  ≡ƒöì keras==3.11.1 - Not in requirements.txt
+  ≡ƒöì kiwisolver==1.4.8 - Not in requirements.txt
+  ≡ƒöì kubernetes==33.1.0 - Not in requirements.txt
+  ≡ƒöì langchain-anthropic==0.3.19 - Not in requirements.txt
+  ≡ƒöì langchain-community==0.3.27 - Not in requirements.txt
+  ≡ƒöì langchain-core==0.3.74 - Not in requirements.txt
+  ≡ƒöì langchain-ollama==0.3.7 - Not in requirements.txt
+  ≡ƒöì langchain-openai==0.3.31 - Not in requirements.txt
+  ≡ƒöì langchain-text-splitters==0.3.9 - Not in requirements.txt
+  ≡ƒöì langchain==0.3.27 - Not in requirements.txt
+  ≡ƒöì langcodes==3.5.0 - Not in requirements.txt
+  ≡ƒöì langgraph-checkpoint==2.1.1 - Not in requirements.txt
+  ≡ƒöì langgraph-prebuilt==0.6.4 - Not in requirements.txt
+  ≡ƒöì langgraph-sdk==0.2.3 - Not in requirements.txt
+  ≡ƒöì langgraph==0.6.6 - Not in requirements.txt
+  ≡ƒöì langsmith==0.4.16 - Not in requirements.txt
+  ≡ƒöì language-data==1.3.0 - Not in requirements.txt
+  ≡ƒöì lazy-loader==0.4 - Not in requirements.txt
+  ≡ƒöì libclang==18.1.1 - Not in requirements.txt
+  ≡ƒöì linear-operator==0.6 - Not in requirements.txt
+  ≡ƒöì locket==1.0.0 - Not in requirements.txt
+  ≡ƒöì locust-cloud==1.26.3 - Not in requirements.txt
+  ≡ƒöì locust==2.38.0 - Not in requirements.txt
+  ≡ƒöì loguru==0.7.3 - Not in requirements.txt
+  ≡ƒöì mako==1.3.10 - Not in requirements.txt
+  ≡ƒöì marisa-trie==1.3.1 - Not in requirements.txt
+  ≡ƒöì markdown-it-py==3.0.0 - Not in requirements.txt
+  ≡ƒöì markdown==3.8.2 - Not in requirements.txt
+  ≡ƒöì markupsafe==3.0.2 - Not in requirements.txt
+  ≡ƒöì marshmallow==3.26.1 - Not in requirements.txt
+  ≡ƒöì matplotlib==3.10.5 - Not in requirements.txt
+  ≡ƒöì mccabe==0.7.0 - Not in requirements.txt
+  ≡ƒöì mdurl==0.1.2 - Not in requirements.txt
+  ≡ƒöì ml-dtypes==0.5.3 - Not in requirements.txt
+  ≡ƒöì more-itertools==10.7.0 - Not in requirements.txt
+  ≡ƒöì mpmath==1.3.0 - Not in requirements.txt
+  ≡ƒöì msgpack==1.1.1 - Not in requirements.txt
+  ≡ƒöì multidict==6.6.3 - Not in requirements.txt
+  ≡ƒöì multipledispatch==1.0.0 - Not in requirements.txt
+  ≡ƒöì murmurhash==1.0.13 - Not in requirements.txt
+  ≡ƒöì mypy-extensions==1.1.0 - Not in requirements.txt
+  ≡ƒöì namex==0.1.0 - Not in requirements.txt
+  ≡ƒöì narwhals==2.0.1 - Not in requirements.txt
+  ≡ƒöì nest-asyncio==1.6.0 - Not in requirements.txt
+  ≡ƒöì networkx==3.5 - Not in requirements.txt
+  ≡ƒöì nltk==3.9.1 - Not in requirements.txt
+  ≡ƒöì nodeenv==1.9.1 - Not in requirements.txt
+  ≡ƒöì numexpr==2.11.0 - Not in requirements.txt
+  ≡ƒöì oauthlib==3.3.1 - Not in requirements.txt
+  ≡ƒöì ollama==0.5.3 - Not in requirements.txt
+  ≡ƒöì openai==1.101.0 - Not in requirements.txt
+  ≡ƒöì openpyxl==3.1.5 - Not in requirements.txt
+  ≡ƒöì opentelemetry-api==1.36.0 - Not in requirements.txt
+  ≡ƒöì opt-einsum==3.4.0 - Not in requirements.txt
+  ≡ƒöì optree==0.17.0 - Not in requirements.txt
+  ≡ƒöì orjson==3.11.2 - Not in requirements.txt
+  ≡ƒöì ormsgpack==1.10.0 - Not in requirements.txt
+  ≡ƒöì packaging==25.0 - Not in requirements.txt
+  ≡ƒöì pandas==2.3.1 - Not in requirements.txt
+  ≡ƒöì parsimonious==0.10.0 - Not in requirements.txt
+  ≡ƒöì partd==1.4.2 - Not in requirements.txt
+  ≡ƒöì pathspec==0.12.1 - Not in requirements.txt
+  ≡ƒöì patsy==1.0.1 - Not in requirements.txt
+  ≡ƒöì pbr==6.1.1 - Not in requirements.txt
+  ≡ƒöì persim==0.3.8 - Not in requirements.txt
+  ≡ƒöì photutils==2.2.0 - Not in requirements.txt
+  ≡ƒöì platformdirs==4.3.8 - Not in requirements.txt
+  ≡ƒöì plotly==6.2.0 - Not in requirements.txt
+  ≡ƒöì pluggy==1.6.0 - Not in requirements.txt
+  ≡ƒöì poppy==1.1.2 - Not in requirements.txt
+  ≡ƒöì preshed==3.0.10 - Not in requirements.txt
+  ≡ƒöì propcache==0.3.2 - Not in requirements.txt
+  ≡ƒöì proto-plus==1.26.1 - Not in requirements.txt
+  ≡ƒöì protobuf==6.31.1 - Not in requirements.txt
+  ≡ƒöì psutil==6.1.1 - Not in requirements.txt
+  ≡ƒöì psycopg2==2.9.10 - Not in requirements.txt
+  ≡ƒöì py==1.11.0 - Not in requirements.txt
+  ≡ƒöì pyarrow==21.0.0 - Not in requirements.txt
+  ≡ƒöì pyasn1-modules==0.4.2 - Not in requirements.txt
+  ≡ƒöì pyasn1==0.6.1 - Not in requirements.txt
+  ≡ƒöì pycparser==2.22 - Not in requirements.txt
+  ≡ƒöì pycryptodome==3.23.0 - Not in requirements.txt
+  ≡ƒöì pydantic-core==2.23.4 - Not in requirements.txt
+  ≡ƒöì pydantic-settings==2.10.1 - Not in requirements.txt
+  ≡ƒöì pyerfa==2.0.1.5 - Not in requirements.txt
+  ≡ƒöì pygments==2.19.2 - Not in requirements.txt
+  ≡ƒöì pyjwt==2.10.1 - Not in requirements.txt
+  ≡ƒöì pylint==3.3.7 - Not in requirements.txt
+  ≡ƒöì pyotp==2.9.0 - Not in requirements.txt
+  ≡ƒöì pyparsing==3.2.3 - Not in requirements.txt
+  ≡ƒöì pyre-extensions==0.0.32 - Not in requirements.txt
+  ≡ƒöì pyro-api==0.1.2 - Not in requirements.txt
+  ≡ƒöì pyro-ppl==1.9.1 - Not in requirements.txt
+  ≡ƒöì pysiaf==0.24.1 - Not in requirements.txt
+  ≡ƒöì pytest-pythonpath==0.7.4 - Not in requirements.txt
+  ≡ƒöì pytest-stress==1.0.1 - Not in requirements.txt
+  ≡ƒöì python-dateutil==2.9.0.post0 - Not in requirements.txt
+  ≡ƒöì python-engineio==4.12.2 - Not in requirements.txt
+  ≡ƒöì python-socketio==5.13.0 - Not in requirements.txt
+  ≡ƒöì pytz==2025.2 - Not in requirements.txt
+  ≡ƒöì pyunormalize==16.0.0 - Not in requirements.txt
+  ≡ƒöì pyvo==1.7 - Not in requirements.txt
+  ≡ƒöì pywin32-ctypes==0.2.3 - Not in requirements.txt
+  ≡ƒöì pywin32==311 - Not in requirements.txt
+  ≡ƒöì pyzmq==27.0.1 - Not in requirements.txt
+  ≡ƒöì qhss==1.0.0 - Not in requirements.txt
+  ≡ƒöì qiskit-aer==0.17.1 - Not in requirements.txt
+  ≡ƒöì qiskit==2.1.1 - Not in requirements.txt
+  ≡ƒöì regex==2025.7.34 - Not in requirements.txt
+  ≡ƒöì requests-oauthlib==2.0.0 - Not in requirements.txt
+  ≡ƒöì requests-toolbelt==1.0.0 - Not in requirements.txt
+  ≡ƒöì retrying==1.4.2 - Not in requirements.txt
+  ≡ƒöì rich==14.1.0 - Not in requirements.txt
+  ≡ƒöì ripser==0.6.12 - Not in requirements.txt
+  ≡ƒöì rlp==4.1.0 - Not in requirements.txt
+  ≡ƒöì rq==2.4.1 - Not in requirements.txt
+  ≡ƒöì rsa==4.9.1 - Not in requirements.txt
+  ≡ƒöì ruamel.yaml.clib==0.2.12 - Not in requirements.txt
+  ≡ƒöì ruamel.yaml==0.18.14 - Not in requirements.txt
+  ≡ƒöì rustworkx==0.16.0 - Not in requirements.txt
+  ≡ƒöì s3transfer==0.13.1 - Not in requirements.txt
+  ≡ƒöì safetensors==0.6.2 - Not in requirements.txt
+  ≡ƒöì safety-schemas==0.0.14 - Not in requirements.txt
+  ≡ƒöì safety==3.6.0 - Not in requirements.txt
+  ≡ƒöì schedule==1.2.2 - Not in requirements.txt
+  ≡ƒöì scikit-image==0.25.2 - Not in requirements.txt
+  ≡ƒöì scipy==1.16.1 - Not in requirements.txt
+  ≡ƒöì shellingham==1.5.4 - Not in requirements.txt
+  ≡ƒöì simple-websocket==1.1.0 - Not in requirements.txt
+  ≡ƒöì six==1.17.0 - Not in requirements.txt
+  ≡ƒöì smart-open==7.3.0.post1 - Not in requirements.txt
+  ≡ƒöì smmap==5.0.2 - Not in requirements.txt
+  ≡ƒöì sniffio==1.3.1 - Not in requirements.txt
+  ≡ƒöì sortedcontainers==2.4.0 - Not in requirements.txt
+  ≡ƒöì soupsieve==2.7 - Not in requirements.txt
+  ≡ƒöì spacy-legacy==3.0.12 - Not in requirements.txt
+  ≡ƒöì spacy-loggers==1.0.5 - Not in requirements.txt
+  ≡ƒöì spacy==3.8.7 - Not in requirements.txt
+  ≡ƒöì speechrecognition==3.14.3 - Not in requirements.txt
+  ≡ƒöì srsly==2.5.1 - Not in requirements.txt
+  ≡ƒöì standard-aifc==3.13.0 - Not in requirements.txt
+  ≡ƒöì standard-chunk==3.13.0 - Not in requirements.txt
+  ≡ƒöì starlette==0.47.2 - Not in requirements.txt
+  ≡ƒöì statsmodels==0.14.5 - Not in requirements.txt
+  ≡ƒöì stevedore==5.4.1 - Not in requirements.txt
+  ≡ƒöì sympy==1.14.0 - Not in requirements.txt
+  ≡ƒöì synphot==1.6.0 - Not in requirements.txt
+  ≡ƒöì tabulate==0.9.0 - Not in requirements.txt
+  ≡ƒöì tavily-python==0.7.11 - Not in requirements.txt
+  ≡ƒöì tensorboard-data-server==0.7.2 - Not in requirements.txt
+  ≡ƒöì tensorboard==2.20.0 - Not in requirements.txt
+  ≡ƒöì tensorflow==2.20.0rc0 - Not in requirements.txt
+  ≡ƒöì tensorly==0.9.0 - Not in requirements.txt
+  ≡ƒöì termcolor==3.1.0 - Not in requirements.txt
+  ≡ƒöì thinc==8.3.6 - Not in requirements.txt
+  ≡ƒöì threadpoolctl==3.6.0 - Not in requirements.txt
+  ≡ƒöì tifffile==2025.6.11 - Not in requirements.txt
+  ≡ƒöì tiktoken==0.11.0 - Not in requirements.txt
+  ≡ƒöì tokenizers==0.21.4 - Not in requirements.txt
+  ≡ƒöì tomli==2.0.1 - Not in requirements.txt
+  ≡ƒöì tomlkit==0.13.3 - Not in requirements.txt
+  ≡ƒöì toolz==1.0.0 - Not in requirements.txt
+  ≡ƒöì transformers==4.55.1 - Not in requirements.txt
+  ≡ƒöì twilio==9.8.0 - Not in requirements.txt
+  ≡ƒöì typeguard==4.3.0 - Not in requirements.txt
+  ≡ƒöì typer==0.16.0 - Not in requirements.txt
+  ≡ƒöì types-requests==2.32.4.20250611 - Not in requirements.txt
+  ≡ƒöì typing-extensions==4.14.1 - Not in requirements.txt
+  ≡ƒöì typing-inspect==0.9.0 - Not in requirements.txt
+  ≡ƒöì typing-inspection==0.4.1 - Not in requirements.txt
+  ≡ƒöì tzdata==2025.2 - Not in requirements.txt
+  ≡ƒöì tzlocal==5.3.1 - Not in requirements.txt
+  ≡ƒöì urllib3==2.5.0 - Not in requirements.txt
+  ≡ƒöì uvicorn==0.35.0 - Not in requirements.txt
+  ≡ƒöì virtualenv==20.33.1 - Not in requirements.txt
+  ≡ƒöì vitest==2.0 - Not in requirements.txt
+  ≡ƒöì wadler-lindig==0.1.7 - Not in requirements.txt
+  ≡ƒöì waitress==3.0.2 - Not in requirements.txt
+  ≡ƒöì wasabi==1.1.3 - Not in requirements.txt
+  ≡ƒöì weasel==0.4.1 - Not in requirements.txt
+  ≡ƒöì web3==7.12.1 - Not in requirements.txt
+  ≡ƒöì webencodings==0.5.1 - Not in requirements.txt
+  ≡ƒöì websocket-client==1.8.0 - Not in requirements.txt
+  ≡ƒöì websockets==15.0.1 - Not in requirements.txt
+  ≡ƒöì werkzeug==3.1.3 - Not in requirements.txt
+  ≡ƒöì win32-setctime==1.2.0 - Not in requirements.txt
+  ≡ƒöì wrapt==1.17.2 - Not in requirements.txt
+  ≡ƒöì wsproto==1.2.0 - Not in requirements.txt
+  ≡ƒöì xxhash==3.5.0 - Not in requirements.txt
+  ≡ƒöì yarl==1.20.1 - Not in requirements.txt
+  ≡ƒöì zipp==3.23.0 - Not in requirements.txt
+  ≡ƒöì zope-event==5.1.1 - Not in requirements.txt
+  ≡ƒöì zope.interface==7.2 - Not in requirements.txt
+  ≡ƒöì zstandard==0.23.0 - Not in requirements.txt
+
+============================================================
+SUMMARY
+============================================================
+Total Required: 69
+Correctly Installed: 0
+Missing: 28
+Version Mismatches: 41
+Potentially Unused: 324
+
+ΓÜá∩╕Å ISSUES FOUND - Run: pip install -r requirements.txt

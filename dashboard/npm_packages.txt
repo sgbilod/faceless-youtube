@@ -1,0 +1,50 @@
+faceless-youtube-dashboard@1.0.0 C:\FacelessYouTube\dashboard
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY @tanstack/react-query@^5.14.2
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY @types/react-dom@^18.2.17
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY @types/react@^18.2.43
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY @vitejs/plugin-react@^4.2.1
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY autoprefixer@^10.4.16
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY axios@^1.6.2
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY clsx@^2.0.0
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY date-fns@^3.0.0
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY eslint-plugin-react@^7.33.2
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY eslint@^8.55.0
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY lucide-react@^0.294.0
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY postcss@^8.4.32
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY prettier@^3.1.1
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY react-calendar@^4.7.0
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY react-dom@^18.2.0
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY react-hot-toast@^2.4.1
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY react-router-dom@^6.20.0
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY react@^18.2.0
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY recharts@^2.10.3
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY tailwindcss@^3.3.6
+Γö£ΓöÇΓöÇ UNMET DEPENDENCY vite@^5.0.8
+ΓööΓöÇΓöÇ UNMET DEPENDENCY zustand@^4.4.7
+
+npm ERR! code ELSPROBLEMS
+npm ERR! missing: @tanstack/react-query@^5.14.2, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: @types/react-dom@^18.2.17, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: @types/react@^18.2.43, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: @vitejs/plugin-react@^4.2.1, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: autoprefixer@^10.4.16, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: axios@^1.6.2, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: clsx@^2.0.0, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: date-fns@^3.0.0, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: eslint-plugin-react@^7.33.2, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: eslint@^8.55.0, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: lucide-react@^0.294.0, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: postcss@^8.4.32, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: prettier@^3.1.1, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: react-calendar@^4.7.0, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: react-dom@^18.2.0, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: react-hot-toast@^2.4.1, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: react-router-dom@^6.20.0, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: react@^18.2.0, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: recharts@^2.10.3, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: tailwindcss@^3.3.6, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: vite@^5.0.8, required by faceless-youtube-dashboard@1.0.0
+npm ERR! missing: zustand@^4.4.7, required by faceless-youtube-dashboard@1.0.0
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\sgbil\AppData\Local\npm-cache\_logs\2025-10-04T04_19_26_582Z-debug-0.log
