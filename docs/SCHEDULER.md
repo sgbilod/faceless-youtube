@@ -67,6 +67,7 @@ The Scheduler system automates the complete content creation and publishing work
 Main orchestration service that manages the complete workflow.
 
 **Key Features:**
+
 - Schedule single videos
 - Batch scheduling
 - Automatic retry with exponential backoff
@@ -75,6 +76,7 @@ Main orchestration service that manages the complete workflow.
 - Execution history
 
 **Usage:**
+
 ```python
 from services.scheduler import ContentScheduler, ScheduleConfig
 
@@ -103,6 +105,7 @@ print(f"Progress: {job.progress_percent}%")
 Background execution engine with retry logic.
 
 **Key Features:**
+
 - Async job execution
 - Configurable retry strategies (fixed, exponential, linear)
 - Concurrent job limits
@@ -111,12 +114,14 @@ Background execution engine with retry logic.
 - Execution history
 
 **Retry Strategies:**
+
 - **NONE**: No retries
 - **FIXED_DELAY**: Fixed delay between retries
-- **EXPONENTIAL_BACKOFF**: 2^n * base_delay (default)
-- **LINEAR_BACKOFF**: n * base_delay
+- **EXPONENTIAL_BACKOFF**: 2^n \* base_delay (default)
+- **LINEAR_BACKOFF**: n \* base_delay
 
 **Usage:**
+
 ```python
 from services.scheduler import JobExecutor, ExecutorConfig, RetryStrategy
 
@@ -143,6 +148,7 @@ if result.status == ExecutionStatus.COMPLETED:
 Pattern-based scheduling using APScheduler.
 
 **Key Features:**
+
 - Daily schedules
 - Weekly schedules (specific days)
 - Monthly schedules (specific dates)
@@ -152,6 +158,7 @@ Pattern-based scheduling using APScheduler.
 - Pause/resume schedules
 
 **Usage:**
+
 ```python
 from services.scheduler import RecurringScheduler, DayOfWeek
 
@@ -187,6 +194,7 @@ await scheduler.start()
 ```
 
 **Topic Template Variables:**
+
 - `{date}` - 2024-06-15
 - `{time}` - 14:30
 - `{datetime}` - 2024-06-15 14:30
@@ -203,6 +211,7 @@ await scheduler.start()
 Content calendar and planning system.
 
 **Key Features:**
+
 - Visual calendar representation
 - Conflict detection (time and topic)
 - Optimal slot suggestions
@@ -212,6 +221,7 @@ Content calendar and planning system.
 - Utilization tracking
 
 **Usage:**
+
 ```python
 from services.scheduler import CalendarManager, CalendarConfig
 
@@ -258,6 +268,7 @@ pip install apscheduler pydantic asyncio
 ### Dependencies
 
 The scheduler integrates with:
+
 - **ScriptGenerator** (Task #6) - AI script generation
 - **VideoAssembler** (Task #7) - Video production
 - **YouTubeUploader** (Task #8) - YouTube uploads
@@ -288,10 +299,10 @@ async def setup_automation():
         max_retries=3,
         youtube_account="main"
     ))
-    
+
     # Create recurring schedules
     recurring = RecurringScheduler(scheduler)
-    
+
     # Daily tips at 10 AM
     await recurring.create_daily_schedule(
         name="Daily Python Tips",
@@ -299,7 +310,7 @@ async def setup_automation():
         hour=10,
         tags=["python", "tips", "daily"]
     )
-    
+
     # Weekly tutorials
     await recurring.create_weekly_schedule(
         name="Weekly Tutorials",
@@ -308,19 +319,19 @@ async def setup_automation():
         hour=14,
         tags=["python", "tutorial"]
     )
-    
+
     # Start automation
     await scheduler.start()
     await recurring.start()
-    
+
     print("Automation running! Videos will be created automatically.")
-    
+
     # Monitor
     while True:
         stats = scheduler.get_statistics()
         print(f"Active jobs: {stats['active_jobs']}, "
               f"Completed: {stats['statistics']['total_completed']}")
-        
+
         await asyncio.sleep(60)
 
 if __name__ == "__main__":
@@ -353,6 +364,7 @@ async def schedule_video(
 ```
 
 **Parameters:**
+
 - `topic` - Video topic (required)
 - `scheduled_at` - When to create video (required)
 - `publish_at` - When to publish (None = immediately)
@@ -375,6 +387,7 @@ async def schedule_batch(
 ```
 
 **Parameters:**
+
 - `videos` - List of video configs (each with schedule_video params)
 
 **Returns:** List of job IDs
@@ -425,6 +438,7 @@ def get_statistics() -> Dict[str, Any]
 ```
 
 **Returns:**
+
 ```python
 {
     "total_jobs": 10,
@@ -684,6 +698,7 @@ await scheduler.create_cron_schedule(
 ```
 
 **Common Cron Patterns:**
+
 - `0 10 * * *` - Daily at 10 AM
 - `0 14 * * 1,3,5` - Mon/Wed/Fri at 2 PM
 - `0 9 1,15 * *` - 1st and 15th at 9 AM
@@ -697,12 +712,14 @@ await scheduler.create_cron_schedule(
 ### 1. Schedule Management
 
 **DO:**
+
 - Use recurring schedules for consistent content
 - Set reasonable gaps between videos (6+ hours)
 - Use calendar to visualize schedule
 - Monitor job statistics regularly
 
 **DON'T:**
+
 - Schedule too many videos simultaneously
 - Ignore conflicts and warnings
 - Skip error handling
@@ -743,15 +760,15 @@ Implement monitoring for production:
 async def monitor_scheduler(scheduler):
     while True:
         stats = scheduler.get_statistics()
-        
+
         # Alert if too many failures
         if stats['statistics']['total_failed'] > 10:
             send_alert("High failure rate!")
-        
+
         # Log progress
         logger.info(f"Active: {stats['active_jobs']}, "
                     f"Completed: {stats['statistics']['total_completed']}")
-        
+
         await asyncio.sleep(300)  # Check every 5 minutes
 ```
 
@@ -797,6 +814,7 @@ for slot_time in suggestions:
 **Symptoms:** Jobs stay in PENDING status
 
 **Solutions:**
+
 1. Check scheduler is started: `await scheduler.start()`
 2. Verify scheduled time is in future
 3. Check concurrent job limit
@@ -807,6 +825,7 @@ for slot_time in suggestions:
 **Symptoms:** Many jobs in FAILED status
 
 **Solutions:**
+
 1. Check external service credentials (YouTube, Ollama)
 2. Increase retry count and delay
 3. Verify network connectivity
@@ -817,6 +836,7 @@ for slot_time in suggestions:
 **Symptoms:** Calendar shows CONFLICT status
 
 **Solutions:**
+
 1. Increase min_gap_hours in CalendarConfig
 2. Reduce max_videos_per_day
 3. Use calendar.suggest_optimal_slots() for better times
@@ -827,6 +847,7 @@ for slot_time in suggestions:
 **Symptoms:** Recurring jobs not creating videos
 
 **Solutions:**
+
 1. Verify recurring scheduler is started: `await recurring.start()`
 2. Check job is enabled: `job.enabled == True`
 3. Verify cron expression syntax
@@ -838,6 +859,7 @@ for slot_time in suggestions:
 **Symptoms:** Video assembly fails
 
 **Solutions:**
+
 1. Implement automatic cleanup:
    ```python
    await scheduler.clean_old_jobs(days=30)
@@ -913,6 +935,7 @@ Copyright (c) 2024 DOPPELGANGER STUDIO. All Rights Reserved.
 ## Support
 
 For issues or questions:
+
 - Check troubleshooting section
 - Review examples in `examples/scheduler_usage.py`
 - Check logs for error details

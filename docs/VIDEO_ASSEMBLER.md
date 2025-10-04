@@ -142,6 +142,7 @@ The Video Assembler consists of four main components working together:
 Generates natural-sounding narration from text.
 
 **Features**:
+
 - 7 pre-configured voices (male/female, various tones)
 - SSML support for pauses, emphasis, rate control
 - Audio format conversion (WAV, MP3, OGG)
@@ -150,13 +151,15 @@ Generates natural-sounding narration from text.
 - Batch generation for multiple segments
 
 **Voice Options**:
+
 - `FEMALE_CALM`: Meditation, relaxation content
-- `FEMALE_ENERGETIC`: Motivation, energetic content  
+- `FEMALE_ENERGETIC`: Motivation, energetic content
 - `MALE_DEEP`: Facts, authoritative narration
 - `MALE_FRIENDLY`: Stories, casual tone
 - `FAST_FEMALE/MALE`: Lower quality but faster
 
 **Example**:
+
 ```python
 from src.services.video_assembler import TTSEngine, Voice
 
@@ -175,6 +178,7 @@ result = await tts.generate(
 Constructs video timeline from scripts and assets.
 
 **Features**:
+
 - Scene creation with assets and narration
 - Automatic asset-to-narration synchronization
 - Transition effects (fade, dissolve, wipe, zoom)
@@ -184,6 +188,7 @@ Constructs video timeline from scripts and assets.
 - Timeline validation
 
 **Scene Structure**:
+
 ```python
 Scene:
   - Assets (videos/images)
@@ -194,6 +199,7 @@ Scene:
 ```
 
 **Example**:
+
 ```python
 from src.services.video_assembler import TimelineBuilder
 
@@ -212,6 +218,7 @@ timeline = await builder.build(
 Renders timeline to final video file.
 
 **Features**:
+
 - Multiple quality presets (720p to 4K)
 - Progress tracking with callbacks
 - GPU acceleration support
@@ -221,6 +228,7 @@ Renders timeline to final video file.
 - Platform-optimized exports (YouTube, Instagram, TikTok)
 
 **Quality Presets**:
+
 - `DRAFT`: 640x360, 30fps (fast preview)
 - `HD_720P`: 1280x720, 30fps, 5 Mbps
 - `HD_1080P`: 1920x1080, 30fps, 8 Mbps
@@ -228,6 +236,7 @@ Renders timeline to final video file.
 - `UHD_4K`: 3840x2160, 30fps, 35 Mbps
 
 **Example**:
+
 ```python
 from src.services.video_assembler import VideoRenderer, QualityPreset
 
@@ -246,6 +255,7 @@ result = await renderer.render(
 Main orchestration service.
 
 **Features**:
+
 - End-to-end automation
 - Script segmentation
 - Component coordination
@@ -256,6 +266,7 @@ Main orchestration service.
 - Time estimation
 
 **Example**:
+
 ```python
 from src.services.video_assembler import VideoAssembler
 
@@ -282,25 +293,25 @@ config = VideoConfig(
     # TTS Settings
     voice=Voice.FEMALE_CALM,
     speaking_rate=1.0,
-    
+
     # Timeline Settings
     target_duration=300.0,  # 5 minutes
     add_captions=False,
-    
+
     # Rendering Settings
     quality=QualityPreset.HD_1080P,
-    
+
     # Music
     background_music_path=Path("music.mp3"),
     music_volume=0.3,
-    
+
     # Watermark
     add_watermark=True,
     watermark_text="@YourChannel",
-    
+
     # Output
     output_dir=Path("output_videos"),
-    
+
     # Performance
     max_retries=3,
     enable_cache=True,
@@ -450,6 +461,7 @@ Main orchestration class.
 Assemble complete video from script and assets.
 
 Parameters:
+
 - `script` (str): Video script text
 - `niche` (str): Content niche
 - `assets` (List[Path]): Visual asset paths
@@ -536,26 +548,26 @@ Estimate render time based on timeline and quality.
 
 ### YouTube Recommendations
 
-| Preset | Resolution | FPS | Bitrate | Use Case |
-|--------|-----------|-----|---------|----------|
-| `HD_720P` | 1280x720 | 30 | 5 Mbps | Standard quality, fast upload |
-| `HD_1080P` | 1920x1080 | 30 | 8 Mbps | **Recommended** for most content |
-| `HD_1080P_60` | 1920x1080 | 60 | 12 Mbps | Smooth motion, gaming |
-| `UHD_4K` | 3840x2160 | 30 | 35 Mbps | Premium quality, large files |
+| Preset        | Resolution | FPS | Bitrate | Use Case                         |
+| ------------- | ---------- | --- | ------- | -------------------------------- |
+| `HD_720P`     | 1280x720   | 30  | 5 Mbps  | Standard quality, fast upload    |
+| `HD_1080P`    | 1920x1080  | 30  | 8 Mbps  | **Recommended** for most content |
+| `HD_1080P_60` | 1920x1080  | 60  | 12 Mbps | Smooth motion, gaming            |
+| `UHD_4K`      | 3840x2160  | 30  | 35 Mbps | Premium quality, large files     |
 
 ### Social Media Presets
 
-| Preset | Resolution | Format | Platform |
-|--------|-----------|--------|----------|
-| `INSTAGRAM_SQUARE` | 1080x1080 | 1:1 | Instagram Feed |
-| `INSTAGRAM_STORY` | 1080x1920 | 9:16 | Instagram/Facebook Stories |
-| `TIKTOK` | 1080x1920 | 9:16 | TikTok, YouTube Shorts |
+| Preset             | Resolution | Format | Platform                   |
+| ------------------ | ---------- | ------ | -------------------------- |
+| `INSTAGRAM_SQUARE` | 1080x1080  | 1:1    | Instagram Feed             |
+| `INSTAGRAM_STORY`  | 1080x1920  | 9:16   | Instagram/Facebook Stories |
+| `TIKTOK`           | 1080x1920  | 9:16   | TikTok, YouTube Shorts     |
 
 ### Draft Preset
 
-| Preset | Resolution | Use Case |
-|--------|-----------|----------|
-| `DRAFT` | 640x360 | Quick preview, testing |
+| Preset  | Resolution | Use Case               |
+| ------- | ---------- | ---------------------- |
+| `DRAFT` | 640x360    | Quick preview, testing |
 
 ---
 
@@ -564,26 +576,29 @@ Estimate render time based on timeline and quality.
 ### Available Voices
 
 **Female Voices**:
+
 - `FEMALE_CALM`: Soft, soothing, ideal for meditation
 - `FEMALE_ENERGETIC`: Upbeat, motivational content
 
 **Male Voices**:
+
 - `MALE_DEEP`: Authoritative, facts, education
 - `MALE_FRIENDLY`: Casual, storytelling
 
 **Fast Voices** (lower quality, faster generation):
+
 - `FAST_FEMALE`
 - `FAST_MALE`
 
 ### Voice Selection Guide
 
 | Content Type | Recommended Voice | Speaking Rate |
-|--------------|------------------|---------------|
-| Meditation | FEMALE_CALM | 0.8 - 0.9 |
-| Motivation | FEMALE_ENERGETIC | 1.0 - 1.1 |
-| Facts | MALE_DEEP | 0.95 - 1.05 |
-| Stories | MALE_FRIENDLY | 1.0 |
-| Education | MALE_DEEP | 0.9 - 1.0 |
+| ------------ | ----------------- | ------------- |
+| Meditation   | FEMALE_CALM       | 0.8 - 0.9     |
+| Motivation   | FEMALE_ENERGETIC  | 1.0 - 1.1     |
+| Facts        | MALE_DEEP         | 0.95 - 1.05   |
+| Stories      | MALE_FRIENDLY     | 1.0           |
+| Education    | MALE_DEEP         | 0.9 - 1.0     |
 
 ---
 
@@ -594,6 +609,7 @@ Estimate render time based on timeline and quality.
 **Error**: `FFmpeg not found`
 
 **Solution**:
+
 ```bash
 # Install FFmpeg
 # Windows: choco install ffmpeg
@@ -611,6 +627,7 @@ ffmpeg -version
 **Error**: `Failed to download TTS model`
 
 **Solution**:
+
 ```python
 # Manual download
 from TTS.api import TTS
@@ -624,6 +641,7 @@ TTS(model_name="tts_models/en/ljspeech/tacotron2-DDC")
 **Error**: `MemoryError` or system slowdown
 
 **Solutions**:
+
 1. Use lower quality preset (DRAFT or HD_720P)
 2. Reduce number of scenes
 3. Close other applications
@@ -645,6 +663,7 @@ await assembler.cleanup_temp_files(max_age_hours=1)
 **Problem**: Video takes very long to render
 
 **Solutions**:
+
 1. Use `DRAFT` preset for testing
 2. Enable GPU acceleration (if available)
 3. Reduce video duration
@@ -666,6 +685,7 @@ render_config = RenderConfig(
 **Problem**: Narration doesn't match video
 
 **Solution**:
+
 - Ensure all audio files are valid
 - Check narration file durations
 - Validate timeline before rendering
@@ -741,12 +761,14 @@ await assembler.cleanup_temp_files(max_age_hours=168)
 ### System Requirements
 
 **Minimum**:
+
 - CPU: 4 cores
 - RAM: 8GB
 - Storage: 50GB SSD
 - OS: Windows 10, macOS 10.15+, Ubuntu 20.04+
 
 **Recommended**:
+
 - CPU: 8+ cores
 - RAM: 16GB+
 - Storage: 500GB SSD
@@ -770,6 +792,7 @@ pip install moviepy TTS pydub
 ### Monitoring
 
 Track key metrics:
+
 - Assembly time (target: < 2x video duration)
 - Render time (varies by quality)
 - Cache hit rate (target: > 60%)
@@ -795,10 +818,12 @@ except Exception as e:
 ### Scaling
 
 **Single Server**:
+
 - Process 10-20 videos/day
 - Use queue system (Celery)
 
 **Multi-Server**:
+
 - Load balancer
 - Shared storage (NFS, S3)
 - Distributed queue
@@ -839,6 +864,7 @@ Part of the Faceless YouTube project. See LICENSE for details.
 ## Support
 
 For issues and questions:
+
 1. Check troubleshooting section
 2. Review examples in `examples/video_assembler_usage.py`
 3. Check logs for detailed error messages

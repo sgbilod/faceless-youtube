@@ -121,6 +121,7 @@ print(script.script)
 **Best For**: Relaxation, sleep, stress relief videos
 
 **Example Topics**:
+
 - "10-Minute Morning Meditation"
 - "Body Scan for Deep Relaxation"
 - "Breathing Exercises for Anxiety"
@@ -135,6 +136,7 @@ print(script.script)
 **Best For**: Personal development, success stories, life advice
 
 **Example Topics**:
+
 - "The Power of Daily Habits"
 - "Overcoming Fear of Failure"
 - "Why Consistency Beats Talent"
@@ -149,6 +151,7 @@ print(script.script)
 **Best For**: "Top 10" videos, trivia, educational shorts
 
 **Example Topics**:
+
 - "10 Mind-Blowing Space Facts"
 - "5 Historical Events That Changed Everything"
 - "7 Psychology Facts About Human Behavior"
@@ -163,6 +166,7 @@ print(script.script)
 **Best For**: Fictional stories, historical narratives, parables
 
 **Example Topics**:
+
 - "The Last Man on Mars"
 - "A Stranger's Kindness Changed My Life"
 - "The Mystery of the Abandoned Lighthouse"
@@ -177,6 +181,7 @@ print(script.script)
 **Best For**: Tutorials, explainers, how-to videos
 
 **Example Topics**:
+
 - "Understanding Quantum Physics for Beginners"
 - "How the Stock Market Actually Works"
 - "The Science Behind Sleep"
@@ -191,6 +196,7 @@ print(script.script)
 **Best For**: Tech news, coding tutorials, gadget reviews
 
 **Example Topics**:
+
 - "What is Blockchain? Explained Simply"
 - "AI vs Machine Learning: What's the Difference?"
 - "5 Coding Principles Every Developer Should Know"
@@ -205,6 +211,7 @@ print(script.script)
 **Best For**: Investing basics, budgeting, financial literacy
 
 **Example Topics**:
+
 - "How to Start Investing with $100"
 - "Understanding Compound Interest"
 - "5 Common Money Mistakes to Avoid"
@@ -221,6 +228,7 @@ print(script.script)
 **Best For**: Wellness tips, exercise guides, health awareness
 
 **Example Topics**:
+
 - "Benefits of Morning Exercise"
 - "Understanding Sleep Cycles"
 - "5 Foods That Boost Brain Health"
@@ -237,6 +245,7 @@ print(script.script)
 **Best For**: Stoicism, ethics, existential questions
 
 **Example Topics**:
+
 - "The Stoic Approach to Modern Life"
 - "What Makes a Life Meaningful?"
 - "The Philosophy of Happiness"
@@ -251,6 +260,7 @@ print(script.script)
 **Best For**: Historical deep-dives, biographies, "what if" scenarios
 
 **Example Topics**:
+
 - "The Fall of the Roman Empire Explained"
 - "How World War II Changed Technology"
 - "The Life of Leonardo da Vinci"
@@ -270,17 +280,17 @@ config = ScriptConfig(
     niche=NicheType.MEDITATION,     # Content type
     tone="calm and soothing",        # Writing style
     target_audience="beginners",     # Audience description
-    
+
     # AI Settings
     model="mistral",                 # Ollama model name
     temperature=0.7,                 # Creativity (0.0-1.0)
     max_tokens=2048,                # Max generation length
     max_retries=3,                   # Retry on failure
-    
+
     # Validation Settings
     validate=True,                   # Enable quality checks
     min_quality_score=0.7,          # Minimum acceptable quality (0.0-1.0)
-    
+
     # Cache Settings
     cache_enabled=True,              # Use Redis caching
     cache_ttl=3600,                 # Cache lifetime (seconds)
@@ -376,16 +386,19 @@ generator = ScriptGenerator(ollama_config=ollama_config)
 ### Quality Checks
 
 1. **Length Validation**
+
    - Minimum: 100 words
    - Maximum: 5000 words
    - Duration-based targets
 
 2. **Content Safety**
+
    - Profanity detection
    - Hate speech patterns
    - Inappropriate content filtering
 
 3. **Compliance**
+
    - Medical advice disclaimers (health niche)
    - Financial advice warnings (finance niche)
    - Copyright pattern detection
@@ -430,12 +443,12 @@ class ScriptGenerator:
         config: ScriptConfig,
         additional_context: Optional[str] = None
     ) -> GeneratedScript
-    
+
     async def generate_batch(
         topics: List[str],
         config: ScriptConfig
     ) -> List[GeneratedScript]
-    
+
     async def regenerate_with_feedback(
         original_script: str,
         feedback: str,
@@ -473,16 +486,19 @@ class ScriptGenerator:
 ### Installation
 
 **Windows**:
+
 ```powershell
 winget install Ollama.Ollama
 ```
 
 **Linux**:
+
 ```bash
 curl https://ollama.ai/install.sh | sh
 ```
 
 **macOS**:
+
 ```bash
 brew install ollama
 ```
@@ -517,12 +533,12 @@ ollama show mistral
 
 ### Recommended Models
 
-| Model | Size | Speed | Quality | Best For |
-|-------|------|-------|---------|----------|
-| **mistral:7b-instruct** | 4.1GB | Fast | High | General use (recommended) |
-| llama2:7b | 3.8GB | Fast | Good | Alternative |
-| llama2:13b | 7.3GB | Medium | Excellent | High quality needs |
-| llama2:70b | 39GB | Slow | Superior | Maximum quality |
+| Model                   | Size  | Speed  | Quality   | Best For                  |
+| ----------------------- | ----- | ------ | --------- | ------------------------- |
+| **mistral:7b-instruct** | 4.1GB | Fast   | High      | General use (recommended) |
+| llama2:7b               | 3.8GB | Fast   | Good      | Alternative               |
+| llama2:13b              | 7.3GB | Medium | Excellent | High quality needs        |
+| llama2:70b              | 39GB  | Slow   | Superior  | Maximum quality           |
 
 ### Hardware Requirements
 
@@ -539,6 +555,7 @@ ollama show mistral
 **Problem**: `Connection refused` or timeout errors
 
 **Solution**:
+
 ```bash
 # Check if Ollama is running
 curl http://localhost:11434/api/health
@@ -557,6 +574,7 @@ netsh advfirewall firewall add rule name="Ollama" dir=in action=allow protocol=T
 **Problem**: `Model 'mistral' not found`
 
 **Solution**:
+
 ```bash
 # List installed models
 ollama list
@@ -575,6 +593,7 @@ ollama list
 **Problem**: Script generation takes too long (>60s)
 
 **Solution**:
+
 1. Use a smaller model (7B instead of 13B)
 2. Reduce `max_tokens` in config
 3. Enable GPU acceleration:
@@ -592,6 +611,7 @@ ollama list
 **Problem**: Scripts consistently score below 0.7
 
 **Solution**:
+
 1. Adjust temperature (0.7-0.8 for most niches)
 2. Provide more specific topics
 3. Add `additional_context` to guide generation
@@ -605,6 +625,7 @@ ollama list
 **Problem**: Duplicate generations not using cache
 
 **Solution**:
+
 ```python
 # Check Redis connection
 from src.utils.cache import CacheManager
@@ -623,6 +644,7 @@ config = ScriptConfig(cache_enabled=True, cache_ttl=3600)
 **Problem**: Scripts fail validation unexpectedly
 
 **Solution**:
+
 ```python
 # Check validation details
 script = await generator.generate(topic, config)
@@ -723,12 +745,14 @@ ollama run mistral "test" --no-input
 ### 1. Resource Planning
 
 **Single Instance**:
+
 - CPU: 4+ cores
 - RAM: 16GB minimum (8GB for Ollama, 8GB for OS/app)
 - Storage: 20GB for models + app
 - GPU (optional): NVIDIA with 4GB+ VRAM
 
 **High Availability**:
+
 - Load balancer → Multiple Ollama instances
 - Redis for shared caching
 - Queue system (Celery) for batch jobs
@@ -751,6 +775,7 @@ logger.info(f"Quality: {script.quality_score:.2f}")
 ```
 
 **Key Metrics**:
+
 - Generation time (p50, p95, p99)
 - Quality scores distribution
 - Cache hit rate

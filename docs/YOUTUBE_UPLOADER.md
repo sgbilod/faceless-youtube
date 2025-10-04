@@ -63,13 +63,13 @@ async def upload_video():
     auth = AuthManager(AuthConfig(
         client_secrets_path="client_secrets.json"
     ))
-    
+
     # Authenticate (first time only)
     await auth.authenticate(account_name="main")
-    
+
     # Create uploader
     uploader = VideoUploader(auth)
-    
+
     # Define metadata
     metadata = VideoMetadata(
         title="My Video Title",
@@ -78,7 +78,7 @@ async def upload_video():
         category=Category.EDUCATION,
         privacy_status=PrivacyStatus.PUBLIC
     )
-    
+
     # Upload
     result = await uploader.upload(
         account_name="main",
@@ -86,7 +86,7 @@ async def upload_video():
         metadata=metadata,
         thumbnail_path="thumbnail.jpg"
     )
-    
+
     print(f"Uploaded: {result.url}")
 
 # Run
@@ -128,7 +128,7 @@ async def authenticate():
     auth = AuthManager(AuthConfig(
         client_secrets_path="client_secrets.json"
     ))
-    
+
     # This will open browser for authorization
     credentials = await auth.authenticate(account_name="main")
     print(f"Authenticated: {credentials.channel_title}")
@@ -145,6 +145,7 @@ The tokens are saved in `youtube_tokens/` and auto-refresh when needed.
 Handles OAuth2 authentication and token management.
 
 **Features:**
+
 - OAuth2 web flow with browser authorization
 - Token encryption and secure storage
 - Automatic token refresh
@@ -152,6 +153,7 @@ Handles OAuth2 authentication and token management.
 - Credential validation
 
 **Key Methods:**
+
 - `authenticate()` - Initial OAuth2 flow
 - `load_credentials()` - Load saved credentials
 - `get_youtube_client()` - Get authenticated API client
@@ -163,6 +165,7 @@ Handles OAuth2 authentication and token management.
 Core video upload functionality with resumable uploads.
 
 **Features:**
+
 - Resumable uploads for large files
 - Automatic retry with exponential backoff
 - Progress tracking callbacks
@@ -172,6 +175,7 @@ Core video upload functionality with resumable uploads.
 - Video status monitoring
 
 **Key Methods:**
+
 - `upload()` - Upload video
 - `upload_thumbnail()` - Upload custom thumbnail
 - `update_metadata()` - Update video metadata
@@ -184,6 +188,7 @@ Core video upload functionality with resumable uploads.
 Manages multiple uploads with priority and scheduling.
 
 **Features:**
+
 - Priority-based queue (LOW, NORMAL, HIGH, URGENT)
 - Concurrent upload limits
 - Scheduled uploads
@@ -192,6 +197,7 @@ Manages multiple uploads with priority and scheduling.
 - Batch operations
 
 **Key Methods:**
+
 - `add()` - Add video to queue
 - `add_batch()` - Add multiple videos
 - `start()` / `stop()` - Control queue processing
@@ -204,6 +210,7 @@ Manages multiple uploads with priority and scheduling.
 Tracks video and channel performance.
 
 **Features:**
+
 - Video statistics (views, likes, comments, watch time)
 - Channel statistics (subscribers, total views)
 - Performance metrics over time
@@ -212,6 +219,7 @@ Tracks video and channel performance.
 - Video comparison
 
 **Key Methods:**
+
 - `get_video_stats()` - Get video statistics
 - `get_channel_stats()` - Get channel statistics
 - `get_top_videos()` - Get top performing videos
@@ -611,6 +619,7 @@ VideoStats(
 **Problem**: Browser doesn't open during authentication
 
 **Solution**:
+
 ```python
 # Manually copy authorization URL
 auth_config = AuthConfig(
@@ -625,6 +634,7 @@ auth = AuthManager(auth_config)
 **Problem**: "Access blocked: This app's request is invalid"
 
 **Solution**:
+
 - Check OAuth consent screen configuration
 - Add test users if app not verified
 - Verify redirect URI matches
@@ -634,6 +644,7 @@ auth = AuthManager(auth_config)
 **Problem**: "Upload failed: Quota exceeded"
 
 **Solution**:
+
 - Check [YouTube API quota](https://console.cloud.google.com/apis/api/youtube.googleapis.com/quotas)
 - Default quota: 10,000 units/day
 - Each upload costs ~1600 units
@@ -642,6 +653,7 @@ auth = AuthManager(auth_config)
 **Problem**: "Invalid video format"
 
 **Solution**:
+
 - Supported formats: MOV, MPEG4, MP4, AVI, WMV, MPEGPS, FLV, 3GPP, WebM
 - Max file size: 256GB (128GB recommended)
 - Use FFmpeg to convert if needed:
@@ -652,6 +664,7 @@ auth = AuthManager(auth_config)
 **Problem**: Upload stalls or times out
 
 **Solution**:
+
 - Check network connection
 - Reduce chunk size for unstable connections:
   ```python
@@ -667,6 +680,7 @@ auth = AuthManager(auth_config)
 **Problem**: Queue not processing
 
 **Solution**:
+
 ```python
 # Check if queue is started
 summary = queue.get_queue_summary()
@@ -683,6 +697,7 @@ for item in failed_items:
 **Problem**: Uploads fail repeatedly
 
 **Solution**:
+
 - Check error messages
 - Verify video file integrity
 - Check API quota
@@ -696,6 +711,7 @@ for item in failed_items:
 **Problem**: Analytics data is empty or zero
 
 **Solution**:
+
 - YouTube Data API v3 has limited analytics
 - For detailed analytics, enable YouTube Analytics API
 - Some metrics require monetization
@@ -706,12 +722,14 @@ for item in failed_items:
 ### 1. Authentication
 
 ✅ **DO:**
+
 - Store `client_secrets.json` securely (never commit to git)
 - Use token encryption (enabled by default)
 - Implement proper error handling for expired tokens
 - Use different accounts for testing and production
 
 ❌ **DON'T:**
+
 - Share client secrets or tokens
 - Commit credentials to version control
 - Disable token encryption in production
@@ -720,6 +738,7 @@ for item in failed_items:
 ### 2. Uploads
 
 ✅ **DO:**
+
 - Use progress callbacks for long uploads
 - Implement proper error handling
 - Validate video files before uploading
@@ -728,6 +747,7 @@ for item in failed_items:
 - Use descriptive titles and tags
 
 ❌ **DON'T:**
+
 - Upload without validation
 - Ignore API quota limits
 - Upload without thumbnails
@@ -738,6 +758,7 @@ for item in failed_items:
 ### 3. Queue Management
 
 ✅ **DO:**
+
 - Use priorities appropriately
 - Monitor queue status
 - Handle failed uploads
@@ -745,6 +766,7 @@ for item in failed_items:
 - Set reasonable concurrent limits
 
 ❌ **DON'T:**
+
 - Mark everything as URGENT
 - Ignore failed uploads
 - Set too high concurrent limits (use 2-3)
@@ -753,6 +775,7 @@ for item in failed_items:
 ### 4. Performance
 
 ✅ **DO:**
+
 - Use queue for multiple uploads
 - Enable caching for analytics
 - Batch similar operations
@@ -760,6 +783,7 @@ for item in failed_items:
 - Optimize video files before upload
 
 ❌ **DON'T:**
+
 - Upload uncompressed videos
 - Make redundant API calls
 - Disable caching
@@ -768,6 +792,7 @@ for item in failed_items:
 ### 5. Security
 
 ✅ **DO:**
+
 - Use environment variables for sensitive data
 - Implement access controls
 - Log upload activities
@@ -775,6 +800,7 @@ for item in failed_items:
 - Monitor API usage
 
 ❌ **DON'T:**
+
 - Hardcode credentials
 - Share API keys
 - Expose tokens in logs
@@ -802,21 +828,21 @@ async def complete_workflow():
         topic="Python Tutorial",
         style="educational"
     )
-    
+
     # 2. Assemble video
     assembler = VideoAssembler(VideoConfig())
     video = await assembler.assemble(
         script_text=script.content,
         assets_dir="assets/python"
     )
-    
+
     # 3. Upload to YouTube
     auth = AuthManager(AuthConfig(
         client_secrets_path="client_secrets.json"
     ))
-    
+
     uploader = VideoUploader(auth)
-    
+
     metadata = VideoMetadata(
         title=script.title,
         description=script.description,
@@ -824,14 +850,14 @@ async def complete_workflow():
         category=Category.EDUCATION,
         privacy_status=PrivacyStatus.PUBLIC
     )
-    
+
     result = await uploader.upload(
         account_name="main",
         video_path=video.output_path,
         metadata=metadata,
         thumbnail_path=video.thumbnail_path
     )
-    
+
     print(f"Complete! {result.url}")
 
 asyncio.run(complete_workflow())
