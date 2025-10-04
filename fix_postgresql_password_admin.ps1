@@ -21,22 +21,13 @@ Write-Host "   [OK] Authentication changed to trust`n" -ForegroundColor Green
 # Step 3: Restart PostgreSQL service
 Write-Host "Step 3: Restarting PostgreSQL service..." -ForegroundColor Yellow
 Restart-Service postgresql-x64-14
-Write-Host "   Waiting for service to fully start..." -ForegroundColor Cyan
-Start-Sleep -Seconds 10
+Start-Sleep -Seconds 3
 Write-Host "   [OK] Service restarted`n" -ForegroundColor Green
 
 # Step 4: Set new password
 Write-Host "Step 4: Setting password to 'FacelessYT2025!'..." -ForegroundColor Yellow
-$env:PGPASSWORD = ""  # Clear any existing password
-$result = & 'C:\Program Files\PostgreSQL\14\bin\psql.exe' -U postgres -c "ALTER USER postgres WITH PASSWORD 'FacelessYT2025!';" 2>&1
-if ($LASTEXITCODE -eq 0) {
-    Write-Host "   [OK] Password updated successfully`n" -ForegroundColor Green
-}
-else {
-    Write-Host "   [WARNING] Password command completed with issues" -ForegroundColor Yellow
-    Write-Host "   This may be OK if using trust mode`n" -ForegroundColor Cyan
-}
-Remove-Item Env:\PGPASSWORD -ErrorAction SilentlyContinue
+& 'C:\Program Files\PostgreSQL\14\bin\psql.exe' -U postgres -c "ALTER USER postgres WITH PASSWORD 'FacelessYT2025!';"
+Write-Host "   [OK] Password updated`n" -ForegroundColor Green
 
 # Step 5: Restore original authentication
 Write-Host "Step 5: Restoring scram-sha-256 authentication..." -ForegroundColor Yellow
@@ -46,8 +37,7 @@ Write-Host "   [OK] Authentication restored`n" -ForegroundColor Green
 # Step 6: Restart PostgreSQL again
 Write-Host "Step 6: Restarting PostgreSQL with new settings..." -ForegroundColor Yellow
 Restart-Service postgresql-x64-14
-Write-Host "   Waiting for service to fully start..." -ForegroundColor Cyan
-Start-Sleep -Seconds 10
+Start-Sleep -Seconds 3
 Write-Host "   [OK] Service restarted`n" -ForegroundColor Green
 
 # Step 7: Test connection
