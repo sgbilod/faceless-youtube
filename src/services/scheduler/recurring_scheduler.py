@@ -449,7 +449,8 @@ class RecurringScheduler:
         )
         
         job.apscheduler_job_id = apscheduler_job.id
-        job.next_run = apscheduler_job.next_run_time
+        # Get next_run_time from trigger, not job object
+        job.next_run = trigger.get_next_fire_time(None, datetime.now()) if hasattr(trigger, 'get_next_fire_time') else None
         
         if job.enabled:
             self._stats["active_jobs"] += 1
@@ -486,8 +487,9 @@ class RecurringScheduler:
             
             # Update next run
             apscheduler_job = self._scheduler.get_job(job.id)
-            if apscheduler_job:
-                job.next_run = apscheduler_job.next_run_time
+            if apscheduler_job and hasattr(apscheduler_job, 'trigger'):
+                # Get next fire time from the trigger
+                job.next_run = apscheduler_job.trigger.get_next_fire_time(None, datetime.now()) if hasattr(apscheduler_job.trigger, 'get_next_fire_time') else None
             
             logger.info(
                 f"Scheduled video: {scheduled_job_id} for recurring job: {job.name}"
@@ -562,8 +564,9 @@ class RecurringScheduler:
         
         # Update next run
         apscheduler_job = self._scheduler.get_job(job.id)
-        if apscheduler_job:
-            job.next_run = apscheduler_job.next_run_time
+        if apscheduler_job and hasattr(apscheduler_job, 'trigger'):
+            # Get next fire time from the trigger
+            job.next_run = apscheduler_job.trigger.get_next_fire_time(None, datetime.now()) if hasattr(apscheduler_job.trigger, 'get_next_fire_time') else None
         
         logger.info(f"Resumed recurring job: {job.name} - Next: {job.next_run}")
     

@@ -560,7 +560,7 @@ class ContentScheduler:
         job_file = self._storage_path / f"{job.id}.json"
         
         with open(job_file, "w") as f:
-            f.write(job.json(indent=2))
+            f.write(job.model_dump_json(indent=2))
     
     async def load_jobs(self):
         """Load jobs from storage"""
@@ -570,7 +570,7 @@ class ContentScheduler:
             
             try:
                 with open(job_file) as f:
-                    job = ScheduledJob.parse_raw(f.read())
+                    job = ScheduledJob.model_validate_json(f.read())
                     self._jobs[job.id] = job
                     
                     logger.info(f"Loaded job: {job.id} - {job.status}")
