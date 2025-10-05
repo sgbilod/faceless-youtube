@@ -221,11 +221,11 @@ class AnalyticsTracker:
         youtube = await self.auth_manager.get_youtube_client(account_name)
         
         # Get video details
-        video_response = await asyncio.to_thread(
-            youtube.videos().list,
+        video_list = youtube.videos().list(
             part="snippet,statistics",
             id=video_id
-        ).execute()
+        )
+        video_response = await asyncio.to_thread(video_list.execute)
         
         if not video_response.get("items"):
             raise ValueError(f"Video not found: {video_id}")
@@ -320,11 +320,11 @@ class AnalyticsTracker:
         youtube = await self.auth_manager.get_youtube_client(account_name)
         
         # Get channel details
-        channel_response = await asyncio.to_thread(
-            youtube.channels().list,
+        channel_list = youtube.channels().list(
             part="snippet,statistics,contentDetails",
             mine=True
-        ).execute()
+        )
+        channel_response = await asyncio.to_thread(channel_list.execute)
         
         if not channel_response.get("items"):
             raise ValueError("Channel not found")
@@ -447,14 +447,14 @@ class AnalyticsTracker:
         youtube = await self.auth_manager.get_youtube_client(account_name)
         
         # Get channel's videos
-        search_response = await asyncio.to_thread(
-            youtube.search().list,
+        search_list = youtube.search().list(
             part="id",
             forMine=True,
             type="video",
             maxResults=max_results,
             order=order_by
-        ).execute()
+        )
+        search_response = await asyncio.to_thread(search_list.execute)
         
         # Get stats for each video
         video_ids = [item["id"]["videoId"] for item in search_response.get("items", [])]
@@ -501,10 +501,8 @@ class AnalyticsTracker:
                 await self.get_channel_stats(account_name)
             ).channel_id
         
-        response = await asyncio.to_thread(
-            youtube.commentThreads().list,
-            **params
-        ).execute()
+        comments_list = youtube.commentThreads().list(**params)
+        response = await asyncio.to_thread(comments_list.execute)
         
         comments = []
         for item in response.get("items", []):
