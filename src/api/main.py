@@ -9,7 +9,7 @@ REST API for controlling and monitoring the scheduler system:
 - Recurring schedule management
 """
 
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Depends, Request, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from typing import List, Optional, Dict, Any
@@ -17,6 +17,18 @@ from datetime import datetime, date, timedelta
 from pydantic import BaseModel, Field
 import asyncio
 import logging
+
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+
+from src.api.auth import (
+    Token,
+    create_access_token,
+    get_current_user,
+    authenticate_user,
+    ACCESS_TOKEN_EXPIRE_MINUTES,
+)
 
 from services.scheduler import (
     ContentScheduler,
@@ -54,6 +66,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Rate Limiting
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # ===================================================================
 # Global State
@@ -221,23 +238,89 @@ async def health_check():
 
 
 # ===================================================================
+# Authentication
+# ===================================================================
+
+@app.post("/api/auth/login", response_model=Token)
+@limiter.limit("5/minute")  # Prevent brute force attacks
+async def login(
+    request: Request,
+    username: str = Form(...),
+    password: str = Form(...)
+):
+    """
+    Login endpoint to obtain JWT access token.
+    
+    **Rate Limited:** 5 requests per minute per IP to prevent brute force.
+    
+    **Demo Credentials:**
+    - Username: admin
+    - Password: admin
+    
+    **IMPORTANT:** Change credentials in production!
+    
+    Args:
+        username: User's username
+        password: User's password
+        
+    Returns:
+        JWT access token
+        
+    Raises:
+        HTTP 401: If credentials are invalid
+        HTTP 429: If rate limit exceeded
+    """
+    # Authenticate user
+    is_valid = await authenticate_user(username, password)
+    
+    if not is_valid:
+        raise HTTPException(
+            status_code=401,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    # Create access token
+    access_token = create_access_token(
+        data={"sub": username},
+        expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    )
+    
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
+# ===================================================================
 # Job Management Endpoints
 # ===================================================================
 
 @app.post("/api/jobs/schedule", response_model=Dict[str, str])
-async def schedule_video(request: ScheduleVideoRequest):
-    """Schedule single video"""
+@limiter.limit("10/minute")  # Prevent abuse
+async def schedule_video(
+    request: Request,
+    job_request: ScheduleVideoRequest,
+    current_user: str = Depends(get_current_user)
+):
+    """
+    Schedule single video (PROTECTED - Requires Authentication).
+    
+    **Authentication Required:** Include JWT token in Authorization header:
+    ```
+    Authorization: Bearer <your_jwt_token>
+    ```
+    
+    **Rate Limited:** 10 video schedules per minute
+    """
     if not content_scheduler:
         raise HTTPException(status_code=500, detail="Scheduler not initialized")
     
     try:
         job_id = await content_scheduler.schedule_video(
-            topic=request.topic,
-            scheduled_at=request.scheduled_at,
-            publish_at=request.publish_at,
-            style=request.style,
-            duration_minutes=request.duration_minutes,
-            tags=request.tags
+            topic=job_request.topic,
+            scheduled_at=job_request.scheduled_at,
+            publish_at=job_request.publish_at,
+            style=job_request.style,
+            duration_minutes=job_request.duration_minutes,
+            tags=job_request.tags
         )
         
         # Notify WebSocket clients

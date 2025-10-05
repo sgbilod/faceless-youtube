@@ -15,7 +15,7 @@ from unittest.mock import Mock, AsyncMock, patch, MagicMock
 from pathlib import Path
 
 # Scheduler components
-from services.scheduler import (
+from src.services.scheduler import (
     ContentScheduler,
     ScheduleConfig,
     ScheduledJob,

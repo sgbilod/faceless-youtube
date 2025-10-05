@@ -21,9 +21,9 @@ from uuid import uuid4
 
 from pydantic import BaseModel, Field
 
-from services.script_generator import ScriptGenerator, GenerationConfig
-from services.video_assembler import VideoAssembler, VideoConfig as AssemblerConfig
-from services.youtube_uploader import (
+from src.services.script_generator import ScriptGenerator, ScriptConfig
+from src.services.video_assembler import VideoAssembler, VideoConfig as AssemblerConfig
+from src.services.youtube_uploader import (
     AuthManager,
     VideoUploader,
     VideoMetadata,

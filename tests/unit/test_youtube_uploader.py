@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 import tempfile
 import json
 
-from services.youtube_uploader import (
+from src.services.youtube_uploader import (
     AuthManager,
     AuthConfig,
     AuthStatus,

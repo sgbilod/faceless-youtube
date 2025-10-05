@@ -34,7 +34,7 @@ import uuid
 from pydantic import BaseModel, Field
 
 try:
-    from moviepy.editor import (
+    from moviepy import (
         VideoFileClip,
         ImageClip,
         CompositeVideoClip,
