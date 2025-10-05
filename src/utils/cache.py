@@ -11,17 +11,27 @@ Features:
 - Async/await support
 - Graceful fallback to in-memory cache
 - Cache statistics and monitoring
-- Pattern-based invalidation
-"""
-
-import os
+- Pattern-based invalidati        @functools.wraps(func)
+        async def async_wrapper(*args, **kwargs):
+            # Generate cache key
+            prefix = key_prefix or func.__name__
+            key_data = json.dumps({
+                \"prefix\": prefix,
+                \"args\": args,
+                \"kwargs\": kwargs
+            }, sort_keys=True, default=str)
+            # MD5 used for cache key only, not security (nosec: B324)
+            key_hash = hashlib.md5(key_data.encode(), usedforsecurity=False)
+            cache_key = f\"{prefix}:{key_hash.hexdigest()}\"
+            
+            # Try to get from cache
+            cached_value = await cache_manager.get(cache_key)port os
 import json
 import logging
 import hashlib
 import functools
 from typing import Any, Optional, Callable, Union, List
 from datetime import timedelta
-import pickle
 import asyncio
 from collections import OrderedDict
 
@@ -230,7 +240,14 @@ class CacheManager:
                 value = await self._redis_client.get(key)
                 if value is not None:
                     self.stats["hits"] += 1
-                    return pickle.loads(value)
+                    # Use JSON instead of pickle for security
+                    import json
+                    try:
+                        return json.loads(value)
+                    except (json.JSONDecodeError, TypeError):
+                        # Fallback for non-JSON data (backward compatibility)
+                        logger.warning(f"Could not deserialize cached value for key '{key}' as JSON")
+                        return default
                 else:
                     self.stats["misses"] += 1
                     return default
@@ -270,13 +287,26 @@ class CacheManager:
             ttl = ttl or self.default_ttl
             
             if self._using_redis and self._redis_client:
-                serialized = pickle.dumps(value)
-                if ttl:
-                    await self._redis_client.setex(key, ttl, serialized)
-                else:
-                    await self._redis_client.set(key, serialized)
-                self.stats["sets"] += 1
-                return True
+                # Use JSON instead of pickle for security
+                import json
+                try:
+                    # Handle Pydantic models
+                    from pydantic import BaseModel
+                    if isinstance(value, BaseModel):
+                        serialized = value.model_dump_json()
+                    else:
+                        serialized = json.dumps(value)
+                    
+                    if ttl:
+                        await self._redis_client.setex(key, ttl, serialized)
+                    else:
+                        await self._redis_client.set(key, serialized)
+                    self.stats["sets"] += 1
+                    return True
+                except (TypeError, ValueError) as e:
+                    logger.error(f"Cannot serialize value for key '{key}': {e}")
+                    self.stats["errors"] += 1
+                    return False
             else:
                 # Use fallback cache
                 await self._fallback_cache.set(key, value, ttl)
@@ -394,7 +424,8 @@ class CacheManager:
         """
         # Create deterministic key from arguments
         key_data = json.dumps({"args": args, "kwargs": kwargs}, sort_keys=True)
-        key_hash = hashlib.md5(key_data.encode()).hexdigest()
+        # MD5 used for cache key only, not security (nosec: B324)
+        key_hash = hashlib.md5(key_data.encode(), usedforsecurity=False).hexdigest()
         return f"cache:{key_hash}"
 
 
@@ -462,7 +493,9 @@ def cached(ttl: Optional[int] = None, key_prefix: Optional[str] = None):
                 "args": args,
                 "kwargs": kwargs
             }, sort_keys=True, default=str)
-            cache_key = f"{prefix}:{hashlib.md5(key_data.encode()).hexdigest()}"
+            # MD5 used for cache key only, not security (nosec: B324)
+            key_hash = hashlib.md5(key_data.encode(), usedforsecurity=False)
+            cache_key = f"{prefix}:{key_hash.hexdigest()}"
             
             # Try to get from cache
             cached_value = loop.run_until_complete(cache_manager.get(cache_key))

@@ -528,7 +528,8 @@ class TTSEngine:
             Cache key hash
         """
         content = f"{text}:{voice.value}:{speaking_rate}:{self.config.sample_rate}"
-        return hashlib.md5(content.encode()).hexdigest()
+        # MD5 used for cache key only, not security (nosec: B324)
+        return hashlib.md5(content.encode(), usedforsecurity=False).hexdigest()
     
     async def list_available_voices(self) -> List[str]:
         """

@@ -287,7 +287,8 @@ class BaseScraper(ABC):
         """Generate a cache key for a search query"""
         # Include all parameters in cache key
         params_str = f"{query}:" + ":".join(f"{k}={v}" for k, v in sorted(kwargs.items()))
-        params_hash = hashlib.md5(params_str.encode()).hexdigest()
+        # MD5 used for cache key only, not security (nosec: B324)
+        params_hash = hashlib.md5(params_str.encode(), usedforsecurity=False).hexdigest()
         return f"{self.cache_key_prefix}:search:{params_hash}"
     
     async def _make_request(

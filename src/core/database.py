@@ -205,7 +205,10 @@ def get_table_row_counts() -> dict:
     counts = {}
     with get_db() as db:
         for table in Base.metadata.sorted_tables:
-            count = db.execute(f"SELECT COUNT(*) FROM {table.name}").scalar()
+            # Use SQLAlchemy text() with parameterized query to prevent SQL injection
+            from sqlalchemy import text, func, select
+            # Use SQLAlchemy ORM to safely count rows
+            count = db.execute(select(func.count()).select_from(table)).scalar()
             counts[table.name] = count
     return counts
 

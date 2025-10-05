@@ -11,16 +11,33 @@ REST API for controlling and monitoring the scheduler system:
 
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Depends, Request, Form
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from typing import List, Optional, Dict, Any
 from datetime import datetime, date, timedelta
 from pydantic import BaseModel, Field
 import asyncio
 import logging
+import os
 
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+
+# Import security middleware
+from src.api.middleware.security import SecurityHeadersMiddleware
+from src.api.middleware.logging import RequestLoggingMiddleware
+
+# Import logging configuration
+from src.utils.logging_config import setup_logging
+
+# Import Prometheus metrics
+try:
+    from prometheus_fastapi_instrumentator import Instrumentator
+    PROMETHEUS_AVAILABLE = True
+except ImportError:
+    PROMETHEUS_AVAILABLE = False
+    logging.warning("prometheus-fastapi-instrumentator not installed")
 
 from src.api.auth import (
     Token,
@@ -48,6 +65,13 @@ from services.scheduler import (
 
 logger = logging.getLogger(__name__)
 
+# Setup structured logging at module load
+setup_logging(
+    level=os.getenv("LOG_LEVEL", "INFO"),
+    log_file="logs/app.log",
+    json_logs=os.getenv("JSON_LOGS", "true").lower() == "true"
+)
+
 # ===================================================================
 # FastAPI App
 # ===================================================================
@@ -55,17 +79,44 @@ logger = logging.getLogger(__name__)
 app = FastAPI(
     title="Faceless YouTube Dashboard API",
     description="REST API for automated video creation and scheduling",
-    version="1.0.0"
+    version="2.0.0"
 )
 
-# CORS middleware for React frontend
+# ===================================================================
+# MIDDLEWARE (Order matters! Applied in reverse order)
+# ===================================================================
+
+# 1. Trusted Host Protection
+allowed_hosts = os.getenv(
+    "ALLOWED_HOSTS",
+    "localhost,127.0.0.1,*.localhost"
+).split(",")
+
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=allowed_hosts
+)
+
+# 2. CORS (Restrict origins in production)
+cors_origins = os.getenv(
+    "CORS_ORIGINS",
+    "http://localhost:3000,http://localhost:5173,http://127.0.0.1:3000"
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173"],  # React dev servers
+    allow_origins=cors_origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH"],
     allow_headers=["*"],
+    max_age=3600,
 )
+
+# 3. Security Headers
+app.add_middleware(SecurityHeadersMiddleware)
+
+# 4. Request Logging
+app.add_middleware(RequestLoggingMiddleware)
 
 # Rate Limiting
 limiter = Limiter(key_func=get_remote_address)
@@ -170,8 +221,22 @@ class StatisticsResponse(BaseModel):
 
 @app.on_event("startup")
 async def startup_event():
-    """Initialize schedulers on startup"""
+    """Initialize schedulers and monitoring on startup"""
     global content_scheduler, recurring_scheduler, calendar_manager
+    
+    logger.info(
+        "Starting Faceless YouTube API",
+        extra={
+            "version": "2.0.0",
+            "event": "startup",
+            "log_level": os.getenv("LOG_LEVEL", "INFO")
+        }
+    )
+    
+    # Initialize Prometheus metrics
+    if PROMETHEUS_AVAILABLE:
+        Instrumentator().instrument(app).expose(app)
+        logger.info("Prometheus metrics enabled at /metrics")
     
     logger.info("Initializing schedulers...")
     
@@ -850,11 +915,18 @@ async def start_monitoring():
 
 if __name__ == "__main__":
     import uvicorn
+    import os
+    
+    # Default to localhost for security, allow override via environment
+    host = os.getenv("API_HOST", "127.0.0.1")
+    port = int(os.getenv("API_PORT", "8000"))
+    workers = int(os.getenv("API_WORKERS", "1"))
     
     uvicorn.run(
         "api.main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True,
-        log_level="info"
+        host=host,
+        port=port,
+        reload=os.getenv("DEBUG", "false").lower() == "true",
+        log_level=os.getenv("LOG_LEVEL", "info"),
+        workers=workers if workers > 1 else None
     )

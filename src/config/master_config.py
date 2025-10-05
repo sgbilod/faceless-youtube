@@ -178,7 +178,7 @@ class ApplicationConfig(BaseSettings):
     debug: bool = Field(default=False, env="DEBUG")
     
     # API settings
-    api_host: str = Field(default="0.0.0.0", env="API_HOST")
+    api_host: str = Field(default="127.0.0.1", env="API_HOST")  # Secure default, override for production
     api_port: int = Field(default=8000, env="API_PORT")
     api_workers: int = Field(default=4, env="API_WORKERS")
     
