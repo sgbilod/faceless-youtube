@@ -205,7 +205,7 @@ async def test_python_imports():
         "redis": "Redis client",
         "pymongo": "MongoDB client",
         "httpx": "Async HTTP client",
-        "moviepy.editor": "Video editing",
+        "moviepy": "Video editing",
         "PIL": "Image processing",
         "google.oauth2": "Google OAuth",
     }
