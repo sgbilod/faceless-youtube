@@ -14,24 +14,24 @@
 
 ### Test Statistics
 
-| Metric | Before Phase 3 | After Phase 3 | Improvement |
-|--------|----------------|---------------|-------------|
-| **Total Tests** | 171 | 171 | - |
-| **Passing** | 132 (77%) | 137 (80%) | +5 tests (+3%) |
-| **Failing** | 5 | 0 | **-5 failures** ✅ |
-| **Errors** | 0 | 0 | - |
-| **Skipped** | 34 | 34 | - |
+| Metric          | Before Phase 3 | After Phase 3 | Improvement        |
+| --------------- | -------------- | ------------- | ------------------ |
+| **Total Tests** | 171            | 171           | -                  |
+| **Passing**     | 132 (77%)      | 137 (80%)     | +5 tests (+3%)     |
+| **Failing**     | 5              | 0             | **-5 failures** ✅ |
+| **Errors**      | 0              | 0             | -                  |
+| **Skipped**     | 34             | 34            | -                  |
 
 ### Unit Tests Progress
 
-| Category | Before | After | Status |
-|----------|--------|-------|--------|
-| **TTS Engine** | 14/14 (100%) | 14/14 (100%) | ✅ Perfect |
-| **Timeline Builder** | 6/9 (67%) | 9/9 (100%) | ✅ FIXED |
-| **Video Renderer** | 9/12 (75%) | 12/12 (100%) | ✅ FIXED |
-| **Scheduler** | 38/42 (90%) | 42/42 (100%) | ✅ FIXED |
-| **Video Assembler** | 11/14 (79%) | 11/14 (79%) | ⏸️ 3 skipped |
-| **All Unit Tests** | 96/113 (85%) | 101/113 (89%) | +5 tests |
+| Category             | Before       | After         | Status       |
+| -------------------- | ------------ | ------------- | ------------ |
+| **TTS Engine**       | 14/14 (100%) | 14/14 (100%)  | ✅ Perfect   |
+| **Timeline Builder** | 6/9 (67%)    | 9/9 (100%)    | ✅ FIXED     |
+| **Video Renderer**   | 9/12 (75%)   | 12/12 (100%)  | ✅ FIXED     |
+| **Scheduler**        | 38/42 (90%)  | 42/42 (100%)  | ✅ FIXED     |
+| **Video Assembler**  | 11/14 (79%)  | 11/14 (79%)   | ⏸️ 3 skipped |
+| **All Unit Tests**   | 96/113 (85%) | 101/113 (89%) | +5 tests     |
 
 ---
 
@@ -40,6 +40,7 @@
 ### Fix 1: Timeline.from_scenes Method ✅ (3 tests)
 
 **Problem:** Pydantic `Timeline` class missing `from_scenes()` classmethod
+
 - Tests were calling `Timeline.from_scenes()` but method didn't exist
 - Only `BuilderTimeline` (dataclass version) had this method
 - **Tests affected:**
@@ -48,6 +49,7 @@
   - `test_render_time_estimation_accuracy`
 
 **Root Cause:**
+
 - Two Timeline classes exist:
   1. `Timeline` (Pydantic) - from `timeline.py`
   2. `BuilderTimeline` (dataclass) - from `timeline_builder.py` with `from_scenes`
@@ -79,7 +81,7 @@ def from_scenes(
                 duration=scene.duration,
                 asset_path=str(asset_path),
             ))
-    
+
     timeline = cls(scenes=pydantic_scenes, background_audio=background_audio)
     timeline._recalculate_timings()
     timeline._update_duration()
@@ -87,6 +89,7 @@ def from_scenes(
 ```
 
 **Also Added:**
+
 - `scene_count` property
 - `video_assets` property
 
@@ -98,10 +101,12 @@ def from_scenes(
 ### Fix 2: Scheduler Retry Count ✅ (1 test)
 
 **Problem:** `test_execute_with_retry` expected `retry_count == 2`, got `1`
+
 - Test calls job that fails twice, succeeds on 3rd attempt
 - Expected 2 retries, but code reported only 1
 
 **Root Cause:** Off-by-one error in retry counting logic
+
 ```python
 # OLD CODE (WRONG):
 except Exception as e:
@@ -112,6 +117,7 @@ except Exception as e:
 ```
 
 **Timeline:**
+
 1. **1st attempt** (retry_count=0): Fails
    - Sets `result.retry_count = 0`
    - Increments to `retry_count = 1`
@@ -139,6 +145,7 @@ result.retry_count = retry_count  # Update on success
 ### Fix 3: Calendar Slot Reservation ✅ (2 tests)
 
 **Problem:** `test_reserve_slot` expected status `RESERVED`, got `CONFLICT`
+
 - Error message: "Not in preferred hours: [10, 14, 18]"
 
 **Root Cause:** Default `preferred_hours` in `CalendarManager.__init__`
@@ -169,6 +176,7 @@ def calendar_config():
 
 **Second Problem - test_suggest_optimal_slots:** ❌
 With all 24 hours allowed, optimal slot suggester picks hours sequentially:
+
 - Slot 1: Day 1, hour 0
 - Slot 2: Day 1, hour 2 (respects min_gap_hours=2)
 - Slot 3: Day 1, hour 4
@@ -189,6 +197,7 @@ def calendar_config():
 ```
 
 This ensures:
+
 - `test_reserve_slot` can reserve at any of the 4 hours (likely matches test time)
 - `test_suggest_optimal_slots` gets well-spaced suggestions respecting min_gap_hours
 
@@ -200,7 +209,9 @@ This ensures:
 ## 📁 Files Modified
 
 ### Core Fixes (2 files)
-1. **src/services/video_assembler/timeline.py** 
+
+1. **src/services/video_assembler/timeline.py**
+
    - Added `from_scenes()` classmethod (46 lines)
    - Added `scene_count` and `video_assets` properties
 
@@ -208,6 +219,7 @@ This ensures:
    - Fixed retry count update on success (1 line)
 
 ### Test Configuration (1 file)
+
 3. **tests/unit/test_scheduler.py**
    - Updated `calendar_config` fixture with proper preferred_hours
 
@@ -217,18 +229,19 @@ This ensures:
 
 ### Path to 100%
 
-| Phase | Tests Passing | Coverage | Status |
-|-------|--------------|----------|--------|
-| Start | 112/153 | 73% | Cache error |
-| After Phase 1 | 112/153 | 73% | Diagnosed |
-| After Phase 2 | 132/171 | 77% | ✅ Complete |
-| **After Phase 3** | **137/171** | **80%** | ✅ **COMPLETE** |
-| After Phase 4 | 153/171 | 89% | Need FastAPI |
-| After Phase 5 | 171/171 | 100% | Enable skipped |
+| Phase             | Tests Passing | Coverage | Status          |
+| ----------------- | ------------- | -------- | --------------- |
+| Start             | 112/153       | 73%      | Cache error     |
+| After Phase 1     | 112/153       | 73%      | Diagnosed       |
+| After Phase 2     | 132/171       | 77%      | ✅ Complete     |
+| **After Phase 3** | **137/171**   | **80%**  | ✅ **COMPLETE** |
+| After Phase 4     | 153/171       | 89%      | Need FastAPI    |
+| After Phase 5     | 171/171       | 100%     | Enable skipped  |
 
 ### Remaining Work
 
 #### Phase 4: FastAPI Endpoints (16 skipped tests) - 3-4 hours
+
 - Implement Video CRUD endpoints:
   - `POST /api/videos` - Create video
   - `GET /api/videos` - List videos
@@ -241,6 +254,7 @@ This ensures:
 - **Expected:** 137 → 153 passing (89%)
 
 #### Phase 5: Enable Skipped Tests (18 skipped) - 2-3 hours
+
 - VideoAssembler integration tests (5 tests)
 - Tests requiring real file operations (8 tests)
 - TTS integration test (1 test)
@@ -253,12 +267,14 @@ This ensures:
 ## 🎉 Success Metrics
 
 ### Zero Failures! ✅
+
 - ✅ **All 137 non-skipped tests passing**
 - ✅ **0 failures** (was 5 before Phase 3)
 - ✅ **0 errors** (was 19 before Phase 2)
 - ✅ **Solid 80% coverage**
 
 ### Unit Tests Excellence
+
 - ✅ **TTS Engine:** 100% (14/14)
 - ✅ **Timeline Builder:** 100% (9/9)
 - ✅ **Video Renderer:** 100% (12/12)
@@ -266,11 +282,13 @@ This ensures:
 - ✅ **Overall Unit Tests:** 89% (101/113)
 
 ### Integration Tests
+
 - ✅ **Database Integration:** 100% (17/17)
 - ✅ **Video Pipeline:** 100% (7/7)
 - ⏸️ **API Integration:** 0% (0/16 - awaiting FastAPI)
 
 ### Quality Indicators
+
 - ✅ All critical paths tested
 - ✅ All fixtures working correctly
 - ✅ All test infrastructure solid
@@ -286,11 +304,13 @@ This ensures:
 The project uses two parallel implementations:
 
 **Pydantic Models** (timeline.py):
+
 - For API/database serialization
 - Strong validation
 - Used in tests and external interfaces
 
 **Dataclass Models** (timeline_builder.py):
+
 - For internal processing
 - Performance-optimized
 - Used in video assembly pipeline
@@ -342,20 +362,23 @@ def calendar_config():
 
 ## 🏆 Conclusion
 
-**Phase 3 is COMPLETE!** 
+**Phase 3 is COMPLETE!**
 
 All unit test failures have been systematically resolved:
+
 - ✅ Timeline.from_scenes implementation (architectural)
 - ✅ Retry count off-by-one (logic fix)
 - ✅ Calendar slot conflicts (configuration fix)
 
 **We've achieved:**
+
 - 80% test coverage (137/171 passing)
 - Zero test failures
 - Clean, maintainable test suite
 - Solid foundation for Phases 4 & 5
 
 **Next steps to 100%:**
+
 1. **Phase 4:** Implement FastAPI endpoints (+16 tests = 89%)
 2. **Phase 5:** Enable skipped tests (+34 tests = 100%)
 
@@ -367,6 +390,6 @@ All unit test failures have been systematically resolved:
 **Production Readiness:** 98%  
 **Test Coverage:** 80% (137/171)  
 **Technical Debt:** Minimal  
-**Test Stability:** Excellent  
+**Test Stability:** Excellent
 
 **Status:** ✅ Ready for Phase 4 or Phase 5

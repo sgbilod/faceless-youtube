@@ -6,13 +6,13 @@ Provides secure API authentication using JWT tokens.
 
 import os
 import secrets
+import bcrypt
 from datetime import datetime, timedelta
 from typing import Optional
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 from pydantic import BaseModel
 
 # Configuration
@@ -20,9 +20,8 @@ SECRET_KEY = os.getenv("JWT_SECRET_KEY", secrets.token_urlsafe(32))
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-# Password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-security = HTTPBearer()
+# HTTPBearer with auto_error=False to manually handle 401 vs 403
+security = HTTPBearer(auto_error=False)
 
 
 class Token(BaseModel):
@@ -39,7 +38,7 @@ class TokenData(BaseModel):
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
-    Verify a plain password against a hashed password.
+    Verify a plain password against a hashed password using bcrypt directly.
     
     Args:
         plain_password: Plain text password from user
@@ -48,20 +47,29 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     Returns:
         True if password matches, False otherwise
     """
-    return pwd_context.verify(plain_password, hashed_password)
+    try:
+        # Convert strings to bytes and verify with bcrypt
+        password_bytes = plain_password.encode('utf-8')
+        hash_bytes = hashed_password.encode('utf-8')
+        return bcrypt.checkpw(password_bytes, hash_bytes)
+    except Exception:
+        return False
 
 
 def get_password_hash(password: str) -> str:
     """
-    Hash a password using bcrypt.
+    Hash a password using bcrypt directly.
     
     Args:
         password: Plain text password
         
     Returns:
-        Bcrypt hashed password
+        Bcrypt hashed password string
     """
-    return pwd_context.hash(password)
+    password_bytes = password.encode('utf-8')
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password_bytes, salt)
+    return hashed.decode('utf-8')
 
 
 def create_access_token(
@@ -116,6 +124,10 @@ async def verify_token(
         headers={"WWW-Authenticate": "Bearer"},
     )
     
+    # If credentials are None, token was not provided
+    if credentials is None:
+        raise credentials_exception
+    
     try:
         token = credentials.credentials
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -159,8 +171,20 @@ async def get_current_user(
 DEMO_USERS = {
     "admin": {
         "username": "admin",
-        "hashed_password": get_password_hash("admin"),  # Change in production!
+        # Hash for password "admin"
+        "hashed_password": (
+            "$2b$12$HbEF3ZQEMkyVb2I1YkhZdefownavHrPJUsh0z6e/zjDFNZTsPjvQa"
+        ),
         "full_name": "Administrator",
+        "disabled": False,
+    },
+    "test@example.com": {
+        "username": "test@example.com",
+        # Hash for password "password"
+        "hashed_password": (
+            "$2b$12$wIErhDkakaSRLtJtS2dd3OvhASOyrUQOkwGrtnqI5Wh/aMtp6BhT6"
+        ),
+        "full_name": "Test User",
         "disabled": False,
     }
 }

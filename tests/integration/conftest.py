@@ -111,19 +111,35 @@ def override_get_db(test_db_session):
 # ============================================
 
 @pytest.fixture(scope="function")
-def test_client():
+def test_client(test_db_session):
     """
     FastAPI synchronous test client.
     
     For testing API endpoints with real HTTP requests.
-    Note: Requires FastAPI app to be implemented.
     """
-    # When API is ready, uncomment:
-    # from fastapi.testclient import TestClient
-    # from src.api.app import app
-    # return TestClient(app)
+    import os
+    # Allow all hosts in tests (must be set before importing app)
+    os.environ["ALLOWED_HOSTS"] = "*"
     
-    pytest.skip("API not yet implemented")
+    from fastapi.testclient import TestClient
+    from src.api.main import app
+    from src.core.database import get_db
+    
+    # Override database dependency
+    def override_get_db():
+        try:
+            yield test_db_session
+        finally:
+            pass
+    
+    app.dependency_overrides[get_db] = override_get_db
+    
+    client = TestClient(app)
+    
+    yield client
+    
+    # Cleanup
+    app.dependency_overrides.clear()
 
 
 @pytest.fixture(scope="function")
@@ -376,10 +392,17 @@ def auth_headers(sample_user) -> dict:
     Returns:
         Dictionary with Authorization header
     """
-    # In real implementation, generate actual JWT token
-    # For now, return mock header
+    from src.api.auth import create_access_token
+    from datetime import timedelta
+    
+    # Generate real JWT token for test user
+    access_token = create_access_token(
+        data={"sub": sample_user.email},
+        expires_delta=timedelta(hours=1)
+    )
+    
     return {
-        "Authorization": "Bearer test_jwt_token_12345"
+        "Authorization": f"Bearer {access_token}"
     }
 
 
