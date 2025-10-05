@@ -7,7 +7,7 @@ AI-powered script generation for various content niches.
 from .ollama_client import OllamaClient, OllamaConfig
 from .script_generator import ScriptGenerator, ScriptConfig, GeneratedScript
 from .prompt_templates import PromptTemplateManager, NicheType
-from .content_validator import ContentValidator, ValidationResult
+from .content_validator import ContentValidator, ValidationResult, ValidationIssue
 
 __all__ = [
     'OllamaClient',
@@ -19,4 +19,5 @@ __all__ = [
     'NicheType',
     'ContentValidator',
     'ValidationResult',
+    'ValidationIssue',
 ]
