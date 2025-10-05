@@ -85,6 +85,9 @@ credentials.json
 token.json
 api_keys.json
 Pexels.txt
+API Key.txt
+*api*key*.txt
+*secret*.txt
 
 # Database
 *.db
