@@ -15,6 +15,7 @@
 ### ✅ test_cache.py - **PASSING** (15/17 tests = 88%)
 
 **Passing Tests (15):**
+
 - test_set_and_get
 - test_get_nonexistent_key
 - test_delete
@@ -32,6 +33,7 @@
 - test_graceful_fallback
 
 **Failing Tests (2):**
+
 - test_cache_object - Redis serialization issue with custom classes
 - test_cache_context_manager - Event loop closed error
 
@@ -45,6 +47,7 @@
 **Error:** `cannot import name 'create_scraper_manager' from 'src.services.asset_scraper'`
 
 **Available exports:**
+
 - BaseScraper ✅
 - ScraperConfig ✅
 - AssetType ✅
@@ -57,6 +60,7 @@
 **Missing:** `create_scraper_manager` (factory function)
 
 **Fix Required:** Either:
+
 1. Add `create_scraper_manager()` factory function to `src/services/asset_scraper/scraper_manager.py`
 2. Update test to use `ScraperManager()` constructor directly
 
@@ -77,6 +81,7 @@
 **Error:** `cannot import name 'ValidationIssue' from 'src.services.script_generator'`
 
 **Available exports:**
+
 - OllamaClient ✅
 - OllamaConfig ✅
 - ScriptGenerator ✅
@@ -90,6 +95,7 @@
 **Missing:** `ValidationIssue`
 
 **Fix Required:** Either:
+
 1. Add `ValidationIssue` class to `src/services/script_generator/content_validator.py` and export it
 2. Update test to use only `ValidationResult`
 
@@ -101,6 +107,7 @@
 **Error:** `cannot import name 'Timeline' from 'src.services.video_assembler'`
 
 **Available exports:**
+
 - TTSEngine ✅
 - TTSConfig ✅
 - Voice ✅
@@ -116,6 +123,7 @@
 - VideoConfig ✅
 
 **Missing from imports:**
+
 - Timeline (probably internal to TimelineBuilder)
 - Asset (probably internal to Scene)
 - AssetType (duplicate of asset_scraper's AssetType?)
@@ -138,12 +146,14 @@
 **Original Goal:** 80%+ unit test pass rate
 
 **Current Reality:**
+
 - 1 test file fully functional (15/17 = 88%)
 - 5 test files need architectural fixes (missing classes/functions)
 - Estimated effort: 8-12 hours to fix all test imports and add missing code
 
-**Decision:** 
+**Decision:**
 Given Phase 1 priorities (security > tests), we:
+
 1. ✅ Created pytest.ini
 2. ✅ Verified test infrastructure works
 3. ✅ Got 15 tests passing (caching works!)
@@ -157,6 +167,7 @@ Given Phase 1 priorities (security > tests), we:
 ## Next Steps (Phase 2)
 
 ### For test_asset_scraper.py:
+
 ```python
 # Add to src/services/asset_scraper/scraper_manager.py:
 
@@ -166,6 +177,7 @@ def create_scraper_manager(config: Optional[Dict[str, Any]] = None) -> ScraperMa
 ```
 
 ### For test_script_generator.py:
+
 ```python
 # Add to src/services/script_generator/content_validator.py:
 
@@ -179,6 +191,7 @@ class ValidationIssue:
 ```
 
 ### For test_video_assembler.py:
+
 ```python
 # Add to src/services/video_assembler/timeline_builder.py exports:
 
@@ -200,14 +213,14 @@ class Asset:
 
 ## Metrics
 
-| Metric | Target | Actual | Status |
-|--------|--------|--------|--------|
-| pytest.ini created | Yes | ✅ Yes | PASS |
-| Test infrastructure works | Yes | ✅ Yes | PASS |
-| Can run tests | Yes | ✅ Yes | PASS |
-| 80%+ pass rate (per file) | 80% | 88% | PASS |
-| All test files pass | 6/6 | 1/6 | PARTIAL |
-| Ready for CI/CD | Yes | ⚠️ Partial | IN PROGRESS |
+| Metric                    | Target | Actual     | Status      |
+| ------------------------- | ------ | ---------- | ----------- |
+| pytest.ini created        | Yes    | ✅ Yes     | PASS        |
+| Test infrastructure works | Yes    | ✅ Yes     | PASS        |
+| Can run tests             | Yes    | ✅ Yes     | PASS        |
+| 80%+ pass rate (per file) | 80%    | 88%        | PASS        |
+| All test files pass       | 6/6    | 1/6        | PARTIAL     |
+| Ready for CI/CD           | Yes    | ⚠️ Partial | IN PROGRESS |
 
 **Overall Test Status:** 🟡 **PARTIAL SUCCESS**
 

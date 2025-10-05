@@ -1,0 +1,111 @@
+Run started:2025-10-05 04:12:29.005787
+
+Test results:
+>> Issue: [B104:hardcoded_bind_all_interfaces] Possible binding to all interfaces.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-605 (https://cwe.mitre.org/data/definitions/605.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b104_hardcoded_bind_all_interfaces.html
+   Location: src/api\main.py:856:13
+855	        "api.main:app",
+856	        host="0.0.0.0",
+857	        port=8000,
+
+--------------------------------------------------
+>> Issue: [B104:hardcoded_bind_all_interfaces] Possible binding to all interfaces.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-605 (https://cwe.mitre.org/data/definitions/605.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b104_hardcoded_bind_all_interfaces.html
+   Location: src/config\master_config.py:181:34
+180	    # API settings
+181	    api_host: str = Field(default="0.0.0.0", env="API_HOST")
+182	    api_port: int = Field(default=8000, env="API_PORT")
+
+--------------------------------------------------
+>> Issue: [B608:hardcoded_sql_expressions] Possible SQL injection vector through string-based query construction.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b608_hardcoded_sql_expressions.html
+   Location: src/core\database.py:208:33
+207	        for table in Base.metadata.sorted_tables:
+208	            count = db.execute(f"SELECT COUNT(*) FROM {table.name}").scalar()
+209	            counts[table.name] = count
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b324_hashlib.html
+   Location: src/services\asset_scraper\base_scraper.py:290:22
+289	        params_str = f"{query}:" + ":".join(f"{k}={v}" for k, v in sorted(kwargs.items()))
+290	        params_hash = hashlib.md5(params_str.encode()).hexdigest()
+291	        return f"{self.cache_key_prefix}:search:{params_hash}"
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b324_hashlib.html
+   Location: src/services\video_assembler\tts_engine.py:531:15
+530	        content = f"{text}:{voice.value}:{speaking_rate}:{self.config.sample_rate}"
+531	        return hashlib.md5(content.encode()).hexdigest()
+532	    
+
+--------------------------------------------------
+>> Issue: [B301:blacklist] Pickle and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue.
+   Severity: Medium   Confidence: High
+   CWE: CWE-502 (https://cwe.mitre.org/data/definitions/502.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_calls.html#b301-pickle
+   Location: src/utils\cache.py:233:27
+232	                    self.stats["hits"] += 1
+233	                    return pickle.loads(value)
+234	                else:
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b324_hashlib.html
+   Location: src/utils\cache.py:397:19
+396	        key_data = json.dumps({"args": args, "kwargs": kwargs}, sort_keys=True)
+397	        key_hash = hashlib.md5(key_data.encode()).hexdigest()
+398	        return f"cache:{key_hash}"
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b324_hashlib.html
+   Location: src/utils\cache.py:436:36
+435	            }, sort_keys=True, default=str)
+436	            cache_key = f"{prefix}:{hashlib.md5(key_data.encode()).hexdigest()}"
+437	            
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b324_hashlib.html
+   Location: src/utils\cache.py:465:36
+464	            }, sort_keys=True, default=str)
+465	            cache_key = f"{prefix}:{hashlib.md5(key_data.encode()).hexdigest()}"
+466	            
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 9970
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 4
+		Medium: 4
+		High: 5
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 4
+		High: 9
+Files skipped (0):
