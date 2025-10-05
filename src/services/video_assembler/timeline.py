@@ -225,6 +225,72 @@ class Timeline(BaseModel):
             f"{self.resolution[0]}x{self.resolution[1]} @ {self.fps}fps"
         )
     
+    @classmethod
+    def from_scenes(
+        cls,
+        scenes: List,  # Accept any scene type
+        config: Optional[Dict[str, Any]] = None,
+        background_audio: Optional[str] = None
+    ) -> 'Timeline':
+        """
+        Create a Timeline from a list of scenes.
+        
+        Args:
+            scenes: List of Scene objects (Pydantic or dataclass)
+            config: Optional configuration dict with resolution, fps, etc.
+            background_audio: Optional background music path
+            
+        Returns:
+            Timeline object
+        """
+        # Convert BuilderScenes (dataclass) to Pydantic Scenes if needed
+        pydantic_scenes = []
+        for scene in scenes:
+            if isinstance(scene, Scene):
+                # Already a Pydantic Scene
+                pydantic_scenes.append(scene)
+            else:
+                # Convert from BuilderScene (dataclass) to Pydantic Scene
+                # Extract basic info from BuilderScene
+                asset_path = scene.assets[0].path if scene.assets else "/tmp/default.mp4"
+                pydantic_scenes.append(Scene(
+                    start_time=0.0,  # Will be recalculated
+                    duration=scene.duration,
+                    asset_path=str(asset_path) if hasattr(asset_path, '__fspath__') else asset_path,
+                ))
+        
+        timeline = cls(
+            scenes=pydantic_scenes,
+            background_audio=background_audio
+        )
+        
+        # Apply config if provided
+        if config:
+            if hasattr(config, 'resolution'):
+                timeline.resolution = config.resolution
+            elif isinstance(config, dict) and 'resolution' in config:
+                timeline.resolution = config['resolution']
+                
+            if hasattr(config, 'fps'):
+                timeline.fps = config.fps
+            elif isinstance(config, dict) and 'fps' in config:
+                timeline.fps = config['fps']
+        
+        timeline._recalculate_timings()
+        timeline._update_duration()
+        return timeline
+    
+    @property
+    def scene_count(self) -> int:
+        """Get number of scenes in timeline"""
+        return len(self.scenes)
+    
+    @property
+    def video_assets(self) -> int:
+        """Count video assets across all scenes"""
+        # This is a simplified version - real implementation would check asset types
+        return len([s for s in self.scenes if s.asset_path])
+    
     def __repr__(self):
         return f"<Timeline {len(self.scenes)} scenes, {self.total_duration:.1f}s>"
     

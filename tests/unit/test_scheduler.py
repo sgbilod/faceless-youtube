@@ -86,7 +86,8 @@ def calendar_config():
     """Calendar configuration"""
     return CalendarConfig(
         min_gap_hours=2,
-        max_videos_per_day=3
+        max_videos_per_day=3,
+        preferred_hours=[8, 12, 16, 20]  # Spaced 4 hours apart
     )
 
 

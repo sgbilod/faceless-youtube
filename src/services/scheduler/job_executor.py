@@ -196,6 +196,7 @@ class JobExecutor:
                         ).total_seconds()
                         result.result_data = job_result
                         result.progress_percent = 100
+                        result.retry_count = retry_count  # Update on success
                         
                         self._stats["total_completed"] += 1
                         
