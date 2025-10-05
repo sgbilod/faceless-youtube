@@ -161,7 +161,7 @@ def sample_user(test_db_session) -> User:
         password_hash="$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyWuL8Gqo7Cy",  # "password"
         created_at=datetime.utcnow(),
         is_active=True,
-        is_verified=False
+        is_superuser=False  # Fixed: was is_verified
     )
     test_db_session.add(user)
     test_db_session.commit()
@@ -181,8 +181,8 @@ def sample_script(test_db_session) -> Script:
         title="Test Meditation Script",
         content="Welcome to this peaceful meditation session. Take a deep breath...",
         niche="meditation",
-        duration_seconds=300,
-        word_count=150,
+        target_duration_seconds=300,  # Fixed: was duration_seconds
+        actual_word_count=150,  # Fixed: was word_count
         created_at=datetime.utcnow()
     )
     test_db_session.add(script)
@@ -206,14 +206,13 @@ def sample_video(test_db_session, sample_user, sample_script) -> Video:
         description="A calming meditation for beginners",
         niche="meditation",
         duration_seconds=300,
-        resolution="1920x1080",
+        resolution="1080p",  # Fixed: was "1920x1080", should be "1080p"
         fps=30,
         status=VideoStatus.COMPLETED,
         file_path="/test/output/video_test.mp4",
-        file_size_mb=45.5,
+        file_size_bytes=47710208,  # Fixed: was file_size_mb=45.5, now 45.5MB in bytes
         thumbnail_path="/test/output/thumbnail_test.jpg",
-        created_at=datetime.utcnow(),
-        completed_at=datetime.utcnow()
+        created_at=datetime.utcnow()
     )
     test_db_session.add(video)
     test_db_session.commit()
@@ -235,10 +234,10 @@ def sample_asset(test_db_session) -> Asset:
         source_url="https://www.pexels.com/video/12345",
         source_id="pexels_12345",
         file_path="/test/assets/nature_video.mp4",
-        file_size_mb=120.5,
+        file_size_bytes=126353408,  # Fixed: was file_size_mb=120.5, now 120.5MB in bytes
         duration_seconds=30,
-        resolution="1920x1080",
-        fps=60,
+        width=1920,  # Fixed: was resolution="1920x1080"
+        height=1080,  # Fixed: parsed from resolution
         quality_score=0.95,
         tags=["nature", "forest", "peaceful", "meditation"],
         license_type="pexels",

@@ -18,7 +18,6 @@ from src.services.asset_scraper import (
     PixabayScraper,
     UnsplashScraper,
     ScraperManager,
-    create_scraper_manager,
 )
 
 

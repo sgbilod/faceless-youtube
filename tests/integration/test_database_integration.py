@@ -116,6 +116,8 @@ class TestVideoRelationships:
             title="Video 1",
             niche="meditation",
             status=VideoStatus.COMPLETED,
+            duration_seconds=300,
+            file_path="/test/video1.mp4",
             created_at=datetime.utcnow()
         )
         video2 = Video(
@@ -123,6 +125,8 @@ class TestVideoRelationships:
             title="Video 2",
             niche="meditation",
             status=VideoStatus.QUEUED,
+            duration_seconds=180,
+            file_path="/test/video2.mp4",
             created_at=datetime.utcnow()
         )
         
@@ -152,6 +156,7 @@ class TestAssetOperations:
             duration_seconds=180,
             quality_score=0.85,
             tags=["calm", "meditation", "background"],
+            license_type="cc0",
             created_at=datetime.utcnow()
         )
         
@@ -173,6 +178,7 @@ class TestAssetOperations:
             source_id="pixabay_67890",
             file_path="/assets/video/ocean.mp4",
             duration_seconds=60,
+            license_type="pixabay",
             created_at=datetime.utcnow()
         )
         test_db_session.add(video_asset2)
@@ -250,6 +256,7 @@ class TestTransactions:
                 source_id=f"pexels_{i}",
                 file_path=f"/assets/video_{i}.mp4",
                 duration_seconds=30,
+                license_type="pexels",
                 created_at=datetime.utcnow()
             )
             for i in range(10)
@@ -277,6 +284,8 @@ class TestCascadeDeletes:
             title="Test Video",
             niche="meditation",
             status=VideoStatus.COMPLETED,
+            duration_seconds=240,
+            file_path="/test/cascade_video.mp4",
             created_at=datetime.utcnow()
         )
         test_db_session.add(video)
@@ -303,6 +312,8 @@ class TestComplexQueries:
             title="Old Video",
             niche="meditation",
             status=VideoStatus.COMPLETED,
+            duration_seconds=300,
+            file_path="/test/old_video.mp4",
             created_at=datetime.utcnow() - timedelta(days=10)
         )
         recent_video = Video(
@@ -310,6 +321,8 @@ class TestComplexQueries:
             title="Recent Video",
             niche="meditation",
             status=VideoStatus.COMPLETED,
+            duration_seconds=180,
+            file_path="/test/recent_video.mp4",
             created_at=datetime.utcnow() - timedelta(days=2)
         )
         
@@ -335,6 +348,8 @@ class TestComplexQueries:
                 title=f"Video {status.value}",
                 niche="meditation",
                 status=status,
+                duration_seconds=200,
+                file_path=f"/test/video_{status.value}.mp4",
                 created_at=datetime.utcnow()
             )
             test_db_session.add(video)

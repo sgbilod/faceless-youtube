@@ -11,21 +11,10 @@ Features:
 - Async/await support
 - Graceful fallback to in-memory cache
 - Cache statistics and monitoring
-- Pattern-based invalidati        @functools.wraps(func)
-        async def async_wrapper(*args, **kwargs):
-            # Generate cache key
-            prefix = key_prefix or func.__name__
-            key_data = json.dumps({
-                \"prefix\": prefix,
-                \"args\": args,
-                \"kwargs\": kwargs
-            }, sort_keys=True, default=str)
-            # MD5 used for cache key only, not security (nosec: B324)
-            key_hash = hashlib.md5(key_data.encode(), usedforsecurity=False)
-            cache_key = f\"{prefix}:{key_hash.hexdigest()}\"
-            
-            # Try to get from cache
-            cached_value = await cache_manager.get(cache_key)port os
+- Pattern-based invalidation
+"""
+
+import os
 import json
 import logging
 import hashlib

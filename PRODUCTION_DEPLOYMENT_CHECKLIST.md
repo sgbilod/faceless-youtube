@@ -9,6 +9,7 @@ Use this checklist before deploying to production environment.
 ## Pre-Deployment Verification
 
 ### Code Quality
+
 - [ ] All tests passing (target: 90%+ pass rate)
 - [ ] Test coverage ≥ 80% for critical paths
 - [ ] No HIGH/CRITICAL Bandit security warnings
@@ -17,6 +18,7 @@ Use this checklist before deploying to production environment.
 - [ ] Code reviewed by at least one other developer
 
 ### Security Audit
+
 - [ ] Bandit security scan clean (`bandit -r src/ -ll`)
 - [ ] No hardcoded secrets in code
 - [ ] No SQL injection vulnerabilities
@@ -28,6 +30,7 @@ Use this checklist before deploying to production environment.
 - [ ] Authentication working correctly
 
 ### Configuration
+
 - [ ] Environment variables configured (`.env` file)
 - [ ] Secrets stored securely (not in `.env` committed to git)
 - [ ] Database credentials rotated
@@ -38,6 +41,7 @@ Use this checklist before deploying to production environment.
 - [ ] `ALLOWED_HOSTS` restricted to known domains
 
 ### Database
+
 - [ ] Database migrations up to date (`alembic upgrade head`)
 - [ ] Database backups configured and tested
 - [ ] Database connection pooling configured
@@ -46,6 +50,7 @@ Use this checklist before deploying to production environment.
 - [ ] Database indexes optimized
 
 ### Dependencies
+
 - [ ] All dependencies installed (`pip install -r requirements.txt`)
 - [ ] No vulnerable packages (`pip-audit` or `safety check`)
 - [ ] Python version matches production (3.13.7)
@@ -53,6 +58,7 @@ Use this checklist before deploying to production environment.
 - [ ] ImageMagick installed (if needed)
 
 ### Monitoring & Logging
+
 - [ ] Structured JSON logging enabled
 - [ ] Log files writable and rotated
 - [ ] Prometheus metrics accessible (`/metrics` endpoint)
@@ -61,6 +67,7 @@ Use this checklist before deploying to production environment.
 - [ ] Health check endpoint working (`/health`)
 
 ### Documentation
+
 - [ ] API documentation up to date
 - [ ] README.md reflects current setup
 - [ ] Deployment guide available
@@ -72,6 +79,7 @@ Use this checklist before deploying to production environment.
 ## Deployment Steps
 
 ### 1. Staging Deployment
+
 - [ ] Deploy to staging environment first
 - [ ] Run smoke tests on staging
 - [ ] Monitor logs for 24 hours
@@ -79,6 +87,7 @@ Use this checklist before deploying to production environment.
 - [ ] Verify all integrations working
 
 ### 2. Pre-Production Checks
+
 - [ ] Create database backup
 - [ ] Tag release in git (`git tag -a v2.0.0 -m "Production release"`)
 - [ ] Build Docker images (if using containers)
@@ -86,6 +95,7 @@ Use this checklist before deploying to production environment.
 - [ ] Update DNS/load balancer (if needed)
 
 ### 3. Production Deployment
+
 - [ ] Deploy application
 - [ ] Run database migrations
 - [ ] Verify application starts successfully
@@ -94,6 +104,7 @@ Use this checklist before deploying to production environment.
 - [ ] Test critical user flows
 
 ### 4. Post-Deployment Verification
+
 - [ ] Monitor error rates (< 1% error rate)
 - [ ] Check response times (p95 < 500ms)
 - [ ] Verify security headers present
@@ -106,6 +117,7 @@ Use this checklist before deploying to production environment.
 ## Post-Deployment Monitoring (First 24 Hours)
 
 ### Metrics to Watch
+
 - [ ] Error rate < 1%
 - [ ] Response time p95 < 500ms
 - [ ] CPU usage < 70%
@@ -114,12 +126,14 @@ Use this checklist before deploying to production environment.
 - [ ] Redis cache hit rate > 80%
 
 ### Logs to Review
+
 - [ ] No unexpected errors in logs
 - [ ] Authentication events logging correctly
 - [ ] Request logging includes timing
 - [ ] No security warnings
 
 ### User Experience
+
 - [ ] Video generation working end-to-end
 - [ ] YouTube upload successful
 - [ ] Script generation responding quickly
@@ -130,6 +144,7 @@ Use this checklist before deploying to production environment.
 ## Rollback Plan
 
 ### Preparation
+
 - [ ] Previous version tagged and accessible
 - [ ] Database backup recent (< 1 hour old)
 - [ ] Rollback procedure tested in staging
@@ -137,21 +152,25 @@ Use this checklist before deploying to production environment.
 ### If Issues Occur
 
 **CRITICAL (Immediate Rollback):**
+
 - Production completely down
 - Data corruption detected
 - Security breach discovered
 
 **HIGH (Rollback within 1 hour):**
+
 - Error rate > 10%
 - Critical feature broken
 - Performance degradation > 50%
 
 **MEDIUM (Fix forward if possible):**
+
 - Non-critical bugs
 - Minor performance issues
 - UI glitches
 
 ### Rollback Steps
+
 1. [ ] Stop current application
 2. [ ] Restore previous version
 3. [ ] Rollback database migrations (if needed)
@@ -165,6 +184,7 @@ Use this checklist before deploying to production environment.
 ## Security Checklist
 
 ### Headers
+
 - [ ] `Strict-Transport-Security` present
 - [ ] `X-Frame-Options` set to DENY
 - [ ] `X-Content-Type-Options` set to nosniff
@@ -173,6 +193,7 @@ Use this checklist before deploying to production environment.
 - [ ] `Permissions-Policy` restricts features
 
 ### Authentication
+
 - [ ] JWT tokens expire (reasonable TTL)
 - [ ] Refresh tokens implemented
 - [ ] Password hashing using bcrypt
@@ -180,6 +201,7 @@ Use this checklist before deploying to production environment.
 - [ ] Failed login attempts logged
 
 ### API Security
+
 - [ ] All endpoints require authentication (except public)
 - [ ] Rate limiting on all endpoints
 - [ ] Input validation on all requests
@@ -192,18 +214,21 @@ Use this checklist before deploying to production environment.
 ## Performance Checklist
 
 ### Caching
+
 - [ ] Redis cache operational
 - [ ] Cache hit rate > 80%
 - [ ] Cache TTL appropriate
 - [ ] Cache keys namespaced
 
 ### Database
+
 - [ ] Connection pooling configured
 - [ ] Slow query log enabled
 - [ ] Indexes on frequently queried columns
 - [ ] N+1 queries eliminated
 
 ### Assets
+
 - [ ] CDN configured (if using)
 - [ ] Images optimized
 - [ ] Videos compressed
@@ -214,6 +239,7 @@ Use this checklist before deploying to production environment.
 ## Compliance & Legal
 
 ### Data Privacy
+
 - [ ] User data encrypted at rest
 - [ ] User data encrypted in transit (HTTPS)
 - [ ] Data retention policy implemented
@@ -221,6 +247,7 @@ Use this checklist before deploying to production environment.
 - [ ] Privacy policy updated
 
 ### Platform Terms
+
 - [ ] YouTube API quota sufficient
 - [ ] Pexels API attribution correct
 - [ ] No terms of service violations
@@ -231,16 +258,19 @@ Use this checklist before deploying to production environment.
 ## Communication Plan
 
 ### Before Deployment
+
 - [ ] Notify stakeholders of deployment window
 - [ ] Post maintenance notice (if downtime expected)
 - [ ] Prepare rollback communication
 
 ### During Deployment
+
 - [ ] Update status page
 - [ ] Monitor support channels
 - [ ] Be ready to respond to issues
 
 ### After Deployment
+
 - [ ] Announce successful deployment
 - [ ] Share release notes
 - [ ] Document lessons learned
@@ -250,6 +280,7 @@ Use this checklist before deploying to production environment.
 ## Success Criteria
 
 Deployment is considered successful when:
+
 - ✅ All health checks passing
 - ✅ Error rate < 1%
 - ✅ Response times within SLA
@@ -272,12 +303,14 @@ Deployment is considered successful when:
 ## Post-Deployment Tasks
 
 ### Within 1 Week
+
 - [ ] Review logs for patterns
 - [ ] Optimize slow queries
 - [ ] Address non-critical bugs
 - [ ] Update documentation based on deployment
 
 ### Within 1 Month
+
 - [ ] Conduct post-mortem (if issues occurred)
 - [ ] Review and improve deployment process
 - [ ] Update monitoring dashboards

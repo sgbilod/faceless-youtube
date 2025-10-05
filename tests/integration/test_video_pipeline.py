@@ -44,8 +44,8 @@ class TestVideoGenerationPipeline:
             title=script_data["title"],
             content=script_data["content"],
             niche="meditation",
-            duration_seconds=script_data["duration"],
-            word_count=script_data["word_count"],
+            target_duration_seconds=script_data["duration"],
+            actual_word_count=script_data["word_count"],
             created_at=datetime.utcnow()
         )
         test_db_session.add(script)
@@ -57,6 +57,8 @@ class TestVideoGenerationPipeline:
             script_id=script.id,
             title=script_data["title"],
             niche="meditation",
+            duration_seconds=300,  # Added required field
+            file_path="/test/pipeline_video.mp4",  # Added required field
             status=VideoStatus.QUEUED,
             created_at=datetime.utcnow()
         )
@@ -118,6 +120,8 @@ class TestVideoGenerationPipeline:
             user_id=sample_user.id,
             title="Test Video",
             niche="meditation",
+            duration_seconds=240,  # Added required field
+            file_path="/test/error_video.mp4",  # Added required field
             status=VideoStatus.QUEUED,
             created_at=datetime.utcnow()
         )
@@ -160,6 +164,8 @@ class TestPartialCompletion:
             script_id=sample_script.id,
             title="Partially Completed Video",
             niche="meditation",
+            duration_seconds=180,  # Added required field
+            file_path="/test/partial_video.mp4",  # Added required field
             status=VideoStatus.RENDERING,
             created_at=datetime.utcnow()
         )
@@ -168,7 +174,7 @@ class TestPartialCompletion:
         
         # Verify initial state
         assert video.status == VideoStatus.RENDERING
-        assert video.file_path is None
+        assert video.file_path == "/test/partial_video.mp4"
         
         # Resume and complete rendering
         video.status = VideoStatus.COMPLETED
@@ -194,6 +200,8 @@ class TestPartialCompletion:
             script_id=sample_script.id,
             title="Failed Video",
             niche="meditation",
+            duration_seconds=200,  # Added required field
+            file_path="/test/failed_video.mp4",  # Added required field
             status=VideoStatus.FAILED,
             error_message="Asset download timeout",
             created_at=datetime.utcnow()
@@ -236,6 +244,8 @@ class TestMetricsCollection:
             script_id=sample_script.id,
             title="Timed Video",
             niche="meditation",
+            duration_seconds=300,  # Added required field
+            file_path="/test/timed_video.mp4",  # Added required field
             status=VideoStatus.QUEUED,
             created_at=datetime.utcnow()
         )
@@ -313,6 +323,8 @@ class TestConcurrentPipelines:
                 script_id=sample_script.id,
                 title=f"Video {i+1}",
                 niche="meditation",
+                duration_seconds=180 + (i * 60),  # Added required field, varied durations
+                file_path=f"/test/queue_video_{i+1}.mp4",  # Added required field
                 status=status,
                 created_at=datetime.utcnow()
             )
