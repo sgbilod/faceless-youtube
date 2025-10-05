@@ -34,19 +34,22 @@ import uuid
 from pydantic import BaseModel, Field
 
 try:
-    from moviepy import (
-        VideoFileClip,
-        ImageClip,
-        CompositeVideoClip,
-        AudioFileClip,
-        CompositeAudioClip,
-        concatenate_videoclips,
-        TextClip,
-    )
-    from moviepy.video.fx import fadein, fadeout, resize
-    from moviepy.audio.fx import audio_fadein, audio_fadeout, volumex
-except ImportError:
+    from moviepy import VideoFileClip
+    from moviepy import ImageClip
+    from moviepy import CompositeVideoClip
+    from moviepy import AudioFileClip
+    from moviepy import CompositeAudioClip
+    from moviepy import concatenate_videoclips
+    from moviepy import TextClip
+    # MoviePy 2.x changed the fx imports - they're now methods on clips
+    # from moviepy.video.fx import fadein, fadeout, resize  # Old MoviePy 1.x
+    # from moviepy.audio.fx import audio_fadein, audio_fadeout, volumex  # Old MoviePy 1.x
+    MOVIEPY_AVAILABLE = True
+except ImportError as e:
     VideoFileClip = None
+    MOVIEPY_AVAILABLE = False
+    import warnings
+    warnings.warn(f"MoviePy not fully available: {e}")
 
 from .timeline_builder import Timeline, Scene, TransitionType, AssetType
 

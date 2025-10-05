@@ -25,7 +25,8 @@ from src.services.video_assembler import (
     # Timeline
     TimelineBuilder,
     Timeline,
-    Scene,
+    BuilderScene as Scene,  # Use dataclass Scene for tests
+    BuilderTimeline,
     Asset,
     AssetType,
     Transition,
