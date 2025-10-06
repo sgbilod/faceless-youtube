@@ -5,7 +5,7 @@ Main service for generating video scripts using AI.
 """
 
 import asyncio
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from typing import Dict, List, Optional, Any
 from uuid import uuid4
@@ -177,7 +177,7 @@ class ScriptGenerator:
                     estimated_duration=self.validator.estimate_duration(script_text),
                     model_used=config.model,
                     temperature=config.temperature,
-                    validation=validation_result.dict() if validation_result else None,
+                    validation=asdict(validation_result) if validation_result else None,
                     quality_score=validation_result.score if validation_result else None,
                     tags=self._extract_tags(topic, config.niche),
                     keywords=self._extract_keywords(script_text),
@@ -474,7 +474,7 @@ Make specific improvements based on the feedback."""
             estimated_duration=self.validator.estimate_duration(improved_text),
             model_used=config.model,
             temperature=config.temperature,
-            validation=validation_result.dict(),
+            validation=asdict(validation_result),
             quality_score=validation_result.score,
             tags=original_script.tags,
             keywords=self._extract_keywords(improved_text),

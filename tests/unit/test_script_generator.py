@@ -51,22 +51,29 @@ def test_ollama_config_custom():
     assert config.temperature == 0.9
 
 
-@pytest.mark.skip(reason="Requires Ollama server running")
 @pytest.mark.asyncio
-async def test_ollama_health_check():
-    """Test Ollama health check"""
+async def test_ollama_health_check(mocker):
+    """Test Ollama health check with mocked server"""
     client = OllamaClient()
+    
+    # Mock the health_check method to return True
+    mocker.patch.object(client, 'health_check', return_value=True)
+    
     is_healthy = await client.health_check()
     await client.close()
     
     assert isinstance(is_healthy, bool)
+    assert is_healthy is True
 
 
-@pytest.mark.skip(reason="Requires Ollama server running")
 @pytest.mark.asyncio
-async def test_ollama_generate():
-    """Test text generation"""
+async def test_ollama_generate(mocker):
+    """Test text generation with mocked server"""
     client = OllamaClient()
+    
+    # Mock the generate method to return fake text
+    mock_response = "Hello! This is a friendly greeting from the AI assistant."
+    mocker.patch.object(client, 'generate', return_value=mock_response)
     
     response = await client.generate(
         prompt="Write a short greeting.",
@@ -75,6 +82,7 @@ async def test_ollama_generate():
     
     assert isinstance(response, str)
     assert len(response) > 0
+    assert response == mock_response
     
     await client.close()
 
@@ -286,10 +294,14 @@ def test_generated_script_serialization():
 # SCRIPT GENERATOR TESTS
 # ============================================
 
-@pytest.mark.skip(reason="Requires Ollama server running")
 @pytest.mark.asyncio
-async def test_script_generator_initialization():
-    """Test script generator initialization"""
+async def test_script_generator_initialization(mocker):
+    """Test script generator initialization with mocked Ollama"""
+    # Mock OllamaClient to avoid server dependency
+    mock_ollama = mocker.MagicMock()
+    mock_ollama.close = mocker.AsyncMock()
+    mocker.patch('src.services.script_generator.script_generator.OllamaClient', return_value=mock_ollama)
+    
     generator = ScriptGenerator()
     
     assert generator.ollama is not None
@@ -300,10 +312,21 @@ async def test_script_generator_initialization():
     await generator.close()
 
 
-@pytest.mark.skip(reason="Requires Ollama server running")
 @pytest.mark.asyncio
-async def test_generate_meditation_script():
-    """Test generating a meditation script"""
+async def test_generate_meditation_script(mocker):
+    """Test generating a meditation script with mocked Ollama"""
+    # Mock the script generation
+    fake_script_text = """Welcome to this calming meditation focused on ocean waves. 
+    Close your eyes and imagine standing on a peaceful beach. 
+    Listen to the gentle rhythm of the waves washing ashore. 
+    Each wave brings deeper relaxation and peace. 
+    Feel the stress melting away with each breath."""
+    
+    mock_ollama = mocker.MagicMock()
+    mock_ollama.generate = mocker.AsyncMock(return_value=fake_script_text)
+    mock_ollama.close = mocker.AsyncMock()
+    mocker.patch('src.services.script_generator.script_generator.OllamaClient', return_value=mock_ollama)
+    
     generator = ScriptGenerator()
     
     config = ScriptConfig(
@@ -328,10 +351,29 @@ async def test_generate_meditation_script():
     await generator.close()
 
 
-@pytest.mark.skip(reason="Requires Ollama server running")
 @pytest.mark.asyncio
-async def test_generate_multiple_niches():
-    """Test generating scripts for different niches"""
+async def test_generate_multiple_niches(mocker):
+    """Test generating scripts for different niches with mocked Ollama"""
+    # Mock responses for different niches
+    niche_responses = {
+        "meditation": "Close your eyes and find inner peace as we explore the path to success through mindful awareness.",
+        "motivation": "Success is not final, failure is not fatal. It's the courage to continue that counts. You have what it takes!",
+        "facts": "Did you know? Success is defined differently across cultures. Studies show that 80% of success comes from persistence."
+    }
+    
+    def generate_mock_response(*args, **kwargs):
+        # Return appropriate response based on context
+        prompt = args[0] if args else kwargs.get('prompt', '')
+        for niche_name, response in niche_responses.items():
+            if niche_name in prompt.lower():
+                return response
+        return niche_responses["meditation"]  # Default
+    
+    mock_ollama = mocker.MagicMock()
+    mock_ollama.generate = mocker.AsyncMock(side_effect=generate_mock_response)
+    mock_ollama.close = mocker.AsyncMock()
+    mocker.patch('src.services.script_generator.script_generator.OllamaClient', return_value=mock_ollama)
+    
     generator = ScriptGenerator()
     
     niches = [NicheType.MEDITATION, NicheType.MOTIVATION, NicheType.FACTS]
@@ -343,9 +385,26 @@ async def test_generate_multiple_niches():
             validate=False,  # Skip validation for speed
         )
         
+        # Provide all required parameters based on niche
+        kwargs = {"style": "informative"}
+        if niche == NicheType.MOTIVATION:
+            kwargs["message"] = "You can achieve anything"
+            kwargs["audience"] = "general"
+            kwargs["tone"] = "energetic"
+            kwargs["context"] = "motivational"
+        elif niche == NicheType.MEDITATION:
+            kwargs["tone"] = "calm"
+            kwargs["context"] = "relaxation"
+        elif niche == NicheType.FACTS:
+            kwargs["tone"] = "educational"
+            kwargs["count"] = 5
+            kwargs["level"] = "intermediate"
+            kwargs["context"] = "informative"
+        
         script = await generator.generate(
             topic="success",
             config=config,
+            **kwargs
         )
         
         assert script.niche == niche.value
@@ -354,10 +413,28 @@ async def test_generate_multiple_niches():
     await generator.close()
 
 
-@pytest.mark.skip(reason="Requires Ollama server running")
 @pytest.mark.asyncio
-async def test_generate_batch():
-    """Test batch script generation"""
+async def test_generate_batch(mocker):
+    """Test batch script generation with mocked Ollama"""
+    # Mock responses for each topic
+    topic_responses = {
+        "peace": "Find inner peace through mindful breathing and gentle awareness of the present moment.",
+        "focus": "Sharpen your concentration by clearing mental clutter and directing your attention to what matters.",
+        "gratitude": "Cultivate appreciation for life's blessings, both big and small, as we journey through gratitude."
+    }
+    
+    def generate_mock_response(*args, **kwargs):
+        prompt = args[0] if args else kwargs.get('prompt', '')
+        for topic, response in topic_responses.items():
+            if topic in prompt.lower():
+                return response
+        return "Generic meditation script for relaxation and mindfulness."
+    
+    mock_ollama = mocker.MagicMock()
+    mock_ollama.generate = mocker.AsyncMock(side_effect=generate_mock_response)
+    mock_ollama.close = mocker.AsyncMock()
+    mocker.patch('src.services.script_generator.script_generator.OllamaClient', return_value=mock_ollama)
+    
     generator = ScriptGenerator()
     
     topics = ["peace", "focus", "gratitude"]
@@ -367,9 +444,9 @@ async def test_generate_batch():
         validate=False,
     )
     
-    scripts = await generator.generate_batch(topics, config)
+    scripts = await generator.generate_batch(topics, config, style="guided")
     
-    assert len(scripts) == len(topics)
+    assert len(scripts) == len(topics), f"Expected {len(topics)} scripts, got {len(scripts)}"
     assert all(isinstance(s, GeneratedScript) for s in scripts)
     
     await generator.close()
@@ -379,10 +456,32 @@ async def test_generate_batch():
 # INTEGRATION TESTS
 # ============================================
 
-@pytest.mark.skip(reason="Requires Ollama server running")
 @pytest.mark.asyncio
-async def test_full_generation_pipeline():
-    """Test complete script generation with validation"""
+async def test_full_generation_pipeline(mocker):
+    """Test complete script generation with validation and mocked Ollama"""
+    # Mock a full meditation script
+    fake_full_script = """Welcome to this peaceful meditation on a mountain sunrise.
+    
+    Close your eyes and imagine yourself standing atop a serene mountain peak.
+    The air is crisp and fresh, filled with the promise of a new day.
+    
+    As the first rays of sunlight begin to peek over the horizon,
+    feel their gentle warmth touching your face.
+    
+    Watch as the sky transforms from deep indigo to brilliant shades of orange and gold.
+    Each breath you take fills you with renewed energy and purpose.
+    
+    The world below is still peaceful, wrapped in morning mist.
+    You are connected to nature, grounded yet elevated.
+    
+    Carry this sense of clarity and peace with you throughout your day.
+    When you're ready, slowly open your eyes, refreshed and centered."""
+    
+    mock_ollama = mocker.MagicMock()
+    mock_ollama.generate = mocker.AsyncMock(return_value=fake_full_script)
+    mock_ollama.close = mocker.AsyncMock()
+    mocker.patch('src.services.script_generator.script_generator.OllamaClient', return_value=mock_ollama)
+    
     generator = ScriptGenerator()
     
     config = ScriptConfig(

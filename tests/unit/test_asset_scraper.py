@@ -8,6 +8,7 @@ import pytest
 import asyncio
 from datetime import datetime
 from typing import List
+from unittest.mock import AsyncMock
 
 from src.services.asset_scraper import (
     BaseScraper,
@@ -370,57 +371,110 @@ async def test_scraper_manager_context_manager():
 # INTEGRATION TESTS (require API keys)
 # ============================================
 
-@pytest.mark.skip(reason="Requires API keys")
 @pytest.mark.asyncio
-async def test_pexels_integration():
-    """Integration test with real Pexels API"""
-    config = ScraperConfig(api_key="YOUR_PEXELS_API_KEY")
+async def test_pexels_integration(mocker):
+    """Integration test with mocked Pexels API"""
+    # Mock the HTTP session response
+    mock_response = {
+        "videos": [
+            {
+                "id": 123,
+                "width": 1920,
+                "height": 1080,
+                "duration": 10,
+                "video_files": [
+                    {
+                        "link": "https://example.com/video1.mp4",
+                        "quality": "hd",
+                        "width": 1920,
+                        "height": 1080
+                    }
+                ],
+                "user": {"name": "Test User"},
+                "url": "https://pexels.com/video/123"
+            }
+        ]
+    }
     
-    async with PexelsScraper(config) as scraper:
-        results = await scraper.search_with_cache(
-            "nature",
-            AssetType.VIDEO,
-            limit=5
-        )
-        
-        assert len(results) > 0
-        assert all(r.source == "pexels" for r in results)
-        assert all(r.commercial_use is True for r in results)
+    config = ScraperConfig(api_key="test_key")
+    scraper = PexelsScraper(config)
+    
+    # Mock the _make_request method to return our fake data
+    mocker.patch.object(scraper, '_make_request', return_value=mock_response)
+    
+    results = await scraper.search("nature", AssetType.VIDEO, limit=5)
+    
+    assert len(results) > 0
+    assert all(r.source == "pexels" for r in results)
+    assert all(r.commercial_use is True for r in results)
 
 
-@pytest.mark.skip(reason="Requires API keys")
 @pytest.mark.asyncio
-async def test_pixabay_integration():
-    """Integration test with real Pixabay API"""
-    config = ScraperConfig(api_key="YOUR_PIXABAY_API_KEY")
+async def test_pixabay_integration(mocker):
+    """Integration test with mocked Pixabay API"""
+    # Mock the HTTP session response
+    mock_response = {
+        "hits": [
+            {
+                "id": 456,
+                "pageURL": "https://pixabay.com/videos/456",
+                "videos": {
+                    "large": {
+                        "url": "https://example.com/video2.mp4",
+                        "width": 1920,
+                        "height": 1080,
+                        "size": 1024000
+                    }
+                },
+                "duration": 15,
+                "user": "TestUser"
+            }
+        ]
+    }
     
-    async with PixabayScraper(config) as scraper:
-        results = await scraper.search_with_cache(
-            "ocean",
-            AssetType.VIDEO,
-            limit=5
-        )
-        
-        assert len(results) > 0
-        assert all(r.source == "pixabay" for r in results)
+    config = ScraperConfig(api_key="test_key")
+    scraper = PixabayScraper(config)
+    
+    # Mock the _make_request method to return our fake data
+    mocker.patch.object(scraper, '_make_request', return_value=mock_response)
+    
+    results = await scraper.search("ocean", AssetType.VIDEO, limit=5)
+    
+    assert len(results) > 0
+    assert all(r.source == "pixabay" for r in results)
 
 
-@pytest.mark.skip(reason="Requires API keys")
 @pytest.mark.asyncio
-async def test_unsplash_integration():
-    """Integration test with real Unsplash API"""
-    config = ScraperConfig(api_key="YOUR_UNSPLASH_ACCESS_KEY")
+async def test_unsplash_integration(mocker):
+    """Integration test with mocked Unsplash API"""
+    # Mock the HTTP session response
+    mock_response = {
+        "results": [
+            {
+                "id": "abc123",
+                "urls": {
+                    "full": "https://example.com/photo1.jpg",
+                    "regular": "https://example.com/photo1_regular.jpg"
+                },
+                "width": 3000,
+                "height": 2000,
+                "user": {"name": "Test Photographer"},
+                "links": {"html": "https://unsplash.com/photos/abc123"}
+            }
+        ]
+    }
     
-    async with UnsplashScraper(config) as scraper:
-        results = await scraper.search_with_cache(
-            "mountains",
-            AssetType.IMAGE,
-            limit=5
-        )
-        
-        assert len(results) > 0
-        assert all(r.source == "unsplash" for r in results)
-        assert all(r.attribution_required is True for r in results)
+    config = ScraperConfig(api_key="test_key")
+    scraper = UnsplashScraper(config)
+    
+    # Mock the _make_request method to return our fake data
+    mocker.patch.object(scraper, '_make_request', return_value=mock_response)
+    
+    results = await scraper.search("mountains", AssetType.IMAGE, limit=5)
+    
+    assert len(results) > 0
+    assert all(r.source == "unsplash" for r in results)
+    assert all(r.attribution_required is True for r in results)
 
 
 # ============================================
