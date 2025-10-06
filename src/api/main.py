@@ -533,9 +533,9 @@ async def create_video(
         Created video object
     """
     try:
-        # Get user from database (for now, use mock user_id=1)
-        # In production, look up user by current_user identifier
-        user_id = 1  # TODO: Look up actual user from current_user
+        # Get user_id from JWT token
+        from .auth import get_user_id_from_username
+        user_id = await get_user_id_from_username(current_user)
         
         # Create video object
         video = Video(
@@ -597,8 +597,12 @@ async def list_videos(
         List of videos
     """
     try:
-        # TODO: Filter by actual user_id from current_user
-        videos = db.query(Video).offset(skip).limit(limit).all()
+        # Get user_id from JWT token and filter by ownership
+        from .auth import get_user_id_from_username
+        user_id = await get_user_id_from_username(current_user)
+        
+        # Filter videos by user ownership
+        videos = db.query(Video).filter(Video.user_id == user_id).offset(skip).limit(limit).all()
         
         return [VideoResponse.from_orm(v) for v in videos]
         
@@ -644,7 +648,19 @@ async def get_video(
                 detail=f"Video {video_id} not found"
             )
         
-        # TODO: Verify user owns this video
+        # Verify user owns this video
+        user = db.query(User).filter(User.username == current_user).first()
+        if not user:
+            raise HTTPException(
+                status_code=401,
+                detail="User not found"
+            )
+        
+        if video.user_id != user.id:
+            raise HTTPException(
+                status_code=403,
+                detail="Not authorized to access this video"
+            )
         
         return VideoResponse.from_orm(video)
         
@@ -694,7 +710,19 @@ async def update_video(
                 detail=f"Video {video_id} not found"
             )
         
-        # TODO: Verify user owns this video
+        # Verify user owns this video
+        user = db.query(User).filter(User.username == current_user).first()
+        if not user:
+            raise HTTPException(
+                status_code=401,
+                detail="User not found"
+            )
+        
+        if video.user_id != user.id:
+            raise HTTPException(
+                status_code=403,
+                detail="Not authorized to update this video"
+            )
         
         # Update fields
         if video_data.title is not None:
@@ -761,7 +789,19 @@ async def delete_video(
                 detail=f"Video {video_id} not found"
             )
         
-        # TODO: Verify user owns this video
+        # Verify user owns this video
+        user = db.query(User).filter(User.username == current_user).first()
+        if not user:
+            raise HTTPException(
+                status_code=401,
+                detail="User not found"
+            )
+        
+        if video.user_id != user.id:
+            raise HTTPException(
+                status_code=403,
+                detail="Not authorized to delete this video"
+            )
         
         db.delete(video)
         db.commit()

@@ -211,3 +211,35 @@ async def authenticate_user(username: str, password: str) -> bool:
         return False
     
     return True
+
+
+async def get_user_id_from_username(username: str) -> int:
+    """
+    Get user_id from username for database queries.
+    
+    In production, this would query the User table.
+    For now, uses a simple mapping for demo users.
+    
+    Args:
+        username: Username from JWT token
+        
+    Returns:
+        User ID for database queries
+        
+    Example:
+        >>> user_id = await get_user_id_from_username("admin")
+        >>> # Returns 1 for admin
+    """
+    # TODO: Replace with real database query in production
+    # from sqlalchemy import select
+    # from src.core.models import User
+    # result = await db.execute(select(User.id).where(User.username == username))
+    # return result.scalar_one_or_none()
+    
+    # Demo mapping (replace with database query)
+    user_mapping = {
+        "admin": 1,
+        "test@example.com": 2
+    }
+    
+    return user_mapping.get(username, 1)  # Default to user_id 1 if not found

@@ -125,23 +125,25 @@ class ChannelStats(BaseModel):
 
 
 class PerformanceMetrics(BaseModel):
-    """Performance metrics over time"""
+    """Performance metrics over time with time-series data"""
     video_id: Optional[str] = None
     channel_id: Optional[str] = None
     start_date: datetime
     end_date: datetime
     
-    # Daily metrics
-    daily_views: List[Dict[str, Any]] = Field(default_factory=list)
-    daily_watch_time: List[Dict[str, Any]] = Field(default_factory=list)
-    daily_subscribers: List[Dict[str, Any]] = Field(default_factory=list)
+    # Time-series data (lists of values, one per day)
+    daily_views: List[int] = Field(default_factory=list)
+    daily_watch_time: List[int] = Field(default_factory=list)
+    daily_subscribers_gained: List[int] = Field(default_factory=list)
     
     # Totals for period
     total_views: int = 0
     total_watch_time_minutes: int = 0
     total_likes: int = 0
     total_comments: int = 0
+    total_shares: int = 0
     total_subscribers_gained: int = 0
+    total_subscribers_lost: int = 0
     
     # Averages
     average_daily_views: float = 0.0
@@ -285,15 +287,76 @@ class AnalyticsTracker:
         video_id: str,
         days: int = 30
     ) -> Dict[str, Any]:
-        """Get video analytics data"""
-        # Note: This requires YouTube Analytics API which needs separate setup
-        # For now, return empty dict. Implement when Analytics API is enabled.
-        
-        # TODO: Implement YouTube Analytics API integration
-        # from googleapiclient.discovery import build
-        # youtube_analytics = build("youtubeAnalytics", "v2", credentials=creds)
-        
-        return {}
+        """Get video analytics data from YouTube Analytics API v2"""
+        try:
+            from googleapiclient.discovery import build
+            
+            # Get authenticated credentials
+            credentials = await self.auth_manager.get_credentials(account_name)
+            if not credentials:
+                logger.warning(f"No credentials for {account_name}")
+                return {}
+            
+            # Build YouTube Analytics service
+            youtube_analytics = build(
+                "youtubeAnalytics", "v2",
+                credentials=credentials,
+                cache_discovery=False
+            )
+            
+            # Calculate date range
+            end_date = datetime.utcnow().date()
+            start_date = end_date - timedelta(days=days)
+            
+            # Query analytics data
+            response = youtube_analytics.reports().query(
+                ids=f"channel==MINE",
+                startDate=start_date.isoformat(),
+                endDate=end_date.isoformat(),
+                metrics="views,estimatedMinutesWatched,likes,comments,shares,subscribersGained",
+                dimensions="day",
+                filters=f"video=={video_id}",
+                sort="day"
+            ).execute()
+            
+            # Parse time-series data
+            analytics_data = {
+                "video_id": video_id,
+                "start_date": start_date.isoformat(),
+                "end_date": end_date.isoformat(),
+                "time_series": [],
+                "totals": {}
+            }
+            
+            if "rows" in response:
+                # Process time-series data
+                for row in response["rows"]:
+                    analytics_data["time_series"].append({
+                        "date": row[0],
+                        "views": row[1],
+                        "watch_time_minutes": row[2],
+                        "likes": row[3],
+                        "comments": row[4],
+                        "shares": row[5],
+                        "subscribers_gained": row[6]
+                    })
+                
+                # Calculate totals
+                analytics_data["totals"] = {
+                    "views": sum(row[1] for row in response["rows"]),
+                    "watch_time_minutes": sum(row[2] for row in response["rows"]),
+                    "likes": sum(row[3] for row in response["rows"]),
+                    "comments": sum(row[4] for row in response["rows"]),
+                    "shares": sum(row[5] for row in response["rows"]),
+                    "subscribers_gained": sum(row[6] for row in response["rows"])
+                }
+            
+            logger.info(f"Retrieved analytics for video {video_id}: {len(analytics_data['time_series'])} data points")
+            return analytics_data
+            
+        except Exception as e:
+            logger.error(f"Failed to get video analytics: {e}", exc_info=True)
+            return {}
     
     async def get_channel_stats(
         self,
@@ -372,9 +435,78 @@ class AnalyticsTracker:
         account_name: str,
         days: int = 30
     ) -> Dict[str, Any]:
-        """Get channel analytics data"""
-        # TODO: Implement YouTube Analytics API integration
-        return {}
+        """Get channel analytics data from YouTube Analytics API v2"""
+        try:
+            from googleapiclient.discovery import build
+            
+            # Get authenticated credentials
+            credentials = await self.auth_manager.get_credentials(account_name)
+            if not credentials:
+                logger.warning(f"No credentials for {account_name}")
+                return {}
+            
+            # Build YouTube Analytics service
+            youtube_analytics = build(
+                "youtubeAnalytics", "v2",
+                credentials=credentials,
+                cache_discovery=False
+            )
+            
+            # Calculate date range
+            end_date = datetime.utcnow().date()
+            start_date = end_date - timedelta(days=days)
+            
+            # Query channel analytics
+            response = youtube_analytics.reports().query(
+                ids="channel==MINE",
+                startDate=start_date.isoformat(),
+                endDate=end_date.isoformat(),
+                metrics="views,estimatedMinutesWatched,likes,comments,shares,subscribersGained,subscribersLost",
+                dimensions="day",
+                sort="day"
+            ).execute()
+            
+            # Parse time-series data
+            analytics_data = {
+                "account_name": account_name,
+                "start_date": start_date.isoformat(),
+                "end_date": end_date.isoformat(),
+                "time_series": [],
+                "totals": {}
+            }
+            
+            if "rows" in response:
+                # Process time-series data
+                for row in response["rows"]:
+                    analytics_data["time_series"].append({
+                        "date": row[0],
+                        "views": row[1],
+                        "watch_time_minutes": row[2],
+                        "likes": row[3],
+                        "comments": row[4],
+                        "shares": row[5],
+                        "subscribers_gained": row[6],
+                        "subscribers_lost": row[7]
+                    })
+                
+                # Calculate totals
+                analytics_data["totals"] = {
+                    "views": sum(row[1] for row in response["rows"]),
+                    "watch_time_minutes": sum(row[2] for row in response["rows"]),
+                    "likes": sum(row[3] for row in response["rows"]),
+                    "comments": sum(row[4] for row in response["rows"]),
+                    "shares": sum(row[5] for row in response["rows"]),
+                    "subscribers_gained": sum(row[6] for row in response["rows"]),
+                    "subscribers_lost": sum(row[7] for row in response["rows"]),
+                    "net_subscribers": sum(row[6] - row[7] for row in response["rows"])
+                }
+            
+            logger.info(f"Retrieved channel analytics for {account_name}: {len(analytics_data['time_series'])} data points")
+            return analytics_data
+            
+        except Exception as e:
+            logger.error(f"Failed to get channel analytics: {e}", exc_info=True)
+            return {}
     
     async def get_performance_metrics(
         self,
@@ -383,7 +515,7 @@ class AnalyticsTracker:
         days: int = 30
     ) -> PerformanceMetrics:
         """
-        Get performance metrics over time
+        Get performance metrics over time with time-series data from Analytics API
         
         Args:
             account_name: Account name
@@ -391,41 +523,93 @@ class AnalyticsTracker:
             days: Number of days to analyze
         
         Returns:
-            PerformanceMetrics with daily breakdown
+            PerformanceMetrics with daily breakdown and time-series data
         """
         end_date = datetime.utcnow()
         start_date = end_date - timedelta(days=days)
         
-        # TODO: Implement YouTube Analytics API integration
-        # For now, return basic metrics from video/channel stats
-        
         if video_id:
-            stats = await self.get_video_stats(account_name, video_id)
+            # Get video analytics with time-series data
+            analytics_data = await self._get_video_analytics(account_name, video_id, days)
             
-            return PerformanceMetrics(
-                video_id=video_id,
-                start_date=start_date,
-                end_date=end_date,
-                total_views=stats.views,
-                total_watch_time_minutes=stats.watch_time_minutes,
-                total_likes=stats.likes,
-                total_comments=stats.comments,
-                average_engagement_rate=stats.engagement_rate
-            )
+            if analytics_data and \"totals\" in analytics_data:
+                # Use Analytics API time-series data
+                totals = analytics_data[\"totals\"]
+                time_series = analytics_data.get(\"time_series\", [])
+                
+                # Calculate engagement rate
+                views = totals.get(\"views\", 0)
+                likes = totals.get(\"likes\", 0)
+                comments = totals.get(\"comments\", 0)
+                engagement_rate = ((likes + comments) / views * 100) if views > 0 else 0.0
+                
+                return PerformanceMetrics(
+                    video_id=video_id,
+                    start_date=start_date,
+                    end_date=end_date,
+                    total_views=views,
+                    total_watch_time_minutes=totals.get(\"watch_time_minutes\", 0),
+                    total_likes=likes,
+                    total_comments=comments,
+                    total_shares=totals.get(\"shares\", 0),
+                    average_engagement_rate=engagement_rate,
+                    daily_views=[point[\"views\"] for point in time_series],
+                    daily_watch_time=[point[\"watch_time_minutes\"] for point in time_series]
+                )
+            else:
+                # Fallback to basic video stats if Analytics API fails
+                stats = await self.get_video_stats(account_name, video_id)
+                
+                return PerformanceMetrics(
+                    video_id=video_id,
+                    start_date=start_date,
+                    end_date=end_date,
+                    total_views=stats.views,
+                    total_watch_time_minutes=stats.watch_time_minutes,
+                    total_likes=stats.likes,
+                    total_comments=stats.comments,
+                    average_engagement_rate=stats.engagement_rate
+                )
         else:
-            stats = await self.get_channel_stats(account_name)
+            # Get channel analytics with time-series data
+            analytics_data = await self._get_channel_analytics(account_name, days)
             
-            return PerformanceMetrics(
-                channel_id=stats.channel_id,
-                start_date=start_date,
-                end_date=end_date,
-                total_views=stats.views_30d,
-                total_watch_time_minutes=stats.watch_time_hours_30d * 60,
-                total_likes=stats.likes_30d,
-                total_comments=stats.comments_30d,
-                total_subscribers_gained=stats.subscribers_gained_30d,
-                average_daily_views=stats.views_30d / days
-            )
+            if analytics_data and \"totals\" in analytics_data:
+                # Use Analytics API time-series data
+                totals = analytics_data[\"totals\"]
+                time_series = analytics_data.get(\"time_series\", [])
+                
+                return PerformanceMetrics(
+                    channel_id=account_name,
+                    start_date=start_date,
+                    end_date=end_date,
+                    total_views=totals.get(\"views\", 0),
+                    total_watch_time_minutes=totals.get(\"watch_time_minutes\", 0),
+                    total_likes=totals.get(\"likes\", 0),
+                    total_comments=totals.get(\"comments\", 0),
+                    total_shares=totals.get(\"shares\", 0),
+                    total_subscribers_gained=totals.get(\"subscribers_gained\", 0),
+                    total_subscribers_lost=totals.get(\"subscribers_lost\", 0),
+                    average_daily_views=totals.get(\"views\", 0) / days if days > 0 else 0,
+                    daily_views=[point[\"views\"] for point in time_series],
+                    daily_watch_time=[point[\"watch_time_minutes\"] for point in time_series],
+                    daily_subscribers_gained=[point[\"subscribers_gained\"] for point in time_series]
+                )
+            else:
+                # Fallback to basic channel stats if Analytics API fails
+                stats = await self.get_channel_stats(account_name)
+                
+                return PerformanceMetrics(
+                    channel_id=stats.channel_id,
+                    start_date=start_date,
+                    end_date=end_date,
+                    total_views=stats.views_30d,
+                    total_watch_time_minutes=stats.watch_time_hours_30d * 60,
+                    total_likes=stats.likes_30d,
+                    total_comments=stats.comments_30d,
+                    total_subscribers_gained=stats.subscribers_gained_30d,
+                    average_daily_views=stats.views_30d / days if days > 0 else 0
+                )
     
     async def get_top_videos(
         self,

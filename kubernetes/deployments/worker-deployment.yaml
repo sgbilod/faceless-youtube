@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+  namespace: doppelganger-studio
+  labels:
+    app: doppelganger-worker
+    component: backend
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: doppelganger-worker
+  template:
+    metadata:
+      labels:
+        app: doppelganger-worker
+    spec:
+      containers:
+        - name: worker
+          image: doppelganger-studio/worker:latest
+          imagePullPolicy: Always
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: database-credentials
+                  key: DATABASE_URL
+            - name: WORKER_TYPE
+              value: "video_generation"
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: api-keys
+          resources:
+            requests:
+              cpu: "1000m"
+              memory: "2Gi"
+            limits:
+              cpu: "4000m"
+              memory: "8Gi"
+          volumeMounts:
+            - name: assets
+              mountPath: /app/assets
+            - name: output
+              mountPath: /app/output_videos
+            - name: temp
+              mountPath: /tmp
+      volumes:
+        - name: assets
+          persistentVolumeClaim:
+            claimName: assets-pvc
+        - name: output
+          persistentVolumeClaim:
+            claimName: output-pvc
+        - name: temp
+          emptyDir:
+            sizeLimit: 10Gi
